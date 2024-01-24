@@ -1,0 +1,37 @@
+.box {
+    height: 45vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.box div {
+    border-radius: 10px;
+    background: rgb(0, 0, 116);
+    width: 500px;
+    height: 600px;
+}
+form {
+      flex-direction: column;
+    display: flex;
+    
+  justify-content: space-around;
+  }
+  label {
+    margin-top: 20px;
+    color: antiquewhite;
+  }
+  input {
+    height: 25px;
+  }
+  textarea {
+    width: 400px;
+    height: 250px;
+  }
+  button {
+    margin-top: 20px
+  }
