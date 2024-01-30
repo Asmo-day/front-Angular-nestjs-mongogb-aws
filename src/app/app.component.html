@@ -1,20 +1,24 @@
 <div class="box">
   <div class="form-container">
-    <form [formGroup]="emailForm" (ngSubmit)="onSubmit()">
-
-      <label for="first-name">Nom </label>
-      <input id="first-name" type="text" formControlName="firstName">
-    
-      <label for="last-name">Prénom </label>
-      <input id="last-name" type="text" formControlName="lastName">
-
-      <label for="email">Votre Adresse E-mail </label>
-      <input id="email" type="text" formControlName="email">
-
-      <label for="message">Votre Message </label>
-      <textarea id="message" type="text" formControlName="message"></textarea>
-      
-      <button mat-raised-button color="accent" type="submit" [disabled]="!emailForm.valid">Submit</button>
+    <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" appearance="outline">
+      <mat-form-field>
+        <mat-label>Nom </mat-label>
+        <input matInput id="first-name" type="text" formControlName="firstName" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label for="last-name">Prénom </mat-label>
+        <input matInput id="last-name" type="text" formControlName="lastName" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Adresse e-mail</mat-label>
+        <input matInput id="email" type="email" formControlName="email" required>
+        <mat-error>Veillez saisir une adresse e-mail valide</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label for="message">Votre Message </mat-label>
+        <textarea matInput id="message" type="text" formControlName="message" required></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="accent" type="submit" [disabled]="!emailForm.valid">Envoyer</button>
     </form>
   </div>
 </div>

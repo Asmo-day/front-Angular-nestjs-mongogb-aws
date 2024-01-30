@@ -1,37 +1,41 @@
 .box {
-    height: 45vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .form-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
-.box div {
-    border-radius: 10px;
-    background: rgb(0, 0, 116);
-    width: 500px;
-    height: 600px;
+
+.form-container {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  background: rgb(0, 0, 116);
+  width: 500px;
+  height: 700px;
 }
+
+// input {
+//   margin-top: 50px;
+//   height: 25px;
+// }
+
+#message {
+  width: 400px;
+  height: 250px;
+  resize: none;
+}
+
+// button {
+//   margin-top: 20px
+// }
 form {
-      flex-direction: column;
-    display: flex;
-    
-  justify-content: space-around;
-  }
-  label {
-    margin-top: 20px;
-    color: antiquewhite;
-  }
-  input {
-    height: 25px;
-  }
-  textarea {
-    width: 400px;
-    height: 250px;
-  }
-  button {
-    margin-top: 20px
-  }
+  display: flex;
+  width: 80%;
+  margin: auto;
+  flex-direction: column;
+}
+
+.mat-mdc-raised-button[disabled] {
+  color: #ffffff6a;
+  background-color: #6d6d6d79 !important;
+}

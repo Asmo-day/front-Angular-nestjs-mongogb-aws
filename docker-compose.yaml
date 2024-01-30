@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  frontend:
+    image: asm0day/user-test-angular:latest
+    ports:
+      - '8080:80'
+    restart: always
