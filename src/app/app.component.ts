@@ -27,8 +27,7 @@ export class AppComponent {
   private formBuilder = inject(FormBuilder)
   public snakeBar = inject(Snakebar)
   public dialog = inject(MatDialog)
-  private mailerService = inject(MailerService)
-  title: string = "angular"
+  public mailerService = inject(MailerService)
 
   emailForm = this.formBuilder.group({
     firstName: ['', Validators.required],
@@ -40,21 +39,20 @@ export class AppComponent {
   onSubmit() {
     this.waitDialog()
     let sendEmailDto = new EmailDto(this.emailForm.value)
-    // this.mailerService.postEmailContent(sendEmailDto).subscribe({
-    //   next: () => {
-    //   },
-    //   error: () => {
-    //     this.dialog.closeAll()
-    //     this.snakeBar.generateSnakebar('Une erreur est survenue lors de l\'envoie de l\'e-mail', '')
-    //   },
-    //   complete: () => {
-    //     this.dialog.closeAll(); this.snakeBar.generateSnakebar('Votre Message a bien été ', 'envoyé !');
-    //     this.emailForm.reset();
-    //     Object.keys(this.emailForm.controls).forEach((key) => {
-    //       this.emailForm.get(key)?.setErrors(null)
-    //     })
-    //   },
-    // })
+    this.mailerService.postEmailContent(sendEmailDto).subscribe({
+      next: () => { },
+      error: () => {
+        this.dialog.closeAll()
+        this.snakeBar.generateSnakebar('Une erreur est survenue lors de l\'envoie de l\'e-mail', '')
+      },
+      complete: () => {
+        this.dialog.closeAll(); this.snakeBar.generateSnakebar('Votre Message a bien été ', 'envoyé !');
+        this.emailForm.reset();
+        Object.keys(this.emailForm.controls).forEach((key) => {
+          this.emailForm.get(key)?.setErrors(null)
+        })
+      },
+    })
   }
 
   waitDialog(): void {
