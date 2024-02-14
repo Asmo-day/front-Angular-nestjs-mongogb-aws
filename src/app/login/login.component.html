@@ -1,0 +1,14 @@
+<div class="container">
+    <h2>Sign In</h2>
+    <form [formGroup]="signInForm" (ngSubmit)="signIn()">
+        <mat-form-field>
+            <mat-label>Nom </mat-label>
+            <input matInput id="first-name" type="text" formControlName="firstName" required>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Nom </mat-label>
+            <input matInput id="first-name" type="text" formControlName="firstName" required>
+        </mat-form-field>
+        <button type="submit">Sign In</button>
+    </form>
+</div>

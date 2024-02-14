@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +18,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   styleUrl: './app.component.scss',
   standalone: true,
   providers: [MailerService],
-  imports: [CommonModule, RouterOutlet, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatDialogModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, ReactiveFormsModule, MatButtonModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatDialogModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
@@ -28,6 +28,11 @@ export class AppComponent {
   public snakeBar = inject(Snakebar)
   public dialog = inject(MatDialog)
   public mailerService = inject(MailerService)
+  public router = inject(Router)
+
+  constructor(
+    private activatedRoute: ActivatedRoute
+) {}
 
   emailForm = this.formBuilder.group({
     firstName: ['', Validators.required],
@@ -61,4 +66,10 @@ export class AppComponent {
       disableClose: true,
     });
   }
+
+  // signIn() {
+  //   console.log(this.activatedRoute);
+    
+  //   this.router.navigate(['login'], { relativeTo: this.activatedRoute });
+  // }
 }

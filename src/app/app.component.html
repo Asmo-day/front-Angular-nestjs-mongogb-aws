@@ -1,4 +1,7 @@
 <div class="box">
+  <div class="signinButton" >
+    <button mat-raised-button [routerLink]="'login'" >SingIn</button>
+  </div>
   <div class="form-container">
     <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" appearance="outline">
       <mat-form-field>
