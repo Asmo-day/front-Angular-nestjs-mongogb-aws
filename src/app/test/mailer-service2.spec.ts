@@ -25,7 +25,6 @@ describe('MailerService', () => {
   it('should make a POST request', () => {
 
     service.postEmailContent(new EmailDto).subscribe(response => {
-      console.log(response);
       expect(response).toContain('delfrick');
     });
 
