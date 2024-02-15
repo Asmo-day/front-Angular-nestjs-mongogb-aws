@@ -1,7 +1,7 @@
 <div class="container">
     <h2>{{ title }}</h2>
     <div class="box">
-        <form class="form" [formGroup]="signInForm" (ngSubmit)="signIn()">
+        <form class="form" [formGroup]="isAccountCreation ? createUserForm: signInForm" (ngSubmit)="signIn()">
             <span *ngIf="isAccountCreation">Sera utiliser lors de la connection</span>
             <mat-form-field>
                 <mat-label>Nom d'utilisateur</mat-label>
@@ -23,23 +23,23 @@
                 <mat-label>Mot de passe</mat-label>
                 <input matInput type="text" formControlName="password" required>
             </mat-form-field>
-            <div [ngStyle]="{'color': signInForm.controls.password.touched ? 'red' : 'black'}"
+            <div [ngStyle]="{'color': createUserForm.controls.password.touched ? 'red' : 'black'}"
                 *ngIf="isAccountCreation">
-                <span *ngIf="!signInForm.controls.password.dirty">Le mot de passe doit contenir :</span>
+                <span *ngIf="!createUserForm.controls.password.dirty">Le mot de passe doit contenir :</span>
                 <ul>
-                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=.*[A-Z])')">
+                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.*[A-Z])')">
                         Au moins une lettre en majuscule.
                     </li>
-                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=.*[a-z])')">
+                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.*[a-z])')">
                         Au moins une lettre en minuscule.
                     </li>
-                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=.{8,})')">
+                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.{8,})')">
                         Au moins 8 caractères.
                     </li>
-                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=(.*\\W))')">
+                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=(.*\\W))')">
                         Au moins un caractère spécial.
                     </li>
-                    <li *ngIf="!signInForm.getRawValue().password?.match('(.*[0-9].*)')">
+                    <li *ngIf="!createUserForm.getRawValue().password?.match('(.*[0-9].*)')">
                         Au moins un chiffre.
                     </li>
                 </ul>
@@ -47,10 +47,11 @@
 
         </form>
         <div class="sign-in-buttons">
-            <button (click)="isAccountCreation ? createAccount() : toggleIsAccountCreation()">{{ creationOrCancelButton
+            <button (click)="toggleIsAccountCreation()">{{ creationOrCancelButton
                 }}</button>
-            <button (click)="isAccountCreation ? createAccount() : signIn()" [disabled]="!signInForm.valid"
-                [ngStyle]="{'background': signInForm.valid ? 'rgb(103 58 183)' : 'rgb(103 58 183 / 33%)'}">
+            <button (click)="isAccountCreation ? createAccount() : signIn()"
+                [disabled]="isAccountCreation ? !createUserForm.valid : !signInForm.valid"
+                [ngStyle]="{'background': isAccountCreation ? (createUserForm.valid ? 'rgb(65, 29, 127)' : 'rgb(103 58 183 / 33%)') : (signInForm.valid ? 'rgb(65, 29, 127)' : 'rgb(103 58 183 / 33%)')}">
                 {{ signInOrCreateButton }}</button>
         </div>
     </div>

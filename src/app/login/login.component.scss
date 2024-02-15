@@ -1,5 +1,7 @@
+@import '../../var.scss';
+
 .container {
-    height: 100%;
+    height: 60%;
     width: 100%;
     display: flex;
     align-content: center;
@@ -36,7 +38,7 @@ button {
     cursor: pointer;
     width: 150px;
     height: 30px;
-    background: rgb(103 58 183);
+    background: $mypurple;
     color: white;
     border: none;
     border-radius: 25px;

@@ -10,7 +10,7 @@ import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { EmailDto } from './emailDto';
 import { MailerService } from './mailer.service';
 import { Snakebar } from '../snakebar.service';
-import { WaitDialogComponent } from '../wait-dialog/wait-dialog.component';
+import { WaitDialogComponent } from '../dialog-box/wait-dialog/wait-dialog.component';
 
 @Component({
   selector: 'app-email',
@@ -63,9 +63,4 @@ export class EmailComponent {
     });
   }
 
-  // signIn() {
-  //   console.log(this.activatedRoute);
-
-  //   this.router.navigate(['login'], { relativeTo: this.activatedRoute });
-  // }
 }

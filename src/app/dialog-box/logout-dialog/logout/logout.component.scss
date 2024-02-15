@@ -1,0 +1,30 @@
+@import '../../../../var.scss';
+
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    width: 400px;
+    height: 200px;
+    text-align: center;
+    font-family: Regi;
+    font-size: 40px;
+    color: $mypurple;
+    background: antiquewhite
+}
+
+button {
+    cursor: pointer;
+    width: 150px;
+    height: 30px;
+    background: $mypurple;
+    color: white;
+    border: none;
+    border-radius: 25px;
+}
+
+.sign-in-buttons {
+    display: flex;
+    justify-content: space-evenly;
+
+}

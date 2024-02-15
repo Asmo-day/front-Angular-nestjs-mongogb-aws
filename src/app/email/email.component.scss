@@ -1,15 +1,17 @@
+@import '../../var.scss';
+
 .box {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 90%;
 }
 
 .form-container {
     display: flex;
     align-items: center;
     border-radius: 10px;
-    background: rgb(0, 0, 116);
+    background: $mypurple;
     width: 500px;
     height: 700px;
 }

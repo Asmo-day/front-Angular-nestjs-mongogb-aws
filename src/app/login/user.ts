@@ -12,8 +12,4 @@ export class User {
         this.lastName = lastName
         this.email = email
     }
-
-    public static generate(init?: Partial<User>) {
-        Object.assign(this, init);
-    }
 }

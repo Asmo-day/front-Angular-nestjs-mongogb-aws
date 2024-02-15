@@ -1,13 +1,21 @@
-<nav mat-tab-nav-bar [tabPanel]="tabPanel">
-  <button class="btn" mat-tab-link [routerLink]="'login'" routerLinkActive #rla="routerLinkActive"
-    [active]="rla.isActive">
-    signIn
-  </button>
-  <button class="btn" mat-tab-link [routerLink]="'email'" routerLinkActive #rla="routerLinkActive"
-    [active]="rla.isActive">
-    send an email
-  </button>
-</nav>
-<mat-tab-nav-panel #tabPanel>
-  <router-outlet></router-outlet>
-</mat-tab-nav-panel>
+<header class="header">
+  <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+
+    <button mat-tab-link [routerLink]="'home'" routerLinkActive #home="routerLinkActive" [active]="home.isActive">
+      Home
+    </button>
+
+    <button mat-tab-link [routerLink]="'email'" routerLinkActive #email="routerLinkActive" [active]="email.isActive"
+      *ngIf="userRouteAccessService.isActivated()">
+      Send Email
+    </button>
+
+    <div class="signin">
+      <mat-icon class="signin-ico" (click)="signInOut()">account_circle</mat-icon>
+      {{ userRouteAccessService.isActivated() ? "Sign out" : "Sign in" }}
+    </div>
+
+  </nav>
+  <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+</header>
+<router-outlet></router-outlet>

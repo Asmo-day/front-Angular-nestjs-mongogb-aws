@@ -1,20 +1,22 @@
 import { Routes } from '@angular/router';
+import { UserRouteAccessService } from './login/user-route-access.service';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    // {
-    //     path: 'accueil',
-    //     loadComponent: () => import("./app/../app.component").then(module => module.AppComponent),
-    //     title: 'Accueil',
-    // },
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    {
+        path: 'home',
+        loadComponent: () => import("./home/home.component").then(module => module.HomeComponent),
+        title: 'home',
+    },
     {
         path: 'email',
+        canActivate: [UserRouteAccessService],
         loadComponent: () => import("./email/email.component").then(module => module.EmailComponent),
-        title: 'home',
+        title: 'email',
     },
     {
         path: 'login',
         loadComponent: () => import("./login/login.component").then(module => module.LoginComponent),
-        title: 'Connexion',
+        title: 'login',
     }
 ];
