@@ -1,7 +1,7 @@
-import { MailerService } from './../mailer.service';
+import { MailerService } from '../email/mailer.service';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EmailDto } from '../emailDto';
+import { EmailDto } from '../email/emailDto';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { MailerServiceResponseData } from './mailer-service-response-data-mock';

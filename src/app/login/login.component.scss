@@ -1,4 +1,43 @@
 .container {
-    width: 800px;
-    height: 800px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.box {
+    width: 40%;
+    max-width: 500px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    height: 50px;
+}
+
+.check-pass {
+    color: red;
+}
+
+.sign-in-buttons {
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+button {
+    cursor: pointer;
+    width: 150px;
+    height: 30px;
+    background: rgb(103 58 183);
+    color: white;
+    border: none;
+    border-radius: 25px;
 }

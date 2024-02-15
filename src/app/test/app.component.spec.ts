@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from '../app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MailerService } from '../mailer.service';
+import { MailerService } from '../email/mailer.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 import { MailerServiceResponseData } from './mailer-service-response-data-mock';

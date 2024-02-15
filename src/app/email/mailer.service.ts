@@ -7,13 +7,10 @@ import { Observable } from "rxjs";
 export class MailerService {
 
     public httpClient = inject(HttpClient)
-    private httpHeaders = new HttpHeaders({
-        'Content-Type': 'application/json'
-    });
 
     postEmailContent(emailDto: EmailDto): Observable<any> {
 
         // return this.httpClient.post<EmailDto>("http://35.163.180.116:3000/email", JSON.stringify(emailDto), { headers: httpHeaders })
-        return this.httpClient.post<EmailDto>("http://localhost:3000/email", JSON.stringify(emailDto), { headers: this.httpHeaders })
+        return this.httpClient.post<EmailDto>("http://localhost:3000/email", JSON.stringify(emailDto))
     }
 }

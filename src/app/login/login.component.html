@@ -1,14 +1,57 @@
 <div class="container">
-    <h2>Sign In</h2>
-    <form [formGroup]="signInForm" (ngSubmit)="signIn()">
-        <mat-form-field>
-            <mat-label>Nom </mat-label>
-            <input matInput id="first-name" type="text" formControlName="firstName" required>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Nom </mat-label>
-            <input matInput id="first-name" type="text" formControlName="firstName" required>
-        </mat-form-field>
-        <button type="submit">Sign In</button>
-    </form>
+    <h2>{{ title }}</h2>
+    <div class="box">
+        <form class="form" [formGroup]="signInForm" (ngSubmit)="signIn()">
+            <span *ngIf="isAccountCreation">Sera utiliser lors de la connection</span>
+            <mat-form-field>
+                <mat-label>Nom d'utilisateur</mat-label>
+                <input matInput type="text" formControlName="username" required>
+            </mat-form-field>
+            <mat-form-field *ngIf="isAccountCreation">
+                <mat-label>Prénom</mat-label>
+                <input matInput type="text" formControlName="firstName" required>
+            </mat-form-field>
+            <mat-form-field *ngIf="isAccountCreation">
+                <mat-label>Nom</mat-label>
+                <input matInput type="text" formControlName="lastName" required>
+            </mat-form-field>
+            <mat-form-field *ngIf="isAccountCreation">
+                <mat-label>Adresse Email</mat-label>
+                <input matInput type="text" formControlName="email" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Mot de passe</mat-label>
+                <input matInput type="text" formControlName="password" required>
+            </mat-form-field>
+            <div [ngStyle]="{'color': signInForm.controls.password.touched ? 'red' : 'black'}"
+                *ngIf="isAccountCreation">
+                <span *ngIf="!signInForm.controls.password.dirty">Le mot de passe doit contenir :</span>
+                <ul>
+                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=.*[A-Z])')">
+                        Au moins une lettre en majuscule.
+                    </li>
+                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=.*[a-z])')">
+                        Au moins une lettre en minuscule.
+                    </li>
+                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=.{8,})')">
+                        Au moins 8 caractères.
+                    </li>
+                    <li *ngIf="!signInForm.getRawValue().password?.match('(?=(.*\\W))')">
+                        Au moins un caractère spécial.
+                    </li>
+                    <li *ngIf="!signInForm.getRawValue().password?.match('(.*[0-9].*)')">
+                        Au moins un chiffre.
+                    </li>
+                </ul>
+            </div>
+
+        </form>
+        <div class="sign-in-buttons">
+            <button (click)="isAccountCreation ? createAccount() : toggleIsAccountCreation()">{{ creationOrCancelButton
+                }}</button>
+            <button (click)="isAccountCreation ? createAccount() : signIn()" [disabled]="!signInForm.valid"
+                [ngStyle]="{'background': signInForm.valid ? 'rgb(103 58 183)' : 'rgb(103 58 183 / 33%)'}">
+                {{ signInOrCreateButton }}</button>
+        </div>
+    </div>
 </div>

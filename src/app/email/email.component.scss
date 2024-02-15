@@ -1,0 +1,33 @@
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    background: rgb(0, 0, 116);
+    width: 500px;
+    height: 700px;
+}
+
+#message {
+    width: 400px;
+    height: 250px;
+    resize: none;
+}
+
+form {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    flex-direction: column;
+}
+
+.mat-mdc-raised-button[disabled] {
+    color: #ffffff6a;
+    background-color: #6d6d6d79 !important;
+}
