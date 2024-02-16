@@ -1,3 +1,7 @@
+<div class="spinner" *ngIf="isSpinner">
+    <mat-spinner></mat-spinner>
+</div>
+
 <div class="container">
     <h2>{{ title }}</h2>
     <div class="box">
@@ -21,35 +25,38 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Mot de passe</mat-label>
-                <input matInput type="text" formControlName="password" required>
+                <div class="password">
+                    <input matInput [type]="showPass ? 'text': 'password'" formControlName="password" required>
+                    <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
+                </div>
             </mat-form-field>
-            <div [ngStyle]="{'color': createUserForm.controls.password.touched ? 'red' : 'black'}"
-                *ngIf="isAccountCreation">
-                <span *ngIf="!createUserForm.controls.password.dirty">Le mot de passe doit contenir :</span>
-                <ul>
-                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.*[A-Z])')">
-                        Au moins une lettre en majuscule.
-                    </li>
-                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.*[a-z])')">
-                        Au moins une lettre en minuscule.
-                    </li>
-                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.{8,})')">
-                        Au moins 8 caractères.
-                    </li>
-                    <li *ngIf="!createUserForm.getRawValue().password?.match('(?=(.*\\W))')">
-                        Au moins un caractère spécial.
-                    </li>
-                    <li *ngIf="!createUserForm.getRawValue().password?.match('(.*[0-9].*)')">
-                        Au moins un chiffre.
-                    </li>
-                </ul>
-            </div>
-
         </form>
+        <div [ngStyle]="{'color': createUserForm.controls.password.touched ? 'red' : 'black'}"
+            *ngIf="isAccountCreation">
+            <span *ngIf="!createUserForm.controls.password.dirty">Le mot de passe doit contenir :</span>
+            <ul>
+                <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.*[A-Z])')">
+                    Au moins une lettre en majuscule.
+                </li>
+                <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.*[a-z])')">
+                    Au moins une lettre en minuscule.
+                </li>
+                <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.{8,})')">
+                    Au moins 8 caractères.
+                </li>
+                <li *ngIf="!createUserForm.getRawValue().password?.match('(?=(.*\\W))')">
+                    Au moins un caractère spécial.
+                </li>
+                <li *ngIf="!createUserForm.getRawValue().password?.match('(.*[0-9].*)')">
+                    Au moins un chiffre.
+                </li>
+            </ul>
+        </div>
         <div class="sign-in-buttons">
-            <button (click)="toggleIsAccountCreation()">{{ creationOrCancelButton
-                }}</button>
+            <button (click)="toggleIsAccountCreation()">{{creationOrCancelButton}}</button>
+
             <button (click)="isAccountCreation ? createAccount() : signIn()"
+                (keyup.enter)="isAccountCreation ? createAccount() : signIn()"
                 [disabled]="isAccountCreation ? !createUserForm.valid : !signInForm.valid"
                 [ngStyle]="{'background': isAccountCreation ? (createUserForm.valid ? 'rgb(65, 29, 127)' : 'rgb(103 58 183 / 33%)') : (signInForm.valid ? 'rgb(65, 29, 127)' : 'rgb(103 58 183 / 33%)')}">
                 {{ signInOrCreateButton }}</button>

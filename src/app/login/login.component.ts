@@ -1,19 +1,23 @@
 import { SignInDto } from './signInDto';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from './user.service';
 import { Snakebar } from '../snakebar.service';
 import { User } from './user';
 import { CreateUserDto } from './createUserDto';
+import { Router } from '@angular/router';
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   providers: [UserService],
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, FormsModule, MatProgressSpinnerModule, MatIconModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -21,47 +25,61 @@ export class LoginComponent {
 
   private userService = inject(UserService)
   private snakeBar = inject(Snakebar)
+  private router = inject(Router)
   private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   private formBuilder = inject(FormBuilder)
   public isAccountCreation: boolean = false
   public creationOrCancelButton: string = "Créer un compte"
   public signInOrCreateButton: string = "Se connecter"
   public title: string = "Connection"
-  createUserForm = this.formBuilder.group({
+  public showPass: boolean = false
+  public isSpinner: boolean = false
+  public createUserForm = this.formBuilder.group({
     username: ['', Validators.required],
     firstName: [''],
     lastName: [''],
     email: [''],
     password: ['', [Validators.required, Validators.pattern(this.passRegx)]],
   });
-
-  signInForm = this.formBuilder.group({
+  public signInForm = this.formBuilder.group({
     username: ['', Validators.required],
     password: ['', [Validators.required]],
   });
 
   signIn() {
-    let signInDto = new SignInDto(this.signInForm.value)
     if (this.signInForm.valid) {
+      this.isSpinner = true
+      let signInDto = new SignInDto(this.signInForm.value)
       this.userService.signIn(signInDto).subscribe({
         next: (data: User) => {
-          this.snakeBar.generateSnakebar('Hello !!', data.username)
-          // this.router.navigate(['email']);
+          this.snakeBar.generateSnakebar('Hello !!', data.username.toUpperCase())
         },
         error: () => {
           this.snakeBar.generateSnakebar('Une erreur est survenue', 'Utilisateur non trouvé')
+        },
+        complete: () => {
+          this.isSpinner = false
+          this.router.navigate(['email']);
         }
       })
     }
   }
 
   createAccount() {
-    this.toggleIsAccountCreation()
     if (this.createUserForm.valid) {
+      this.isSpinner = true
       let userToCreate = new CreateUserDto(this.createUserForm.value);
       this.userService.createUser(userToCreate).subscribe({
         next: (data) => {
-          console.log(data);
+          this.snakeBar.generateSnakebar('Ton compte a été créé', 'Bienvenue ' + data.username.toUpperCase())
+        },
+        error: (data) => {
+          console.warn('error during user creation ' + data);
+          this.snakeBar.generateSnakebar('Une erreur est survenue', 'Utilisateur non créer')
+        },
+        complete: () => {
+          this.isSpinner = false
+          this.toggleIsAccountCreation()
         }
       })
     }
@@ -73,5 +91,4 @@ export class LoginComponent {
     this.creationOrCancelButton = this.isAccountCreation ? "Annuler" : "Créer un compte"
     this.signInOrCreateButton = this.isAccountCreation ? "Créer" : "Se Connecter"
   }
-
 }

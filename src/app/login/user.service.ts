@@ -5,16 +5,19 @@ import { BehaviorSubject, Observable, map } from "rxjs";
 import { SignInDto } from "./signInDto";
 import { User } from "./user";
 import { CreateUserDto } from "./createUserDto";
+import { environment } from "../../environment";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
+    baseUrl = environment.BASE_URL
+
     constructor(private httpClient: HttpClient, private userRouteAccessService: UserRouteAccessService) { }
 
     signIn(signInDto: SignInDto): Observable<User> {
-        this.userRouteAccessService.isActivated.set(true)
-        return this.httpClient.post<User>('http://localhost:3000/users/signin', JSON.stringify(signInDto)).pipe(
+        return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(signInDto)).pipe(
             map(data => {
+                this.userRouteAccessService.isActivated.set(true)
                 return new User(
                     data.username,
                     data.firstName,
@@ -26,6 +29,6 @@ export class UserService {
     }
 
     createUser(userToCreate: CreateUserDto): Observable<any> {
-        return this.httpClient.post('http://localhost:3000/users', JSON.stringify(userToCreate))
+        return this.httpClient.post(this.baseUrl + 'users', JSON.stringify(userToCreate))
     }
 }

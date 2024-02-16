@@ -2,15 +2,17 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { EmailDto } from "./emailDto";
 import { Observable } from "rxjs";
+import { environment } from "../../environment";
 
 @Injectable()
 export class MailerService {
+
+    baseUrl = environment.BASE_URL
 
     public httpClient = inject(HttpClient)
 
     postEmailContent(emailDto: EmailDto): Observable<any> {
 
-        // return this.httpClient.post<EmailDto>("http://35.163.180.116:3000/email", JSON.stringify(emailDto), { headers: httpHeaders })
-        return this.httpClient.post<EmailDto>("http://localhost:3000/email", JSON.stringify(emailDto))
+        return this.httpClient.post<EmailDto>(this.baseUrl + 'email', JSON.stringify(emailDto))
     }
 }

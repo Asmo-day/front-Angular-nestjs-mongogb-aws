@@ -58,6 +58,19 @@
     rotate: -20deg;
 }
 
+@media (min-width: 2560px) {
+    .box-container {
+        grid-template-columns: repeat(10, 2vw);
+        grid-template-rows: repeat(10, 2vw);
+    }
+
+    .box1,
+    .box2,
+    .box3 {
+        font-size: 3vw;
+    }
+}
+
 @keyframes gelatine {
 
     from,

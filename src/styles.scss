@@ -26,3 +26,14 @@ body {
   font-family: 'Regi';
   src: url('./assets/fonts/Regi.otf');
 }
+
+// .spinner .mat-dialog-container {
+//   background-color: var(--background);
+//   box-shadow: none;
+//   padding: 0px !important;
+//   overflow: hidden !important;
+// }
+
+::ng-deep .spinner>mat-dialog-container {
+  background-color: var(--background);
+}

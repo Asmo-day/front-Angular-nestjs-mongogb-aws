@@ -1,12 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterModule, RouterOutlet, RouterLinkActive, Router, ActivatedRoute } from '@angular/router';
+import { RouterLink, RouterModule, RouterOutlet, RouterLinkActive, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { UserRouteAccessService } from './login/user-route-access.service';
-import { LogoutComponent } from './dialog-box/logout-dialog/logout/logout.component';
+import { LogoutComponent } from './dialog-box/logout-dialog/logout.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({

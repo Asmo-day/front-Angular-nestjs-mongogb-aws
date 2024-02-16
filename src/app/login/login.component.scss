@@ -1,7 +1,7 @@
 @import '../../var.scss';
 
 .container {
-    height: 60%;
+    margin-top: 80px;
     width: 100%;
     display: flex;
     align-content: center;
@@ -42,4 +42,22 @@ button {
     color: white;
     border: none;
     border-radius: 25px;
+}
+
+.spinner {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.195);
+    backdrop-filter: blur(2px);
+}
+
+mat-spinner {
+    top: 50%;
+    left: 47%;
+}
+
+.password {
+    display: flex;
 }
