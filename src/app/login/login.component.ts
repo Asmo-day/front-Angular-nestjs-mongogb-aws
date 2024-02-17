@@ -55,6 +55,7 @@ export class LoginComponent {
           this.snakeBar.generateSnakebar('Hello !!', data.username.toUpperCase())
         },
         error: () => {
+          this.isSpinner = false
           this.snakeBar.generateSnakebar('Une erreur est survenue', 'Utilisateur non trouvé')
         },
         complete: () => {
@@ -74,6 +75,7 @@ export class LoginComponent {
           this.snakeBar.generateSnakebar('Ton compte a été créé', 'Bienvenue ' + data.username.toUpperCase())
         },
         error: (data) => {
+          this.isSpinner = false
           console.warn('error during user creation ' + data);
           this.snakeBar.generateSnakebar('Une erreur est survenue', 'Utilisateur non créer')
         },
