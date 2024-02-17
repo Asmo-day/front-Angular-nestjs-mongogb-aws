@@ -1,7 +1,7 @@
 import { UserRouteAccessService } from './user-route-access.service';
 import { HttpClient } from "@angular/common/http";
-import { Injectable, signal } from "@angular/core";
-import { BehaviorSubject, Observable, map } from "rxjs";
+import { Injectable } from "@angular/core";
+import { Observable, map } from "rxjs";
 import { SignInDto } from "./signInDto";
 import { User } from "./user";
 import { CreateUserDto } from "./createUserDto";
@@ -22,7 +22,8 @@ export class UserService {
                     data.username,
                     data.firstName,
                     data.lastName,
-                    data.email
+                    data.email,
+                    data.role
                 )
             })
         )

@@ -1,19 +1,23 @@
 <header class="header">
   <nav mat-tab-nav-bar [tabPanel]="tabPanel">
 
-    <button mat-tab-link [routerLink]="'home'" routerLinkActive #home="routerLinkActive" [active]="home.isActive">
-      Home
+    <button mat-tab-link [routerLink]="'Home'" routerLinkActive #home="routerLinkActive" [active]="home.isActive">
+      Accueil
     </button>
 
     <button mat-tab-link [routerLink]="'email'" routerLinkActive #email="routerLinkActive" [active]="email.isActive"
       *ngIf="userRouteAccessService.isActivated()">
-      Send Email
+      Envoyer un e-mail
     </button>
 
     <div class="signin">
-      <mat-icon class="signin-ico" (click)="signInOut()">account_circle</mat-icon>
-      {{ userRouteAccessService.isActivated() ? "Sign out" : "Sign in" }}
+      <mat-icon class="signin-ico" [matMenuTriggerFor]="menu">account_circle</mat-icon>
+      {{ userRouteAccessService.isActivated() ? "username" : "Se connecter" }}
     </div>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="signInOut()">{{ userRouteAccessService.isActivated() ? "Se déconnecter" : "Se connecter" }}</button>
+    <button mat-menu-item (click)="manageProfil()" *ngIf="userRouteAccessService.isActivated()">Profile</button>
+  </mat-menu>
 
   </nav>
   <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>

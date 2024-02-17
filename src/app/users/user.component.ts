@@ -1,6 +1,6 @@
 import { SignInDto } from './signInDto';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,10 +18,10 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   providers: [UserService],
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, FormsModule, MatProgressSpinnerModule, MatIconModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './user.component.html',
+  styleUrl: './user.component.scss'
 })
-export class LoginComponent {
+export class UserComponent {
 
   private userService = inject(UserService)
   private snakeBar = inject(Snakebar)
@@ -34,6 +34,7 @@ export class LoginComponent {
   public title: string = "Connection"
   public showPass: boolean = false
   public isSpinner: boolean = false
+  public userSignal = signal<User>;
   public createUserForm = this.formBuilder.group({
     username: ['', Validators.required],
     firstName: [''],
@@ -51,8 +52,13 @@ export class LoginComponent {
       this.isSpinner = true
       let signInDto = new SignInDto(this.signInForm.value)
       this.userService.signIn(signInDto).subscribe({
-        next: (data: User) => {
-          this.snakeBar.generateSnakebar('Hello !!', data.username.toUpperCase())
+        next: (user: User) => {
+
+          console.log(user);
+
+          this.userSignal.set(user)
+          
+          this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
         },
         error: () => {
           this.isSpinner = false

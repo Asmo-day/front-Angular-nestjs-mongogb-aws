@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { UserRouteAccessService } from './login/user-route-access.service';
+import { UserRouteAccessService } from './users/user-route-access.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,8 +15,13 @@ export const routes: Routes = [
         title: 'email',
     },
     {
-        path: 'login',
-        loadComponent: () => import("./login/login.component").then(module => module.LoginComponent),
-        title: 'login',
+        path: 'user',
+        loadComponent: () => import("./users/user.component").then(module => module.UserComponent),
+        title: 'user',
+    },
+    {
+        path: 'profil',
+        loadComponent: () => import("./profil/profil.component").then(module => module.ProfilComponent),
+        title: 'profil',
     }
 ];

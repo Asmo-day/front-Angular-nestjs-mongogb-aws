@@ -26,7 +26,7 @@
             <mat-form-field>
                 <mat-label>Mot de passe</mat-label>
                 <div class="password">
-                    <input matInput [type]="showPass ? 'text': 'password'" formControlName="password" required>
+                    <input matInput [type]="showPass ? 'text': 'password'" formControlName="password" autocomplete="on" required>
                     <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
                 </div>
             </mat-form-field>

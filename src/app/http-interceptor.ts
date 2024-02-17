@@ -10,16 +10,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const cacheService = inject(CacheService)
   const cachedToken = cacheService.get('token')
 
-  if (cachedToken) {
-
-    console.log(cachedToken.exp);
-    console.log(new Date().getTime());
-    console.log(cachedToken.exp > new Date().getTime() / 1000);
-
-
-  }
-
-
   if (cachedToken && cachedToken.exp > new Date().getTime() / 1000) {
     console.log('get token from cache ');
     return next(req.clone({
