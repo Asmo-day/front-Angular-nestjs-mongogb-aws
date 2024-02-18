@@ -22,6 +22,8 @@ export class AppComponent {
   public dialog = inject(MatDialog)
   public router = inject(Router)
   public userRouteAccessService = inject(UserRouteAccessService)
+  public user: any;
+
 
   signInOut() {
     if (this.userRouteAccessService.isActivated()) {

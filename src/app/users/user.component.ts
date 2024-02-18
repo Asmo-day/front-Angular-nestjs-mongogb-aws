@@ -1,6 +1,6 @@
 import { SignInDto } from './signInDto';
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,16 +12,19 @@ import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  providers: [UserService],
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, FormsModule, MatProgressSpinnerModule, MatIconModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
 export class UserComponent {
+
+  private _user = new BehaviorSubject<User>({} as any)
+  public user$ = this._user.asObservable()
 
   private userService = inject(UserService)
   private snakeBar = inject(Snakebar)
@@ -34,7 +37,6 @@ export class UserComponent {
   public title: string = "Connection"
   public showPass: boolean = false
   public isSpinner: boolean = false
-  public userSignal = signal<User>;
   public createUserForm = this.formBuilder.group({
     username: ['', Validators.required],
     firstName: [''],
@@ -53,11 +55,6 @@ export class UserComponent {
       let signInDto = new SignInDto(this.signInForm.value)
       this.userService.signIn(signInDto).subscribe({
         next: (user: User) => {
-
-          console.log(user);
-
-          this.userSignal.set(user)
-          
           this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
         },
         error: () => {

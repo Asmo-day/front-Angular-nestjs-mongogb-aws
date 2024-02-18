@@ -11,7 +11,6 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-
     UserService,
     UserRouteAccessService,
     TokenService,

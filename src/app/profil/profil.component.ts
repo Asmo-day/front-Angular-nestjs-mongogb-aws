@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { UserService } from '../users/user.service';
+import { User } from '../users/user';
 
 @Component({
   selector: 'app-profil',
@@ -8,5 +10,10 @@ import { Component } from '@angular/core';
   styleUrl: './profil.component.scss'
 })
 export class ProfilComponent {
+
+
+  public userService = inject(UserService)
+  public user: User = this.userService.userSignal() as User
+
 
 }
