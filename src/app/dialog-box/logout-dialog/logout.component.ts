@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-logout',
@@ -10,7 +10,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class LogoutComponent {
 
-  constructor(private dialogRef: MatDialogRef<LogoutComponent>) { }
+  public title: string = '';
+
+  constructor(
+    private dialogRef: MatDialogRef<LogoutComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { this.title = data.title }
 
   logout() {
     this.dialogRef.close(true);

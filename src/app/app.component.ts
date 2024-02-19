@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterModule, RouterOutlet, RouterLinkActive, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { UserRouteAccessService } from './users/user-route-access.service';
 import { LogoutComponent } from './dialog-box/logout-dialog/logout.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserService } from './users/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -19,18 +20,19 @@ import { UserService } from './users/user.service';
   imports: [CommonModule, RouterOutlet, RouterLink, RouterModule, MatMenuModule, MatMenuModule, MatButtonModule, RouterLinkActive, MatTabsModule, MatIconModule, MatDialogModule],
 })
 
-export class AppComponent implements OnInit {
-  
+export class AppComponent implements OnInit, OnDestroy {
+
   public dialog = inject(MatDialog)
   public router = inject(Router)
   public userService = inject(UserService)
   public userRouteAccessService = inject(UserRouteAccessService)
   public userSignal: any;
-  
+  private logoutSubscription: Subscription = new Subscription();
+
   ngOnInit(): void {
     this.userSignal = this.userService.userSignal
   }
-  
+
   signInOut() {
     if (this.userRouteAccessService.isActivated()) {
       this.logoutDialog()
@@ -44,9 +46,11 @@ export class AppComponent implements OnInit {
   }
 
   logoutDialog(): void {
-    this.dialog.open(LogoutComponent, {
+    const dialog = this.dialog.open(LogoutComponent, {
       panelClass: 'custom-dialog-container',
-    }).afterClosed().subscribe(data => {
+      data: { title: 'Se deconnecter ?' }
+    })
+    this.logoutSubscription = dialog.afterClosed().subscribe(data => {
       if (data) {
         this.userService.userSignal.set({})
         this.userRouteAccessService.isActivated.set(false);
@@ -56,4 +60,7 @@ export class AppComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(): void {
+    this.logoutSubscription.unsubscribe()
+  }
 }

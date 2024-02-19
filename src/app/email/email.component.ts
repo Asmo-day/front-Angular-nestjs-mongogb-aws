@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
@@ -9,8 +9,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { EmailDto } from './emailDto';
 import { MailerService } from './mailer.service';
-import { Snakebar } from '../snakebar.service';
+import { SnakebarService } from '../snakebar.service';
 import { WaitDialogComponent } from '../dialog-box/wait-dialog/wait-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-email',
@@ -22,10 +23,10 @@ import { WaitDialogComponent } from '../dialog-box/wait-dialog/wait-dialog.compo
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
-export class EmailComponent {
+export class EmailComponent implements OnDestroy {
 
   private formBuilder = inject(FormBuilder)
-  public snakeBar = inject(Snakebar)
+  public snakeBar = inject(SnakebarService)
   public dialog = inject(MatDialog)
   public mailerService = inject(MailerService)
   public router = inject(Router)
@@ -36,11 +37,12 @@ export class EmailComponent {
     email: ['', [Validators.required, Validators.email]],
     message: ['', Validators.required],
   });
+  private mailerSubscription: Subscription = new Subscription();
 
   onSubmit() {
     this.waitDialog()
     let sendEmailDto = new EmailDto(this.emailForm.value)
-    this.mailerService.postEmailContent(sendEmailDto).subscribe({
+    this.mailerSubscription = this.mailerService.postEmailContent(sendEmailDto).subscribe({
       next: () => { },
       error: () => {
         this.dialog.closeAll()
@@ -61,6 +63,10 @@ export class EmailComponent {
       panelClass: 'custom-dialog-container',
       disableClose: true,
     });
+  }
+
+  ngOnDestroy(): void {
+    this.mailerSubscription.unsubscribe()
   }
 
 }

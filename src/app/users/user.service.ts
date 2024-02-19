@@ -13,15 +13,16 @@ export class UserService {
     private baseUrl = environment.BASE_URL
 
     public userSignal = signal({})
+    public userActiveSignal = signal(false)
 
     constructor(private httpClient: HttpClient, private userRouteAccessService: UserRouteAccessService) { }
 
     signIn(signInDto: SignInDto): Observable<User> {
-        //TODO see if we can return a signal and handle error here
-        return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(signInDto)).pipe(
+        return this.httpClient.post<any>(this.baseUrl + 'users/signin', JSON.stringify(signInDto)).pipe(
             map(data => {
                 this.userRouteAccessService.isActivated.set(true)
                 const users = new User(
+                    data._id,
                     data.username,
                     data.firstName,
                     data.lastName,
@@ -36,5 +37,9 @@ export class UserService {
 
     createUser(userToCreate: CreateUserDto): Observable<any> {
         return this.httpClient.post(this.baseUrl + 'users', JSON.stringify(userToCreate))
+    }
+
+    deleteUser(username: string): Observable<any> {
+        return this.httpClient.delete(this.baseUrl + 'users/' + username)
     }
 }
