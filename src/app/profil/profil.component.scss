@@ -1,0 +1,36 @@
+@import '../../var.scss';
+
+.box {
+    height: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    background: $mypurple;
+    width: 800px;
+    height: 700px;
+}
+
+.icon  {
+    margin-top: 20px;
+}
+
+.mat-icon {
+    color: antiquewhite;
+    width: 250px;
+    height: 250px;
+    font-size: 250px;
+}
+
+.username {
+    font-size: 30px;
+    color: antiquewhite
+}

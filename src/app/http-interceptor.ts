@@ -11,13 +11,11 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const cachedToken = cacheService.get('token')
 
   if (cachedToken && cachedToken.exp > new Date().getTime() / 1000) {
-    console.log('get token from cache ');
     return next(req.clone({
       headers: req.headers.set('Authorization', `Bearer ${cachedToken.token}`)
         .set('Content-Type', 'application/json')
     }))
   } else {
-    console.log('get token from call to back ');
     return tokenService.getToken().pipe(
       switchMap(response => next(req.clone({
         headers: req.headers.set('Authorization', `Bearer ${response.token}`)

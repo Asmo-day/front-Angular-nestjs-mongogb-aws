@@ -21,6 +21,7 @@ export const routes: Routes = [
     },
     {
         path: 'profil',
+        canActivate: [UserRouteAccessService],
         loadComponent: () => import("./profil/profil.component").then(module => module.ProfilComponent),
         title: 'profil',
     }

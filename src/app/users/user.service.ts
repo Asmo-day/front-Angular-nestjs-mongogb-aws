@@ -12,7 +12,7 @@ export class UserService {
 
     private baseUrl = environment.BASE_URL
 
-    public userSignal: User = signal({}) as unknown as User
+    public userSignal = signal({})
 
     constructor(private httpClient: HttpClient, private userRouteAccessService: UserRouteAccessService) { }
 

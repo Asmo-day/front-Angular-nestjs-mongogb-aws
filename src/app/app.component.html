@@ -1,4 +1,5 @@
-<header class="header">
+<div class="container">
+  <header class="header">
   <nav mat-tab-nav-bar [tabPanel]="tabPanel">
 
     <button mat-tab-link [routerLink]="'home'" routerLinkActive #home="routerLinkActive" [active]="home.isActive">
@@ -7,20 +8,33 @@
 
     <button mat-tab-link [routerLink]="'email'" routerLinkActive #email="routerLinkActive" [active]="email.isActive"
       *ngIf="userRouteAccessService.isActivated()">
-      Envoyer un e-mail
+      Contact
     </button>
 
     <div class="signin">
       <mat-icon class="signin-ico" [matMenuTriggerFor]="menu">account_circle</mat-icon>
-      {{ userRouteAccessService.isActivated() ? "username" : "Se connecter" }}
-    </div>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="signInOut()">{{userRouteAccessService.isActivated() ? "Se déconnecter" : "Se
-        connecter"}}</button>
-      <button mat-menu-item (click)="manageProfil()" *ngIf="userRouteAccessService.isActivated()">Profile</button>
+      {{ userRouteAccessService.isActivated() ? (userSignal().username| uppercase) : "Se connecter" }}
+      <mat-menu #menu="matMenu" xPosition="before">
+
+        @if (userRouteAccessService.isActivated()) {
+          <button mat-menu-item (click)="manageProfil()">
+            {{ userSignal().firstName }} {{ userSignal().lastName | uppercase}}
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <div  class="line"></div>
+            <button mat-menu-item (click)="signInOut()">Déconnexion
+              <mat-icon>power_settings_new</mat-icon>
+            </button>
+        } @else {
+          <button mat-menu-item (click)="signInOut()">Connexion</button>
+        }
+
     </mat-menu>
+  </div>
 
   </nav>
   <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
 </header>
+</div>
+
 <router-outlet></router-outlet>

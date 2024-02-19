@@ -10,14 +10,14 @@ export class Snakebar {
     public snakeBar: MatSnackBar,
   ) { }
 
-  generateSnakebar(leftTxt: string, rightTxt: string, panelClass?: string, duration?: number) {
+  generateSnakebar(txt: string, button: string, panelClass?: string, duration?: number) {
     this.snakeBar.open(
-      leftTxt,
-      rightTxt, {
+      txt,
+      button, {
       duration: duration ? duration : 3000,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
-      panelClass
+      panelClass: ['simple-snack-bar']
     });
   }
 }

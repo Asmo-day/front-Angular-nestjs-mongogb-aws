@@ -29,7 +29,7 @@ export class EmailComponent {
   public dialog = inject(MatDialog)
   public mailerService = inject(MailerService)
   public router = inject(Router)
-
+  public title: string = 'Contactez nous !'
   emailForm = this.formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],

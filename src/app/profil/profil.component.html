@@ -1,1 +1,29 @@
-<p>{{user.email}}</p>
+<div class="box">
+    <h2>{{ title }}</h2>
+    <div class="form-container">
+        <div class="icon">
+        <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="username">{{ userSignal().username | uppercase }}</div>
+        <!-- <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" appearance="outline">
+            <mat-form-field>
+                <mat-label>Nom </mat-label>
+                <input matInput id="first-name" type="text" formControlName="firstName" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label for="last-name">Prénom </mat-label>
+                <input matInput id="last-name" type="text" formControlName="lastName" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Adresse e-mail</mat-label>
+                <input matInput id="email" type="email" formControlName="email" required>
+                <mat-error>Veillez saisir une adresse e-mail valide</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label for="message">Votre Message </mat-label>
+                <textarea matInput id="message" type="text" formControlName="message" required></textarea>
+            </mat-form-field>
+            <button mat-raised-button color="accent" type="submit" [disabled]="!emailForm.valid">Envoyer</button>
+        </form> -->
+    </div>
+</div>
