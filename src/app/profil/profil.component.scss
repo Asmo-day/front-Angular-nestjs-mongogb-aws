@@ -20,17 +20,55 @@
     margin-bottom: 30px;
 }
 
+.username-input {
+// background: red;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: $mypurple !important;
+    font-size: 30px;
+}
+
+.input-div {
+    display: flex;
+    align-items: baseline;
+}
+
+::ng-deep mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    height: 30px !important;
+}
+
+::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input, .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    text-align: center !important;
+}
+
+::ng-deep  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+    color: antiquewhite !important;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+    border-bottom-color: $mypurple !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-disabled, ::ng-deep .mat-form-field-outline {
+    opacity: 0;
+}
+
+// ::ng-deep .mat-mdc-form-field-flex {
+//     background: aliceblue !important;
+//     border-radius: 25px !important;
+// }
+
 .profile-container {
     background: $mypurple;
 
 }
 
 .delete-container {
-    background: rgb(125, 0, 0);
+    cursor: pointer;
+    background: rgba(125, 0, 0);
     padding-bottom: 20px;
     padding-top: 20px;
-    cursor: pointer;
-
 }
 
 .icon {
@@ -38,11 +76,15 @@
 }
 
 .edit-icon {
-    background: green;
-    width: 30px;
-    border-radius: 50px;
-    text-align: center;
+    cursor: pointer;
+    width: 35px;
     height: 30px;
+    text-align: center;
+    vertical-align: sub;
+    margin-left: 10px;
+    padding-top: 5px;
+    border-radius: 50px;
+    background: chartreuse;
 }
 
 .form {
@@ -60,9 +102,24 @@
 .username,
 .delete {
     font-size: 30px;
-    color: antiquewhite
+    color: antiquewhite;
+    width: 500px;
+    text-align: center;
 }
 
-.username {
-    margin-bottom: 30px;
+.update-buttons {
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+button {
+    cursor: pointer;
+    font-size: large;
+    width: 150px;
+    height: 30px;
+    background: chartreuse;
+    color: antiquewhite;
+    border: none;
+    border-radius: 25px;
 }

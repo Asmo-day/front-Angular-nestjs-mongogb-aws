@@ -4,7 +4,7 @@ import { Injectable, signal } from "@angular/core";
 import { Observable, map } from "rxjs";
 import { SignInDto } from "./signInDto";
 import { User } from "./user";
-import { CreateUserDto } from "./createUserDto";
+import { UserDto } from "./userDto";
 import { environment } from "../../environment";
 
 @Injectable({ providedIn: 'root' })
@@ -35,11 +35,15 @@ export class UserService {
         )
     }
 
-    createUser(userToCreate: CreateUserDto): Observable<any> {
+    createUser(userToCreate: UserDto): Observable<any> {
         return this.httpClient.post(this.baseUrl + 'users', JSON.stringify(userToCreate))
     }
 
-    deleteUser(username: string): Observable<any> {
-        return this.httpClient.delete(this.baseUrl + 'users/' + username)
+    updateUser(userId:string, updateUser: UserDto): Observable<any> {
+        return this.httpClient.patch(this.baseUrl + 'users/' + userId , updateUser)
+    }
+
+    deleteUser(userId: string): Observable<any> {
+        return this.httpClient.delete(this.baseUrl + 'users/' + userId)
     }
 }

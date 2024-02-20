@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { UserService } from './user.service';
 import { SnakebarService } from '../snakebar.service';
 import { User } from './user';
-import { CreateUserDto } from './createUserDto';
+import { UserDto } from './userDto';
 import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -41,7 +41,7 @@ export class UserComponent implements OnDestroy {
     username: ['', Validators.required],
     firstName: [''],
     lastName: [''],
-    email: [''],
+    email: ['', Validators.email],
     password: ['', [Validators.required, Validators.pattern(this.passRegx)]],
   });
   public signInForm = this.formBuilder.group({
@@ -76,7 +76,7 @@ export class UserComponent implements OnDestroy {
   createAccount() {
     if (this.createUserForm.valid) {
       this.isSpinner = true
-      let userToCreate = new CreateUserDto(this.createUserForm.value);
+      let userToCreate = new UserDto(this.createUserForm.value);
       this.createSubscription = this.userService.createUser(userToCreate).subscribe({
         next: (data) => {
           this.snakeBar.generateSnakebar('Votre compte a été créé', 'Bienvenue ' + data.username.toUpperCase())

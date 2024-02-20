@@ -4,35 +4,32 @@
         <div class="icon">
             <mat-icon class="user-icon">account_circle</mat-icon>
         </div>
-        <!-- <div class="username"></div> -->
-        <div class="username">{{ userSignal().username | uppercase }}<mat-icon class="edit-icon">edit</mat-icon></div>
-
-        <form class="form" [formGroup]="updateUserForm" (ngSubmit)="updateUser()" appearance="outline">
-            @if (edit) {
-            <mat-form-field>
-                <mat-label>Nom d'utilisateur</mat-label>
-                <input matInput type="text" formControlName="username" required>
-            </mat-form-field>
-            }
-            @if (edit) {
-            <mat-form-field>
-                <mat-label>Prénom</mat-label>
-                <input matInput type="text" formControlName="firstName" required>
-            </mat-form-field>
-            }
-            @if (edit) {
-            <mat-form-field>
-                <mat-label>Nom</mat-label>
-                <input matInput type="text" formControlName="lastName" required>
-            </mat-form-field>
-            }
-            @if (edit) {
-            <mat-form-field>
-                <mat-label>Adresse Email</mat-label>
-                <input matInput type="text" formControlName="email" required>
-            </mat-form-field>
-            }
-            @if (edit) {
+        <form class="form" [formGroup]="updateUserForm" (ngSubmit)="updateUser(userSignal().id)" appearance="outline">
+            <div class="input-div">
+                <mat-form-field class="username">
+                    <input #usernameField class="username-input" matInput type="text" formControlName="username" [readonly]="disableUsernameEdit" required>
+                </mat-form-field>
+            <mat-icon class="edit-icon" (click)="disableUsernameEdit = !disableUsernameEdit; usernameField.focus()">edit</mat-icon>
+            </div>
+            <div class="input-div">
+                <mat-form-field class="username">
+                    <input #firstNameField class="username-input" matInput type="text" formControlName="firstName" [readonly]="disableFirstNameEdit" required>
+                </mat-form-field>
+            <mat-icon class="edit-icon" (click)="disableFirstNameEdit = !disableFirstNameEdit; firstNameField.focus()">edit</mat-icon>
+            </div>
+            <div class="input-div">
+                <mat-form-field class="username">
+                    <input #lastNameField class="username-input" matInput type="text" formControlName="lastName" [readonly]="disableLastNameEdit" required>
+                </mat-form-field>
+            <mat-icon class="edit-icon" (click)="disableLastNameEdit = !disableLastNameEdit; lastNameField.focus()">edit</mat-icon>
+            </div>
+            <div class="input-div">
+                <mat-form-field class="username">
+                    <input #emailField class="username-input" matInput type="text" formControlName="email" [readonly]="disableEmailEdit" required>
+                </mat-form-field>
+            <mat-icon class="edit-icon" (click)="disableEmailEdit = !disableEmailEdit; emailField.focus()">edit</mat-icon>
+            </div>
+            <!-- @if (edit) {
             <mat-form-field>
                 <mat-label>Mot de passe</mat-label>
                 <div class="password">
@@ -41,10 +38,18 @@
                     <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
                 </div>
             </mat-form-field>
-            }
+            } -->
         </form>
-    </div>
+        <div class="update-buttons">
+            <button style="color: black" (click)="resetForm()">Reset</button>
+            
+            <button  type="submit"
+                [ngStyle]="{'background': (updateUserForm.valid ? 'rgb(125, 0, 0)' : 'rgb(125, 0, 0, 0.6)')}">
+                Enregister</button>
+        </div>
+</div>
     <div class="delete-container" (click)="logoutDialog(userSignal().id)">
         <div class="delete">Supprimer votre compte</div>
     </div>
 </div>
+<!-- [disabled]="!updateUserForm.valid" -->
