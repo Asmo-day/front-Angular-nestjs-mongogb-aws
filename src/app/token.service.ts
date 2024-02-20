@@ -1,7 +1,6 @@
 import { HttpBackend, HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, map, tap } from "rxjs";
-import { Token } from "./token";
 import { environment } from "../environment";
 import { CacheService } from "./cache.service";
 
@@ -17,14 +16,12 @@ export class TokenService {
 
     constructor(private httpBackend: HttpBackend, private cacheService: CacheService) { }
 
-    getToken(): Observable<Token> {
+    getToken(): Observable<any> {
         const httpClientNotIntercept = new HttpClient(this.httpBackend)
-        return httpClientNotIntercept.get<Token>(this.baseUrl + 'auth/token', { headers: this.httpHeaders }).pipe(
+        return httpClientNotIntercept.get<any>(this.baseUrl + 'auth/token', { headers: this.httpHeaders }).pipe(
             map(data => {
-                const tokenIatExp = JSON.parse(window.atob(data.token.split('.')[1]))
-                const newToken = new Token(data.token, tokenIatExp.exp, tokenIatExp.iat)
-                this.cacheService.set('token', newToken)
-                return newToken
+                this.cacheService.set('token', data.token)
+                return data.token
             }))
     }
 }

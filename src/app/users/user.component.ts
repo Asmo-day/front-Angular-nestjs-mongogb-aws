@@ -1,6 +1,6 @@
 import { SignInDto } from './signInDto';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import * as CryptoJS from 'crypto-js';
+import { CookiesService } from '../cookies.service';
 
 @Component({
   selector: 'app-login',
@@ -21,16 +24,18 @@ import { BehaviorSubject, Subscription } from 'rxjs';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnDestroy {
+export class UserComponent implements OnInit, OnDestroy {
 
-  private _user = new BehaviorSubject<User>({} as any)
-  public user$ = this._user.asObservable()
+  // private _user = new BehaviorSubject<User>({} as any)
+  // public user$ = this._user.asObservable()
 
-  private userService = inject(UserService)
+  private cookiesService = inject(CookiesService)
   private snakeBar = inject(SnakebarService)
-  private router = inject(Router)
-  private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
+  private userService = inject(UserService)
   private formBuilder = inject(FormBuilder)
+  private router = inject(Router)
+  // private userSignal: any
+  private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   public isAccountCreation: boolean = false
   public creationOrCancelButton: string = "Créer un compte"
   public signInOrCreateButton: string = "Se connecter"
@@ -46,10 +51,14 @@ export class UserComponent implements OnDestroy {
   });
   public signInForm = this.formBuilder.group({
     username: ['', Validators.required],
-    password: ['', [Validators.required]],
+    password: ['', Validators.required],
   });
   private signinSubscription: Subscription = new Subscription();
   private createSubscription: Subscription = new Subscription();
+
+  ngOnInit(): void {
+    // this.userSignal = this.userService.userSignal
+  }
 
   signIn() {
     if (this.signInForm.valid) {
@@ -57,8 +66,7 @@ export class UserComponent implements OnDestroy {
       let signInDto = new SignInDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(signInDto).subscribe({
         next: (user: User) => {
-          console.log(user);
-
+          this.cookiesService.set('user', user)
           this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
         },
         error: () => {
@@ -93,7 +101,7 @@ export class UserComponent implements OnDestroy {
             console.warn('error during user creation ' + data);
             error = 'Une erreur est survenue'
           }
-          this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non créer', undefined, 5000)
+          this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non créé', undefined, 5000)
         },
         complete: () => {
           this.isSpinner = false

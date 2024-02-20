@@ -1,5 +1,21 @@
 @import '../../var.scss';
 
+::root {
+    --field-background-color: $mypurple;
+}
+
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.195);
+    backdrop-filter: blur(2px);
+}
+
 .box {
     margin-top: 20px;
     display: flex;
@@ -20,48 +36,70 @@
     margin-bottom: 30px;
 }
 
-.username-input {
-// background: red;
-}
-
 ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-    background-color: $mypurple !important;
-    font-size: 30px;
+    background-color: var(--field-background-color) !important;
+    border-radius: 20px;
+    font-size: 25px;
 }
 
-.input-div {
-    display: flex;
-    align-items: baseline;
+::ng-deep .mat-mdc-form-field-focus-overlay {
+    background: transparent !important;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--enable) {
+    background-color: var(--field-background-color) !important;
+    border-radius: 20px;
+    font-size: 25px;
 }
 
 ::ng-deep mdc-text-field--filled:not(.mdc-text-field--disabled) {
     height: 30px !important;
 }
 
-::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input, .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
     text-align: center !important;
 }
 
-::ng-deep  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+::ng-deep .mdc-text-field__input {
     color: antiquewhite !important;
 }
 
 ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
-    border-bottom-color: $mypurple !important;
+    border-bottom-color: transparent !important;
 }
 
-::ng-deep .mat-form-field-appearance-outline.mat-form-field-disabled, ::ng-deep .mat-form-field-outline {
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+    border-bottom-color: transparent !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-disabled,
+::ng-deep .mat-form-field-outline {
     opacity: 0;
 }
 
-// ::ng-deep .mat-mdc-form-field-flex {
-//     background: aliceblue !important;
-//     border-radius: 25px !important;
-// }
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+    caret-color: antiquewhite !important;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper,
+.mat-mdc-form-field-bottom-align::before {
+    height: 0 !important;
+}
 
 .profile-container {
     background: $mypurple;
 
+}
+
+span {
+    margin-top: 5px;
+    color: blueviolet;
+}
+
+.line {
+    width: 100%;
+    border-radius: 20px;
 }
 
 .delete-container {
@@ -84,7 +122,6 @@
     margin-left: 10px;
     padding-top: 5px;
     border-radius: 50px;
-    background: chartreuse;
 }
 
 .form {
@@ -99,8 +136,14 @@
     font-size: 200px;
 }
 
-.username,
+// .username {
+//     background: var(--field-background-color);
+// }
+
+.form-field,
 .delete {
+    margin-bottom: 10px;
+    border-radius: 20px;
     font-size: 30px;
     color: antiquewhite;
     width: 500px;
@@ -109,8 +152,17 @@
 
 .update-buttons {
     width: 80%;
+    margin-top: 10px;
     display: flex;
     justify-content: space-evenly;
+}
+
+.reset-btn {
+    color: $mypurple;
+}
+
+.edit-btn {
+    background: rgba(125, 0, 0);
 }
 
 button {

@@ -1,3 +1,4 @@
+import { SignInDto } from './users/signInDto';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterModule, RouterOutlet, RouterLinkActive, Router } from '@angular/router';
@@ -10,6 +11,9 @@ import { LogoutComponent } from './dialog-box/logout-dialog/logout.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserService } from './users/user.service';
 import { Subscription } from 'rxjs';
+import { CookiesService } from './cookies.service';
+import { User } from './users/user';
+
 
 @Component({
   selector: 'app-root',
@@ -24,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public dialog = inject(MatDialog)
   public router = inject(Router)
+  private cookiesService = inject(CookiesService)
   public userService = inject(UserService)
   public userRouteAccessService = inject(UserRouteAccessService)
   public userSignal: any;
@@ -31,6 +36,20 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userSignal = this.userService.userSignal
+    const userFromCookie: User = this.cookiesService.get('user')
+
+    if (userFromCookie ?? '') {
+      console.log(
+        this.cookiesService.get('user')
+      );
+      this.userService.signIn(new SignInDto(userFromCookie)).subscribe({
+        next: (data) => {
+          console.log(data);
+
+        }
+      })
+
+    }
   }
 
   signInOut() {
@@ -53,6 +72,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.logoutSubscription = dialog.afterClosed().subscribe(data => {
       if (data) {
         this.userService.userSignal.set({})
+        this.cookiesService.deleteCookie('user')
         this.userRouteAccessService.isActivated.set(false);
         this.dialog.closeAll()
         this.router.navigate(['/home'])

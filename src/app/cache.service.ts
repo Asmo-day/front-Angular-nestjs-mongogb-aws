@@ -5,25 +5,19 @@ import { Injectable } from '@angular/core';
 })
 export class CacheService {
 
-    private cache: { [key: string]: any } = {};
-
     set(key: string, data: any): void {
-        this.cache[key] = data;
+        localStorage.setItem(key, JSON.stringify(data))
     }
 
     get(key: string): any {
-        return this.cache[key];
-    }
-
-    has(key: string): boolean {
-        return !!this.cache[key];
+        return JSON.parse(localStorage.getItem(key) || 'null')
     }
 
     clear(key?: string): void {
         if (key) {
-            delete this.cache[key];
+            localStorage.removeItem(key);
         } else {
-            this.cache = {};
+            localStorage.clear;
         }
     }
 }

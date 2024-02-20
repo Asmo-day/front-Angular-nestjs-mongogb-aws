@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -8,9 +8,17 @@ import { TokenService } from './token.service';
 import { UserRouteAccessService } from './users/user-route-access.service';
 import { UserService } from './users/user.service';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { JwtModule } from '@auth0/angular-jwt';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    importProvidersFrom(
+      JwtModule.forRoot({
+        config: {
+          tokenGetter: tokenGetter
+        },
+      }),
+    ),
     UserService,
     UserRouteAccessService,
     TokenService,
@@ -23,3 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
   ]
 };
+
+export function tokenGetter() {
+  return localStorage.getItem("token");
+}

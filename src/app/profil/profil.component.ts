@@ -13,11 +13,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserDto } from '../users/userDto';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-profil',
   standalone: true,
-  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatFormFieldModule],
+  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss'
 })
@@ -37,11 +38,8 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   private formBuilder = inject(FormBuilder)
   public showPass: boolean = false
-  public edit = false
-  public disableUsernameEdit = true
-  public disableFirstNameEdit = true
-  public disableLastNameEdit = true
-  public disableEmailEdit = true
+  public isSpinner: boolean = false
+  public editMode: boolean = false
   public updateUserForm = this.formBuilder.group({
     username: ['', Validators.required],
     firstName: ['', Validators.required],
@@ -63,39 +61,51 @@ export class ProfilComponent implements OnInit, OnDestroy {
       email: this.userSignal().email,
       // password: 'h'
     });
-
-      this.disableUsernameEdit = true
-      this.disableFirstNameEdit = true
-      this.disableLastNameEdit = true
-      this.disableEmailEdit = true
   }
 
   updateUser(userId: string) {
-    console.log('in updateUser');
-    
-    if (this.updateUserForm.value.username === this.userSignal().username.toUpperCase() &&
-    this.updateUserForm.value.firstName === this.userSignal().firstName &&
-    this.updateUserForm.value.lastName === this.userSignal().lastName &&
-    this.updateUserForm.value.email === this.userSignal().email ) {
-      this.snakeBar.generateSnakebar('Les information n\'ont pas changé', '')
-      
-    } else {
-      if (this.updateUserForm.valid) {
-        const userDto: UserDto = new UserDto(this.updateUserForm.value)
-        this.updateUserSubscription = this.userService.updateUser(userId, userDto).subscribe({
-          next: (data) => {
-            console.log(data);
-            
-          }
-        })
-      }
 
+    if (this.isPropertiesChanged()) {
+      this.snakeBar.generateSnakebar('Les informations n\'ont pas changé', 'Aucun changement détécté')
+    } else if (this.updateUserForm.valid) {
+      this.isSpinner = true
+      const userDto: UserDto = new UserDto(this.updateUserForm.value)
+      this.updateUserSubscription = this.userService.updateUser(userId, userDto).subscribe({
+        next: () => {
+          this.toggleMode()
+          this.isSpinner = false
+          this.snakeBar.generateSnakebar('Le profil a été mis à jour avec', 'SUCCÉS')
+        },
+        error: (data) => {
+          this.isSpinner = false
+          let error: string;
+          if (data.status === 400) {
+            console.warn(data.error.message);
+            error = 'Le nom d\'utilisateur existe déjà'
+
+          } else {
+            console.warn('error during user creation ' + data);
+            error = 'Une erreur est survenue'
+          }
+          this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non modifié', undefined, 5000)
+        }
+      })
+    } else {
+      const errors: string[] = [];
+      this.updateUserForm.controls.username.errors ? errors.push('Nom d\'utilisateur') : '';
+      this.updateUserForm.controls.firstName.errors ? errors.push('prénom') : '';
+      this.updateUserForm.controls.lastName.errors ? errors.push('Nom') : '';
+      this.updateUserForm.controls.email.errors ? errors.push('Adresse e-mail') : '';
+      this.snakeBar.generateSnakebar('Erreur ! Veuillez vérifier les données suivantes : ', errors.join(', '))
     }
   }
 
   deleteAccount(userId: string) {
+
+    this.isSpinner = true
     this.deleteUserSubscription = this.userService.deleteUser(userId).subscribe({
       next: () => {
+        this.isSpinner = false
         this.snakeBar.generateSnakebar('Votre compte a été', 'SUPPRIMÉ')
         this.userRouteAccessService.isActivated.set(false)
         this.userSignal.set({})
@@ -103,6 +113,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
         this.dialog.closeAll()
       },
       error: (data) => {
+        this.isSpinner = false
         console.warn(data)
         this.snakeBar.generateSnakebar('Une erreur est ', 'SUPPRIMÉ')
       }
@@ -121,10 +132,28 @@ export class ProfilComponent implements OnInit, OnDestroy {
     })
   }
 
+  // fieldColorToggle(toggle: boolean): void {
+  // }
+
+  toggleMode() {
+    this.editMode = !this.editMode
+    this.editMode ? document.documentElement.style.setProperty('--field-background-color', '#5c2eab') :
+      document.documentElement.style.setProperty('--field-background-color', '#411d7f')
+
+  }
+
   ngOnDestroy(): void {
     this.deleteUserSubscription.unsubscribe()
     this.logoutSubscription.unsubscribe()
     this.updateUserSubscription.unsubscribe()
   }
 
+  isPropertiesChanged() {
+    return this.updateUserForm.value.username === this.userSignal().username.toUpperCase() &&
+      this.updateUserForm.value.firstName === this.userSignal().firstName &&
+      this.updateUserForm.value.lastName === this.userSignal().lastName &&
+      this.updateUserForm.value.email === this.userSignal().email
+  }
+
 }
+
