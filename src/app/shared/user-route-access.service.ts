@@ -10,14 +10,9 @@ export class UserRouteAccessService {
     public authService = inject(AuthService)
     private userSignal: any = this.authService.userSignal
 
-    constructor() {
-    }
-
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+
         const authorities = route.data['authorities']
-        console.log(route.data['authorities']);
-
-
         if ((authorities ?? '') && route.data['authorities'].includes(this.userSignal().role)) {
             return true
         }

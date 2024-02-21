@@ -41,7 +41,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userSignal = this.authService.userSignal
-    this.logger.info(this.userSignal().role)
     this.rememberMe()
   }
 
