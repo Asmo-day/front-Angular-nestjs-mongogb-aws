@@ -53,7 +53,8 @@
                 {{ editMode ? 'Enregister' : "Modifier"}}</button>
         </div>
     </div>
-    <div class="delete-container" (click)="logoutDialog(userSignal().id)">
+    <div class="delete-container" (click)="logoutDialog(userSignal().id)"
+        (keydown.enter)="logoutDialog(userSignal().id)">
         <div class="delete">Supprimer votre compte</div>
     </div>
 </div>

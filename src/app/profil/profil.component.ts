@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UserService } from '../users/user.service';
-import { User } from '../users/user';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { SnakebarService } from '../snakebar.service';
+import { SnakebarService } from '../shared/snakebar.service';
 import { Router } from '@angular/router';
-import { UserRouteAccessService } from '../users/user-route-access.service';
+import { UserRouteAccessService } from '../shared/user-route-access.service';
 import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LogoutComponent } from '../dialog-box/logout-dialog/logout.component';
@@ -14,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserDto } from '../users/userDto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-profil',
@@ -29,13 +29,14 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private userService = inject(UserService)
   public dialog = inject(MatDialog)
   public snakeBar = inject(SnakebarService)
+  public authService = inject(AuthService)
   private router = inject(Router)
   public userRouteAccessService = inject(UserRouteAccessService)
   public userSignal: any;
   private deleteUserSubscription: Subscription = new Subscription();
   private logoutSubscription: Subscription = new Subscription();
   private updateUserSubscription: Subscription = new Subscription();
-  private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
+  // private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   private formBuilder = inject(FormBuilder)
   public showPass: boolean = false
   public isSpinner: boolean = false
@@ -49,7 +50,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.userSignal = this.userService.userSignal
+    this.userSignal = this.authService.userSignal
     this.resetForm()
   }
 

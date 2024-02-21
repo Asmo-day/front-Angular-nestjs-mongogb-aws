@@ -1,47 +1,46 @@
 import { SignInDto } from './signInDto';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from './user.service';
-import { SnakebarService } from '../snakebar.service';
+import { SnakebarService } from '../shared/snakebar.service';
 import { User } from './user';
 import { UserDto } from './userDto';
 import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
-import * as CryptoJS from 'crypto-js';
-import { CookiesService } from '../cookies.service';
+import { Subscription } from 'rxjs';
+import { CookiesService } from '../shared/cookies.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { LoggerService } from '../shared/logger.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, MatProgressSpinnerModule, MatIconModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, MatProgressSpinnerModule, MatIconModule, MatCheckboxModule, MatTooltipModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class UserComponent implements OnDestroy {
 
-  // private _user = new BehaviorSubject<User>({} as any)
-  // public user$ = this._user.asObservable()
-
-  private cookiesService = inject(CookiesService)
-  private snakeBar = inject(SnakebarService)
-  private userService = inject(UserService)
-  private formBuilder = inject(FormBuilder)
-  private router = inject(Router)
-  // private userSignal: any
+  private cookiesService = inject(CookiesService);
+  private snakeBar = inject(SnakebarService);
+  private userService = inject(UserService);
+  private formBuilder = inject(FormBuilder);
+  private logger = inject(LoggerService);
+  private router = inject(Router);
   private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
-  public isAccountCreation: boolean = false
-  public creationOrCancelButton: string = "Créer un compte"
-  public signInOrCreateButton: string = "Se connecter"
-  public title: string = "Connection"
-  public showPass: boolean = false
-  public isSpinner: boolean = false
+  public isAccountCreation: boolean = false;
+  public creationOrCancelButton: string = "Créer un compte";
+  public signInOrCreateButton: string = "Se connecter";
+  public title: string = "Connection";
+  public showPass: boolean = false;
+  public isSpinner: boolean = false;
+  private signinSubscription: Subscription = new Subscription();
+  private createSubscription: Subscription = new Subscription();
   public createUserForm = this.formBuilder.group({
     username: ['', Validators.required],
     firstName: [''],
@@ -52,25 +51,21 @@ export class UserComponent implements OnInit, OnDestroy {
   public signInForm = this.formBuilder.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
+    rememberMe: [false]
   });
-  private signinSubscription: Subscription = new Subscription();
-  private createSubscription: Subscription = new Subscription();
-
-  ngOnInit(): void {
-    // this.userSignal = this.userService.userSignal
-  }
 
   signIn() {
     if (this.signInForm.valid) {
       this.isSpinner = true
-      let signInDto = new SignInDto(this.signInForm.value)
+      const signInDto = new SignInDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(signInDto).subscribe({
         next: (user: User) => {
           this.cookiesService.set('user', user)
           this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
         },
-        error: () => {
+        error: (data) => {
           this.isSpinner = false
+          this.logger.error('in UserComponent.signIn error: ', data.error.message)
           this.snakeBar.generateSnakebar('Une erreur est survenue', 'Utilisateur non trouvé')
         },
         complete: () => {
@@ -84,21 +79,21 @@ export class UserComponent implements OnInit, OnDestroy {
   createAccount() {
     if (this.createUserForm.valid) {
       this.isSpinner = true
-      let userToCreate = new UserDto(this.createUserForm.value);
+      const userToCreate = new UserDto(this.createUserForm.value);
       this.createSubscription = this.userService.createUser(userToCreate).subscribe({
         next: (data) => {
           this.snakeBar.generateSnakebar('Votre compte a été créé', 'Bienvenue ' + data.username.toUpperCase())
-          // this.router.navigate(['/home'])
+          this.logger.info('in UserComponent.createAccount', data)
         },
         error: (data) => {
           let error: string;
           this.isSpinner = false
           if (data.status === 400) {
-            console.warn(data.error.message);
+            this.logger.error('in UserComponent.createAccount error', data.status, data.error.message)
             error = 'Le nom d\'utilisateur existe déjà'
 
           } else {
-            console.warn('error during user creation ' + data);
+            this.logger.error('in UserComponent.createAccount error ', data.status, data.error.message);
             error = 'Une erreur est survenue'
           }
           this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non créé', undefined, 5000)

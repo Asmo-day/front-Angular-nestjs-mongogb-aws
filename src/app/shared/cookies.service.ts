@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import * as CryptoJS from 'crypto-js';
-import { environment } from "../environment";
+import { environment } from "../../environment";
 import { CookieService } from "ngx-cookie-service";
 
 @Injectable({
@@ -11,7 +11,7 @@ export class CookiesService {
     private cookieService = inject(CookieService)
 
     set(key: string, value: any) {
-        this.cookieService.set('user', this.encryptCookie(JSON.stringify(value)))
+        this.cookieService.set(key, this.encryptCookie(JSON.stringify(value)))
     }
 
     get(key: string) {

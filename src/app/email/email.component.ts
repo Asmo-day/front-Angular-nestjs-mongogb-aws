@@ -9,7 +9,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { EmailDto } from './emailDto';
 import { MailerService } from './mailer.service';
-import { SnakebarService } from '../snakebar.service';
+import { SnakebarService } from '../shared/snakebar.service';
 import { WaitDialogComponent } from '../dialog-box/wait-dialog/wait-dialog.component';
 import { Subscription } from 'rxjs';
 
@@ -41,7 +41,7 @@ export class EmailComponent implements OnDestroy {
 
   onSubmit() {
     this.waitDialog()
-    let sendEmailDto = new EmailDto(this.emailForm.value)
+    const sendEmailDto = new EmailDto(this.emailForm.value)
     this.mailerSubscription = this.mailerService.postEmailContent(sendEmailDto).subscribe({
       next: () => { },
       error: () => {

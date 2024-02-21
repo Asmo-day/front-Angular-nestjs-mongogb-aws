@@ -6,10 +6,18 @@
         Accueil
       </button>
 
-      <button mat-tab-link [routerLink]="'email'" routerLinkActive #email="routerLinkActive" [active]="email.isActive"
-        *ngIf="userRouteAccessService.isActivated()">
+      @if (userRouteAccessService.isActivated()) {
+      <button mat-tab-link [routerLink]="'email'" routerLinkActive #email="routerLinkActive" [active]="email.isActive">
         Contact
       </button>
+      }
+
+      @if (userRouteAccessService.isActivated() && userSignal().role === 'ADMIN') {
+      <button mat-tab-link [routerLink]="'manageUsers'" routerLinkActive #manageUser="routerLinkActive"
+        [active]="manageUser.isActive">
+        Gestion des utilisateus
+      </button>
+      }
 
       <div class="signin">
         <mat-icon class="signin-ico" [matMenuTriggerFor]="menu">account_circle</mat-icon>

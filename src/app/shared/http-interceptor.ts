@@ -2,15 +2,15 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { TokenService } from './token.service';
 import { switchMap } from 'rxjs';
-import { CacheService } from './cache.service';
+import { StorageService } from './storage.service';
 // import { Token } from './token';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   const tokenService = inject(TokenService)
-  const cacheService = inject(CacheService)
-  const cachedToken = cacheService.get('token')
+  const storageService = inject(StorageService)
+  const cachedToken = storageService.get('token')
   const jwtHelper = new JwtHelperService()
 
   if (cachedToken && !jwtHelper.isTokenExpired(cachedToken)) {

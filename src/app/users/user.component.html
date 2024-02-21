@@ -33,6 +33,11 @@
                     <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
                 </div>
             </mat-form-field>
+            @if (!isAccountCreation) {
+            <mat-checkbox formControlName="rememberMe" matTooltip="Cochez cette case pour rester connecté"
+                matTooltipPosition="before">Se souvenir
+                de moi ?</mat-checkbox>
+            }
         </form>
         <div [ngStyle]="{'color': createUserForm.controls.password.touched ? 'red' : 'black'}"
             *ngIf="isAccountCreation">

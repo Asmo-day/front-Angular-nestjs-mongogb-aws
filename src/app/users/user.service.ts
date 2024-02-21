@@ -1,57 +1,58 @@
-import { UserRouteAccessService } from './user-route-access.service';
+import { AuthService } from './../shared/auth.service';
+import { UserRouteAccessService } from '../shared/user-route-access.service';
 import { HttpClient } from "@angular/common/http";
 import { Injectable, signal } from "@angular/core";
-import { Observable, map } from "rxjs";
+import { Observable, map, tap } from "rxjs";
 import { SignInDto } from "./signInDto";
 import { User } from "./user";
 import { UserDto } from "./userDto";
 import { environment } from "../../environment";
+import { LoggerService } from '../shared/logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
     private baseUrl = environment.BASE_URL
-    public userSignal = signal({})
-    public userActiveSignal = signal(false)
 
-    constructor(private httpClient: HttpClient, private userRouteAccessService: UserRouteAccessService) { }
+    constructor(
+        private httpClient: HttpClient,
+        private authService: AuthService,
+        private userRouteAccessService: UserRouteAccessService,
+        private logger: LoggerService
+    ) { }
 
     signIn(signInDto: SignInDto): Observable<User> {
-        console.log(signInDto);
-
-        return this.httpClient.post<any>(this.baseUrl + 'users/signin', JSON.stringify(signInDto)).pipe(
+        return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(signInDto)).pipe(
             map(data => {
-                console.log(data);
+                const user = this.mapUser(data)
+                this.authService.userSignal.set(user)
+                this.logger.info('in UserService.signIn', user);
                 this.userRouteAccessService.isActivated.set(true)
-                const users = this.mapUser(data)
-
-
-
-                this.userSignal.set(users)
-                console.log(this.userSignal());
-
-                return users
+                return user
             })
         )
     }
 
-    createUser(userToCreate: UserDto): Observable<any> {
-        return this.httpClient.post(this.baseUrl + 'users', JSON.stringify(userToCreate))
+    createUser(userToCreate: UserDto): Observable<User> {
+        return this.httpClient.post<User>(this.baseUrl + 'users', JSON.stringify(userToCreate))
     }
 
     updateUser(userId: string, updateUser: UserDto): Observable<User> {
         return this.httpClient.patch<User>(this.baseUrl + 'users/' + userId, updateUser).pipe(
             map(data => {
-                const users = this.mapUser(data)
-                this.userSignal.set(users)
-                return users
+                const user = this.mapUser(data)
+                this.authService.userSignal.set(user)
+                this.logger.info('in UserService.updateUser', user);
+                return user
             })
         )
     }
 
 
-    deleteUser(userId: string): Observable<any> {
-        return this.httpClient.delete(this.baseUrl + 'users/' + userId)
+    deleteUser(userId: string): Observable<User> {
+        return this.httpClient.delete<User>(this.baseUrl + 'users/' + userId).pipe(tap(data => {
+            this.logger.info('in UserService.deleteUser', data);
+        }))
     }
 
     mapUser(data: any): User {
@@ -63,7 +64,7 @@ export class UserService {
             data.email,
             data.role,
             data.userToken,
-
+            data.rememberMe
         )
     }
 }

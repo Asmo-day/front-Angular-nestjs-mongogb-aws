@@ -6,13 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
-import { UserRouteAccessService } from './users/user-route-access.service';
+import { UserRouteAccessService } from './shared/user-route-access.service';
 import { LogoutComponent } from './dialog-box/logout-dialog/logout.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserService } from './users/user.service';
 import { Subscription } from 'rxjs';
-import { CookiesService } from './cookies.service';
+import { CookiesService } from './shared/cookies.service';
 import { User } from './users/user';
+import { LoggerService } from './shared/logger.service';
+import { AuthService } from './shared/auth.service';
 
 
 @Component({
@@ -26,29 +28,30 @@ import { User } from './users/user';
 
 export class AppComponent implements OnInit, OnDestroy {
 
-  public dialog = inject(MatDialog)
+  private dialog = inject(MatDialog)
   public router = inject(Router)
   private cookiesService = inject(CookiesService)
+  private logger = inject(LoggerService)
+  public authService = inject(AuthService)
   public userService = inject(UserService)
   public userRouteAccessService = inject(UserRouteAccessService)
   public userSignal: any;
   private logoutSubscription: Subscription = new Subscription();
+  private signinSubscription: Subscription = new Subscription();
 
-  ngOnInit(): void {
-    this.userSignal = this.userService.userSignal
+  ngOnInit() {
+    this.userSignal = this.authService.userSignal
+    this.logger.info(this.userSignal().role)
+    this.rememberMe()
+  }
+
+  rememberMe() {
     const userFromCookie: User = this.cookiesService.get('user')
-
-    if (userFromCookie ?? '') {
-      console.log(
-        this.cookiesService.get('user')
-      );
-      this.userService.signIn(new SignInDto(userFromCookie)).subscribe({
-        next: (data) => {
-          console.log(data);
-
-        }
-      })
-
+    this.logger.info('in AppComponent.rememberMe', userFromCookie);
+    if ((userFromCookie ?? '') && userFromCookie.rememberMe) {
+      this.signinSubscription = this.userService.signIn(new SignInDto(userFromCookie)).subscribe()
+    } else {
+      this.logger.info('No cookie found for user')
     }
   }
 
@@ -69,9 +72,9 @@ export class AppComponent implements OnInit, OnDestroy {
       panelClass: 'custom-dialog-container',
       data: { title: 'Se deconnecter ?' }
     })
-    this.logoutSubscription = dialog.afterClosed().subscribe(data => {
-      if (data) {
-        this.userService.userSignal.set({})
+    this.logoutSubscription = dialog.afterClosed().subscribe(isLogout => {
+      if (isLogout) {
+        this.authService.userSignal.set({})
         this.cookiesService.deleteCookie('user')
         this.userRouteAccessService.isActivated.set(false);
         this.dialog.closeAll()
@@ -82,5 +85,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.logoutSubscription.unsubscribe()
+    this.signinSubscription.unsubscribe()
   }
 }
