@@ -14,7 +14,6 @@ import { MatInputModule } from '@angular/material/input';
 import { UserDto } from '../users/userDto';
 import { AuthService } from '../shared/auth.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
-import { User } from '../users/user';
 
 @Component({
   selector: 'app-profil',
@@ -42,9 +41,10 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private updateUserSubscription: Subscription = new Subscription();
   // private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   private formBuilder = inject(FormBuilder)
-  public showPass: boolean = false
+  // public showPass: boolean = false
   public isSpinner: boolean = false
   public editMode: boolean = false
+  public adminEdit: boolean = false
   private userToUpdate: any;
   public updateUserForm = this.formBuilder.group({
     username: ['', Validators.required],
@@ -56,24 +56,32 @@ export class ProfilComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userSignal = this.authService.userSignal
-    console.log(this.updateUser);
-    this.userToUpdate = (this.authService.isAdmin() &&  (this.selectedUser ?? '') ? this.selectedUser : this.userSignal())
-    
+    this.init()
+  }
+
+  init() {
+    if (this.authService.isAdmin() && (this.selectedUser ?? '')) {
+      this.adminEdit = !this.adminEdit
+      this.userToUpdate = this.selectedUser
+      this.toggleMode()
+    } else {
+      this.userToUpdate = this.userSignal()
+    }
     this.resetForm()
   }
-  
+
   resetForm() {
-      this.updateUserForm.setValue({
-        username: this.userToUpdate.username.toUpperCase(),
-        firstName: this.userToUpdate.firstName,
-        lastName: this.userToUpdate.lastName,
-        email: this.userToUpdate.email
-      });
+    this.updateUserForm.setValue({
+      username: this.userToUpdate.username.toUpperCase(),
+      firstName: this.userToUpdate.firstName,
+      lastName: this.userToUpdate.lastName,
+      email: this.userToUpdate.email
+    });
   }
 
   updateUser(userId: string) {
-console.log(userId);
-console.log(this.updateUserForm.valid);
+    console.log(userId);
+    console.log(this.updateUserForm.valid);
 
 
     if (this.isPropertiesChanged()) {
@@ -111,34 +119,34 @@ console.log(this.updateUserForm.valid);
     }
   }
 
-  deleteAccount(userId: string) {
+  deleteAccount() {
 
     this.isSpinner = true
-    this.deleteUserSubscription = this.userService.deleteUser(userId).subscribe({
+    this.deleteUserSubscription = this.userService.deleteUser(this.userToUpdate.id).subscribe({
       next: () => {
         this.isSpinner = false
         this.snakeBar.generateSnakebar('Votre compte a été', 'SUPPRIMÉ')
         this.userRouteAccessService.isActivated.set(false)
         this.userSignal.set({})
-        this.router.navigate(['/home'])
+        this.router.navigate(this.adminEdit ? ['/usersManagement'] : ['/home'])
         this.dialog.closeAll()
       },
       error: (data) => {
         this.isSpinner = false
         console.warn(data)
-        this.snakeBar.generateSnakebar('Une erreur est ', 'SUPPRIMÉ')
+        this.snakeBar.generateSnakebar('Une erreur est survenue ', data)
       }
     });
   }
 
-  deleteDialog(username: string): void {
+  deleteDialog(): void {
     const dialog = this.dialog.open(LogoutDeleteComponent, {
       panelClass: 'custom-dialog-container',
       data: { title: 'Supprimer votre compte ?' }
     })
     this.logoutSubscription = dialog.afterClosed().subscribe(response => {
       if (response) {
-        this.deleteAccount(username)
+        this.deleteAccount()
       }
     })
   }
@@ -147,7 +155,6 @@ console.log(this.updateUserForm.valid);
     this.editMode = !this.editMode
     this.editMode ? document.documentElement.style.setProperty('--field-background-color', '#5c2eab') :
       document.documentElement.style.setProperty('--field-background-color', '#411d7f')
-
   }
 
   ngOnDestroy(): void {

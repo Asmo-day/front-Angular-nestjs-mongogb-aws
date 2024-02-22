@@ -1,6 +1,6 @@
 @if (isSpinner) {
-    <app-spinner ></app-spinner>
-  }
+<app-spinner></app-spinner>
+}
 
 <div class="box">
     <h2>{{ title }}</h2>
@@ -53,8 +53,7 @@
                 {{ editMode ? 'Enregister' : "Modifier"}}</button>
         </div>
     </div>
-    <div class="delete-container" (click)="deleteDialog(userSignal().id)"
-        (keydown.enter)="deleteDialog(userSignal().id)">
+    <div class="delete-container" (click)="deleteDialog()" (keydown.enter)="deleteDialog()">
         <div class="delete">Supprimer votre compte</div>
     </div>
 </div>

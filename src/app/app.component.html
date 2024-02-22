@@ -13,8 +13,8 @@
       }
 
       @if (userRouteAccessService.isActivated() && userSignal().role === 'ADMIN') {
-      <button mat-tab-link [routerLink]="'manageUsers'" routerLinkActive #manageUser="routerLinkActive"
-        [active]="manageUser.isActive">
+      <button mat-tab-link [routerLink]="'usersManagement'" routerLinkActive #usersManagement="routerLinkActive"
+        [active]="usersManagement.isActive">
         Gestion des utilisateus
       </button>
       }
