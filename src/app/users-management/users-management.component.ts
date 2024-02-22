@@ -12,11 +12,12 @@ import { Subscription } from 'rxjs';
 import { LogoutDeleteComponent } from '../shared/dialog-box/logout-delete-dialog/logout-delete.component';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { ProfilComponent } from '../profil/profil.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-users-management',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatDialogModule, SpinnerComponent, ProfilComponent],
+  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatDialogModule, SpinnerComponent, ProfilComponent, MatButtonModule],
   templateUrl: './users-management.component.html',
   styleUrl: './users-management.component.scss'
 })
@@ -32,6 +33,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   public isEditMode = false
   public isSpinner: boolean = false
   private userServiceSubscription = new Subscription();
+  private logoutSubscription: Subscription = new Subscription();
   public selectedUser: User | undefined;
 
   ngOnInit(): void {
@@ -46,43 +48,44 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     })
   }
 
-  delete(element: any) {
-    this.deleteDialog(element);
-    this.userServiceSubscription = this.userService.deleteUser(element._id).subscribe({
-      next: () => { this.refreshData },
+  deleteAccount(user: any) {
+    // this.deleteDialog(element);
+    this.userServiceSubscription = this.userService.deleteUser(user._id).subscribe({
+      next: () => { this.refreshData() },
       error: (data) => {
         this.logger.error('in UsersManagementComponent.deleteDialog error', data.status, data.error.message)
         this.snakeBar.generateSnakebar('Un problèmé est survenue lors de la suppression', 'ERREUR')
       },
       complete: () => {
-        this.snakeBar.generateSnakebar(`L\'utilisateur ${ element.username.toUpperCase() } a été` , 'SUPPRIMÉ')
+        this.snakeBar.generateSnakebar(`L\'utilisateur ${ user.username.toUpperCase() } a été` , 'SUPPRIMÉ')
       }
     })
   }
 
   edit(element: User) {
     this.isEditMode = !this.isEditMode
-    this.selectedUser = element
+    this.selectedUser = this.userService.mapUser(element)
   }
 
-  deleteDialog(userData: User): void {
+  eventFromProfil() {
+    this.isEditMode = !this.isEditMode
+    this.refreshData()
+  }
+
+  deleteDialog(user: User): void {
     const dialog = this.dialog.open(LogoutDeleteComponent, {
       panelClass: 'custom-dialog-container',
-      data: { userData: userData }
+      data: { title: `Supprimer le compte ${user.username} ?` }
+
     })
-    // this.logoutSubscription = dialog.afterClosed().subscribe(isLogout => {
-    //   if (isLogout) {
-    //     this.authService.userSignal.set({})
-    //     this.cookiesService.deleteCookie('user')
-    //     this.userRouteAccessService.isActivated.set(false);
-    //     this.dialog.closeAll()
-    //     this.router.navigate(['/home'])
-    //   }
-    // })
+    this.logoutSubscription = dialog.afterClosed().subscribe(response => {
+      if (response) {
+        this.deleteAccount(user)
+      }
+  })
   }
 
   ngOnDestroy(): void {
     this.userServiceSubscription.unsubscribe()
   }
-
 }

@@ -31,14 +31,18 @@
     text-align: center !important;
 }
 
-.deleteButton {
+.deleteButton, .editButton {
     background-color: #c6c6c9;
     color: white;
 }
 
 .deleteButton:hover {
-background-color: #ff0000;
+background-color: red;
 }
+
+.editButton:hover {
+    background-color: chartreuse;
+    }
 
 input {
     width: 100%;

@@ -38,17 +38,28 @@
                 <mat-label>Mot de passe</mat-label>
                 <div class="password">
                     <input matInput [type]="showPass ? 'text': 'password'" formControlName="password" autocomplete="on"
-                        required>
+                    required>
                     <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
                 </div>
             </mat-form-field> -->
+            @if (isAdminEdit) {
+            <span>Role</span>
+            <mat-radio-group class="radio-group" formControlName="role">
+                @for (role of roles; track role) {
+                    <mat-radio-button value="{{role.value}}">
+                      {{role.label}}
+                    </mat-radio-button>
+                }
+              </mat-radio-group>
+            }
         </form>
+           
         <div class="update-buttons">
             @if (editMode) {
-            <button class="reset-btn" (click)="resetForm(); toggleMode()">Annuler</button>
+            <button class="reset-btn" (click)="cancel()">Annuler</button>
             }
 
-            <button class="edit-btn" (click)="editMode ? updateUser(userSignal().id)  : toggleMode()"
+            <button class="edit-btn" (click)="editMode ? updateUser()  : toggleMode()"
                 (click)="editMode ? usernameField.focus() : ''">
                 {{ editMode ? 'Enregister' : "Modifier"}}</button>
         </div>

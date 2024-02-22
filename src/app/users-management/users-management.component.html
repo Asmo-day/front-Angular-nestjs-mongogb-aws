@@ -2,11 +2,11 @@
   <app-spinner ></app-spinner>
 }
 <div class="box">
-  <h2>{{ title }}</h2>
   @if (isEditMode) {
-    <app-profil [selectedUser]="selectedUser"></app-profil>
+    <app-profil [selectedUser]="selectedUser" (backToUserManagement)="eventFromProfil()"></app-profil>
   }
   @if (!isEditMode) {
+    <h2>{{ title }}</h2>
     <div class="container">
     <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="username">
@@ -36,7 +36,7 @@
           <ng-container matColumnDef="edit">
             <th mat-header-cell *matHeaderCellDef>Modifier</th>
             <td mat-cell *matCellDef="let element" class="buttonCell">
-              <button mat-mini-fab matTooltip="Éditer l'utilisateur" (click)="edit(element)" class="deleteButton">
+              <button mat-mini-fab matTooltip="Éditer l'utilisateur" (click)="edit(element)" class="editButton">
                 <mat-icon mat-button>edit</mat-icon>
               </button>
             </td>
@@ -44,7 +44,7 @@
           <ng-container matColumnDef="delete">
             <th mat-header-cell *matHeaderCellDef>Supprimer</th>
             <td mat-cell *matCellDef="let element" class="buttonCell">
-              <button mat-mini-fab matTooltip="Supprimer l'utilisateur" (click)="delete(element)" class="deleteButton">
+              <button mat-mini-fab matTooltip="Supprimer l'utilisateur" (click)="deleteDialog(element)" class="deleteButton">
                 <mat-icon mat-button>delete_outline</mat-icon>
               </button>
             </td>

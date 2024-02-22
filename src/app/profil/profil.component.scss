@@ -75,6 +75,11 @@
     height: 0 !important;
 }
 
+::ng-deep .mdc-form-field>label {
+    font-size: large !important;
+    color: antiquewhite !important;
+}
+
 .profile-container {
     background: $mypurple;
 
@@ -117,16 +122,21 @@ span {
     flex-direction: column;
 }
 
+.radio-group {
+    display: flex;
+    justify-content: space-around;
+    height: 60px;
+    align-items: center;
+    background: $mypurpleDim;
+    border-radius: 20px;
+}
+
 .user-icon {
     color: antiquewhite;
     width: 200px;
     height: 200px;
     font-size: 200px;
 }
-
-// .username {
-//     background: var(--field-background-color);
-// }
 
 .form-field,
 .delete {
