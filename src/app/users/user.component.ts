@@ -10,17 +10,17 @@ import { User } from './user';
 import { UserDto } from './userDto';
 import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox'
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { CookiesService } from '../shared/cookies.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoggerService } from '../shared/logger.service';
+import { SpinnerComponent } from '../shared/spinner/spinner.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, MatProgressSpinnerModule, MatIconModule, MatCheckboxModule, MatTooltipModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, SpinnerComponent, MatIconModule, MatCheckboxModule, MatTooltipModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })

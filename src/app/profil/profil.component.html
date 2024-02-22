@@ -1,6 +1,6 @@
-<div class="spinner" *ngIf="isSpinner">
-    <mat-spinner></mat-spinner>
-</div>
+@if (isSpinner) {
+    <app-spinner ></app-spinner>
+  }
 
 <div class="box">
     <h2>{{ title }}</h2>
@@ -53,8 +53,8 @@
                 {{ editMode ? 'Enregister' : "Modifier"}}</button>
         </div>
     </div>
-    <div class="delete-container" (click)="logoutDialog(userSignal().id)"
-        (keydown.enter)="logoutDialog(userSignal().id)">
+    <div class="delete-container" (click)="deleteDialog(userSignal().id)"
+        (keydown.enter)="deleteDialog(userSignal().id)">
         <div class="delete">Supprimer votre compte</div>
     </div>
 </div>

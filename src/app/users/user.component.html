@@ -1,6 +1,6 @@
-<div class="spinner" *ngIf="isSpinner">
-    <mat-spinner></mat-spinner>
-</div>
+@if (isSpinner) {
+    <app-spinner ></app-spinner>
+}
 
 <div class="container">
     <h2>{{ title }}</h2>

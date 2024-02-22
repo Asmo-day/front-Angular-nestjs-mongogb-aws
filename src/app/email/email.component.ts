@@ -10,7 +10,7 @@ import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { EmailDto } from './emailDto';
 import { MailerService } from './mailer.service';
 import { SnakebarService } from '../shared/snakebar.service';
-import { WaitDialogComponent } from '../dialog-box/wait-dialog/wait-dialog.component';
+import { WaitDialogComponent } from '../shared/dialog-box/wait-dialog/wait-dialog.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -26,10 +26,10 @@ import { Subscription } from 'rxjs';
 export class EmailComponent implements OnDestroy {
 
   private formBuilder = inject(FormBuilder)
-  public snakeBar = inject(SnakebarService)
-  public dialog = inject(MatDialog)
-  public mailerService = inject(MailerService)
-  public router = inject(Router)
+  private snakeBar = inject(SnakebarService)
+  private dialog = inject(MatDialog)
+  private mailerService = inject(MailerService)
+  private router = inject(Router)
   public title: string = 'Contactez nous !'
   emailForm = this.formBuilder.group({
     firstName: ['', Validators.required],

@@ -11,7 +11,7 @@ import { LoggerService } from '../shared/logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-
+    
     private baseUrl = environment.BASE_URL
 
     constructor(
@@ -36,7 +36,7 @@ export class UserService {
     createUser(userToCreate: UserDto): Observable<User> {
         return this.httpClient.post<User>(this.baseUrl + 'users', JSON.stringify(userToCreate))
     }
-
+    
     updateUser(userId: string, updateUser: UserDto): Observable<User> {
         return this.httpClient.patch<User>(this.baseUrl + 'users/' + userId, updateUser).pipe(
             map(data => {
@@ -48,13 +48,16 @@ export class UserService {
         )
     }
 
+    getUsers(): Observable<User[]> {
+      return this.httpClient.get<User[]>(this.baseUrl + 'users')
+    }
 
     deleteUser(userId: string): Observable<User> {
         return this.httpClient.delete<User>(this.baseUrl + 'users/' + userId).pipe(tap(data => {
             this.logger.info('in UserService.deleteUser', data);
         }))
     }
-
+    
     mapUser(data: any): User {
         return new User(
             data._id,

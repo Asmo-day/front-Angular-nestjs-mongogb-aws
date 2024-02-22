@@ -7,18 +7,18 @@ import { Router } from '@angular/router';
 import { UserRouteAccessService } from '../shared/user-route-access.service';
 import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { LogoutComponent } from '../dialog-box/logout-dialog/logout.component';
+import { LogoutDeleteComponent } from '../shared/dialog-box/logout-delete-dialog/logout-delete.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserDto } from '../users/userDto';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../shared/auth.service';
+import { SpinnerComponent } from '../shared/spinner/spinner.component';
 
 @Component({
   selector: 'app-profil',
   standalone: true,
-  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatFormFieldModule, SpinnerComponent],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss'
 })
@@ -121,8 +121,8 @@ export class ProfilComponent implements OnInit, OnDestroy {
     });
   }
 
-  logoutDialog(username: string): void {
-    const dialog = this.dialog.open(LogoutComponent, {
+  deleteDialog(username: string): void {
+    const dialog = this.dialog.open(LogoutDeleteComponent, {
       panelClass: 'custom-dialog-container',
       data: { title: 'Supprimer votre compte ?' }
     })
