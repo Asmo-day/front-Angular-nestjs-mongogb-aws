@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { UserService } from '../users/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { UserDto } from '../users/userDto';
 import { AuthService } from '../shared/auth.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
+import { User } from '../users/user';
 
 @Component({
   selector: 'app-profil',
@@ -24,6 +25,9 @@ import { SpinnerComponent } from '../shared/spinner/spinner.component';
 })
 
 export class ProfilComponent implements OnInit, OnDestroy {
+
+  @Input()
+  public selectedUser: any;
 
   public title: string = 'Profil'
   private userService = inject(UserService)
@@ -41,6 +45,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
   public showPass: boolean = false
   public isSpinner: boolean = false
   public editMode: boolean = false
+  private userToUpdate: any;
   public updateUserForm = this.formBuilder.group({
     username: ['', Validators.required],
     firstName: ['', Validators.required],
@@ -51,20 +56,25 @@ export class ProfilComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userSignal = this.authService.userSignal
+    console.log(this.updateUser);
+    this.userToUpdate = (this.authService.isAdmin() &&  (this.selectedUser ?? '') ? this.selectedUser : this.userSignal())
+    
     this.resetForm()
   }
-
+  
   resetForm() {
-    this.updateUserForm.setValue({
-      username: this.userSignal().username.toUpperCase(),
-      firstName: this.userSignal().firstName,
-      lastName: this.userSignal().lastName,
-      email: this.userSignal().email,
-      // password: 'h'
-    });
+      this.updateUserForm.setValue({
+        username: this.userToUpdate.username.toUpperCase(),
+        firstName: this.userToUpdate.firstName,
+        lastName: this.userToUpdate.lastName,
+        email: this.userToUpdate.email
+      });
   }
 
   updateUser(userId: string) {
+console.log(userId);
+console.log(this.updateUserForm.valid);
+
 
     if (this.isPropertiesChanged()) {
       this.snakeBar.generateSnakebar('Les informations n\'ont pas changé', 'Aucun changement détécté')
@@ -132,9 +142,6 @@ export class ProfilComponent implements OnInit, OnDestroy {
       }
     })
   }
-
-  // fieldColorToggle(toggle: boolean): void {
-  // }
 
   toggleMode() {
     this.editMode = !this.editMode

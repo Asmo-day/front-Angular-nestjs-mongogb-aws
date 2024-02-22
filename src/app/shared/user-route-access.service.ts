@@ -6,7 +6,6 @@ import { AuthService } from './auth.service';
 export class UserRouteAccessService {
 
     public isActivated = signal(false);
-    public isAdmin = signal(false);
     public authService = inject(AuthService)
     private userSignal: any = this.authService.userSignal
 

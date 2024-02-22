@@ -6,7 +6,8 @@ import { UserDto } from "../users/userDto";
 })
 export class AuthService {
 
-    public userSignal = signal<UserDto>({})
-    public userActiveSignal = signal(false)
+    public userSignal = signal<UserDto>({});
+    public userActiveSignal = signal(false);
+    public isAdmin = signal(false);
 
 }

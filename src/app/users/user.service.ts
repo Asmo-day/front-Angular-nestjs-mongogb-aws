@@ -26,6 +26,7 @@ export class UserService {
             map(data => {
                 const user = this.mapUser(data)
                 this.authService.userSignal.set(user)
+                this.authService.isAdmin.set(user.role === 'ADMIN' ? true : false)
                 this.logger.info('in UserService.signIn', user);
                 this.userRouteAccessService.isActivated.set(true)
                 return user

@@ -11,11 +11,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { LogoutDeleteComponent } from '../shared/dialog-box/logout-delete-dialog/logout-delete.component';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
+import { ProfilComponent } from '../profil/profil.component';
 
 @Component({
   selector: 'app-users-management',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatDialogModule, SpinnerComponent],
+  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatDialogModule, SpinnerComponent, ProfilComponent],
   templateUrl: './users-management.component.html',
   styleUrl: './users-management.component.scss'
 })
@@ -31,6 +32,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   public isEditMode = false
   public isSpinner: boolean = false
   private userServiceSubscription = new Subscription();
+  public selectedUser: User | undefined;
 
   ngOnInit(): void {
     this.refreshData()
@@ -58,7 +60,9 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     })
   }
 
-  edit() {
+  edit(element: User) {
+    this.isEditMode = !this.isEditMode
+    this.selectedUser = element
   }
 
   deleteDialog(userData: User): void {
