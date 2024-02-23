@@ -1,4 +1,111 @@
+@import '../../../../var.scss';
+
 .container {
+    // padding: 20px;
+    font-family: Roboto;
+    font-size: 30px;
+    color: #411d7f;
+    background: antiquewhite;
     width: 800px;
-    height: 600px;
+    text-align: center;
+}
+
+.sub-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    overflow: hidden;
+    font-family: Roboto;
+    font-size: 30px;
+}
+
+.title {
+    margin-bottom: 10px;
+}
+
+image-cropper {
+    max-height: 95%;
+}
+
+.control-btn {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+
+.cropper-wrapper {
+    display: flex;
+    align-items: center;
+    width: 400px;
+    height: 400px;
+    border: 1px solid rgb(185, 173, 158);
+}
+
+.preview-div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-txt {
+    margin-bottom: 20PX;
+    font-family: Roboto;
+    font-size: 30px;
+}
+
+.pic-preview {
+    border-radius: 100px;
+    width: 150px;
+    height: 150px;
+}
+
+.selected-img {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.update-buttons {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+input {
+    display: flex;
+    background: #411d7f;
+}
+
+.open-btn {
+    width: 80%;
+}
+
+.reset-btn {
+    color: $mypurple;
+    background: chartreuse;
+}
+
+.edit-btn {
+    color: antiquewhite;
+    background: rgba(125, 0, 0);
+}
+
+button {
+    width: 250;
+    cursor: pointer;
+    height: 30px;
+    width: 150px;
+    background: $mypurple;
+    color: white;
+    border: none;
+    border-radius: 25px;
+}
+
+.sign-in-buttons {
+    display: flex;
+    justify-content: space-evenly;
+
 }

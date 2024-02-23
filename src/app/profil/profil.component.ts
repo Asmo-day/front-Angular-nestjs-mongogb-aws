@@ -44,6 +44,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
   public userSignal: any;
   private deleteUserSubscription: Subscription = new Subscription();
   private logoutSubscription: Subscription = new Subscription();
+  private editUserIconSubscription: Subscription = new Subscription();
   private updateUserSubscription: Subscription = new Subscription();
   // private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   private formBuilder = inject(FormBuilder)
@@ -61,7 +62,8 @@ export class ProfilComponent implements OnInit, OnDestroy {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', Validators.email],
-    role: ['']
+    role: [''],
+    userIcon: ['']
     // password: ['', [Validators.required, Validators.pattern(this.passRegx)]],
   });
 
@@ -88,14 +90,12 @@ export class ProfilComponent implements OnInit, OnDestroy {
       firstName: this.userToUpdate.firstName,
       lastName: this.userToUpdate.lastName,
       email: this.userToUpdate.email,
-      role: this.userToUpdate.role
+      role: this.userToUpdate.role,
+      userIcon: this.userToUpdate.userIcon
     });
   }
 
   updateUser() {
-
-    console.log(this.updateUserForm.value);
-
     if (this.isPropertiesChanged()) {
       this.snakeBar.generateSnakebar('Les informations n\'ont pas changé', 'Aucun changement détécté')
     } else if (this.updateUserForm.valid) {
@@ -176,17 +176,23 @@ export class ProfilComponent implements OnInit, OnDestroy {
   }
 
   editUserIcon() {
+    if (!this.editMode) {
+      this.toggleMode()
+    }
     const dialog = this.dialog.open(EditUserIconDialogComponent, {
       panelClass: 'custom-dialog-container',
       data: { title: 'Photo de profil' }
     })
-    // this.logoutSubscription = dialog.afterClosed().subscribe(response => {
-    //   if (response) {
-    //     this.deleteAccount()
-    //   }
-    // })
+    this.editUserIconSubscription = dialog.afterClosed().subscribe(icon => {
+      if (icon) {
+        this.updateUserForm.value.userIcon = icon
+      } else {
+        this.toggleMode()
+      }
+
+    })
   }
-  
+
   close() {
     this.backToUserManagement.emit()
   }
@@ -202,13 +208,15 @@ export class ProfilComponent implements OnInit, OnDestroy {
       this.updateUserForm.value.firstName === this.userToUpdate.firstName &&
       this.updateUserForm.value.lastName === this.userToUpdate.lastName &&
       this.updateUserForm.value.email === this.userToUpdate.email &&
-      this.updateUserForm.value.role === this.userToUpdate.role 
+      this.updateUserForm.value.role === this.userToUpdate.role &&
+      this.updateUserForm.value.userIcon === this.userToUpdate.userIcon
   }
 
   ngOnDestroy(): void {
     this.deleteUserSubscription.unsubscribe()
     this.logoutSubscription.unsubscribe()
     this.updateUserSubscription.unsubscribe()
+    this.editUserIconSubscription.unsubscribe()
   }
 }
 

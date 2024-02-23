@@ -11,7 +11,7 @@ import { LoggerService } from './logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    
+
     private baseUrl = environment.BASE_URL
 
     constructor(
@@ -37,12 +37,18 @@ export class UserService {
     createUser(userToCreate: UserDto): Observable<User> {
         return this.httpClient.post<User>(this.baseUrl + 'users', JSON.stringify(userToCreate))
     }
-    
+
+    updateUserIcon(id: string, icon: any) {
+        let formdata = new FormData()
+        formdata.append('image', icon)
+        return this.httpClient.post(this.baseUrl + 'users/' + id, formdata)
+    }
+
     updateUser(userId: string, updateUser: UserDto): Observable<User> {
         return this.httpClient.patch<User>(this.baseUrl + 'users/' + userId, updateUser).pipe(
             map(data => {
                 const user = this.mapUser(data)
-                if (!this.authService.isAdmin()){
+                if (!this.authService.isAdmin()) {
                     this.authService.userSignal.set(user)
                 }
                 this.logger.info('in UserService.updateUser', user);
@@ -52,7 +58,7 @@ export class UserService {
     }
 
     getUsers(): Observable<User[]> {
-      return this.httpClient.get<User[]>(this.baseUrl + 'users')
+        return this.httpClient.get<User[]>(this.baseUrl + 'users')
     }
 
     deleteUser(userId: string): Observable<User> {
@@ -60,7 +66,7 @@ export class UserService {
             this.logger.info('in UserService.deleteUser', data);
         }))
     }
-    
+
     mapUser(data: any): User {
         return new User(
             data._id,
@@ -72,7 +78,8 @@ export class UserService {
             data.userToken,
             data.rememberMe,
             data.createDate,
-            data.lastConnectionDate
+            data.lastConnectionDate,
+            data.userIcon
         )
     }
 }

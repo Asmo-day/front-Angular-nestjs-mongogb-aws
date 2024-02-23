@@ -5,7 +5,7 @@
 <div class="box">
     <h2>{{ title }}</h2>
     @if (isAdminEdit) {
-        <div class="closebtn-div">
+    <div class="closebtn-div">
         <button mat-mini-fab class="closebtn" (click)="cancel(); close()">
             <mat-icon mat-button>close</mat-icon>
         </button>
@@ -13,7 +13,11 @@
     }
     <div class="profile-container">
         <div class="user-icon-div">
+            @if (userSignal().userIcon) {
+            <img class="user-icon" [src]="userSignal().userIcon" />
+            } @else {
             <mat-icon class="user-icon">account_circle</mat-icon>
+            }
             <div class="edit-icon-btn-div">
                 <button mat-mini-fab class="edit-fab-btn" (click)="editUserIcon()">
                     <mat-icon mat-button>edit</mat-icon>
@@ -58,14 +62,14 @@
             <span>Role</span>
             <mat-radio-group class="radio-group" formControlName="role">
                 @for (role of roles; track role) {
-                    <mat-radio-button value="{{ role.value }}">
-                      {{ role.label }}
-                    </mat-radio-button>
+                <mat-radio-button value="{{ role.value }}">
+                    {{ role.label }}
+                </mat-radio-button>
                 }
-              </mat-radio-group>
+            </mat-radio-group>
             }
         </form>
-           
+
         <div class="update-buttons">
             @if (editMode) {
             <button class="reset-btn" (click)="cancel()">{{ isAdminEdit ? 'Reset' : 'Annuler'}}</button>

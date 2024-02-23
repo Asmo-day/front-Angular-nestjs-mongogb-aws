@@ -1,3 +1,4 @@
+import { Roles } from './roles';
 import { SignInDto } from './signInDto';
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, inject } from '@angular/core';
@@ -60,7 +61,8 @@ export class UserComponent implements OnDestroy {
       const signInDto = new SignInDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(signInDto).subscribe({
         next: (user: User) => {
-          this.cookiesService.set('user', user)
+          let userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
+          this.cookiesService.set('user', userForCookie)
           this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
         },
         error: (data) => {

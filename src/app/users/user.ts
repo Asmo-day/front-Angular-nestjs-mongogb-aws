@@ -11,11 +11,13 @@ export class User {
     role: Roles;
     userToken: string;
     rememberMe: boolean;
-    createDate: Date;
-    lastConnectionDate: Date;
+    createDate?: Date;
+    lastConnectionDate?: Date;
+    userIcon?: string;
 
-    constructor(id: string, username: string, firstName: string, lastName: string, 
-        email: string, role: Roles, userToken: string, rememberMe: boolean, createDate: Date, lastConnectionDate: Date) {
+    constructor(id: string, username: string, firstName: string, lastName: string,
+        email: string, role: Roles, userToken: string, rememberMe: boolean,
+        createDate?: Date, lastConnectionDate?: Date, userIcon?: string) {
         this.id = id
         this.username = username
         this.firstName = firstName
@@ -26,5 +28,6 @@ export class User {
         this.rememberMe = rememberMe
         this.createDate = createDate
         this.lastConnectionDate = lastConnectionDate
+        this.userIcon = userIcon
     }
 }

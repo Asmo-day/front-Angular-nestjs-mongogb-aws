@@ -15,12 +15,16 @@
       @if (userRouteAccessService.isActivated() && userSignal().role === 'ADMIN') {
       <button mat-tab-link [routerLink]="'usersManagement'" routerLinkActive #usersManagement="routerLinkActive"
         [active]="usersManagement.isActive">
-        Gestion des utilisateus
+        Gestion des utilisateurs
       </button>
       }
 
       <div class="signin">
+        @if (userSignal().userIcon) {
+        <img class="signin-ico" [matMenuTriggerFor]="menu" [src]="userSignal().userIcon" />
+        } @else {
         <mat-icon class="signin-ico" [matMenuTriggerFor]="menu">account_circle</mat-icon>
+        }
         {{ userRouteAccessService.isActivated() ? (userSignal().username| uppercase) : "Se connecter" }}
         <mat-menu #menu="matMenu" xPosition="before">
 

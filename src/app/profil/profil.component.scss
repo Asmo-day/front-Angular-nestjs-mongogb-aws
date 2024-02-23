@@ -136,6 +136,7 @@ span {
 }
 
 .user-icon {
+    border-radius: 50%;
     color: antiquewhite;
     width: 200px;
     height: 200px;
@@ -177,18 +178,24 @@ span {
 
 .edit-icon-btn-div {
     position: fixed;
-    margin-left: 110px;
-    margin-top: 120px;
+    margin-left: 150px;
+    margin-top: 150px;
 }
 
 .edit-fab-btn {
+    border: 3px solid $mypurple;
     display: flex;
     align-items: center;
+    justify-content: center;
     background: red;
     width: 35px;
     height: 35px;
-    border-radius: 50px;
+    border-radius: 50%;
     position: relative;
+}
+
+::ng-deep .mat-icon {
+    overflow: visible !important;
 }
 
 .closebtn {

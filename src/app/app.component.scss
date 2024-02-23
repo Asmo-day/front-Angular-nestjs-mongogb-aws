@@ -16,7 +16,8 @@
     height: 100%;
 }
 
-::ng-deep .mat-mdc-menu-content, .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+::ng-deep .mat-mdc-menu-content,
+.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
     width: 250px !important;
 }
 
@@ -24,15 +25,14 @@
     height: 100px;
 }
 
-.signin-btn {
-    cursor: pointer;
-    color: white;
-    background: rgb(103 58 183);
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-    border: none;
-}
+// .signin-btn {
+//     cursor: pointer;
+//     color: white;
+//     background: rgb(103 58 183);
+//     width: 50px;
+//     height: 50px;
+//     border: none;
+// }
 
 .signin {
     display: flex;
@@ -43,6 +43,7 @@
 }
 
 .signin-ico {
+    border-radius: 50%;
     cursor: pointer;
     width: 50px;
     height: 50px;

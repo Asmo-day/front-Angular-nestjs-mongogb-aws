@@ -1,3 +1,38 @@
 <div class="container">
-<p>edit-user-icon-dialog works!</p>
+    <div class="sub-container">
+        <span class="title">
+            Photo de profil
+        </span>
+        <button class="open-btn" (click)="fileInput.click()">Ouvrir</button>
+        <input style="display: none;" type="file" (change)="fileChangeEvent($event)" accept="image/*" #fileInput />
+    </div>
+    @if (imageSelected) {
+    <div class="control-btn">
+        <button (click)="resetImage()">Reset image</button>
+        <button (click)="zoomOut()">Zoom -</button>
+        <button (click)="zoomIn()">Zoom +</button>
+    </div>
+
+    <div class="selected-img">
+        <div class="cropper-wrapper">
+            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [cropperMinWidth]="128"
+                [onlyScaleDown]="true" [roundCropper]="true" [(transform)]="transform" [alignImage]="'center'"
+                [style.display]="showCropper ? null : 'none'" format="png" [allowMoveImage]="true" backgroundColor="red"
+                (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                (loadImageFailed)="loadImageFailed()">
+            </image-cropper>
+        </div>
+        @if (displayImageCropper) {
+        <div class="preview-div">
+            <span class="preview-txt">Aperçu</span>
+            <img class="pic-preview" [src]="croppedImage" />
+        </div>
+        }
+    </div>
+    <div class="update-buttons">
+        <button class="reset-btn" (click)="cancel()">Annuler</button>
+        <button class="edit-btn" (click)="updateUserImage()">
+            Valider</button>
+    </div>
+    }
 </div>
