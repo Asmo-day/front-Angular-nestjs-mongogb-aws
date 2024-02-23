@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { UserService } from '../users/user.service';
+import { UserService } from '../shared/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { SnakebarService } from '../shared/snakebar.service';
@@ -16,6 +16,7 @@ import { AuthService } from '../shared/auth.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { Roles } from '../users/roles';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { EditUserIconDialogComponent } from '../shared/dialog-box/edit-user-icon-dialog/edit-user-icon-dialog.component';
 
 @Component({
   selector: 'app-profil',
@@ -71,7 +72,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
 
   init() {
     if (this.authService.isAdmin() && (this.selectedUser ?? '')) {
-      this.title = `Gestion du compte utilisateur : ${this.selectedUser.username.toUpperCase()}`
+      this.title = `Gestion du compte : ${this.selectedUser.username.toUpperCase()}`
       this.isAdminEdit = !this.isAdminEdit
       this.userToUpdate = this.selectedUser
       this.toggleMode()
@@ -106,7 +107,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
           this.isSpinner = false
           this.snakeBar.generateSnakebar('Le profil a été mis à jour avec', 'SUCCÉS')
           if (this.isAdminEdit) {
-            this.backToUserManagement.emit()
+            this.close()
           }
         },
         error: (data) => {
@@ -139,7 +140,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
       next: () => {
         if (this.isAdminEdit) {
           this.snakeBar.generateSnakebar(`le compte ${this.userToUpdate.username.toUpperCase()}`, 'SUPPRIMÉ')
-          this.backToUserManagement.emit()
+          this.close()
         } else {
           this.userRouteAccessService.isActivated.set(false)
           this.userSignal.set({})
@@ -172,9 +173,22 @@ export class ProfilComponent implements OnInit, OnDestroy {
   cancel() {
     this.resetForm();
     this.toggleMode();
-    if (this.isAdminEdit) {
-      this.backToUserManagement.emit()
-    }
+  }
+
+  editUserIcon() {
+    const dialog = this.dialog.open(EditUserIconDialogComponent, {
+      panelClass: 'custom-dialog-container',
+      data: { title: 'Photo de profil' }
+    })
+    // this.logoutSubscription = dialog.afterClosed().subscribe(response => {
+    //   if (response) {
+    //     this.deleteAccount()
+    //   }
+    // })
+  }
+  
+  close() {
+    this.backToUserManagement.emit()
   }
 
   toggleMode() {

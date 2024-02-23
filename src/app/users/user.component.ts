@@ -4,7 +4,7 @@ import { Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { UserService } from './user.service';
+import { UserService } from '../shared/user.service';
 import { SnakebarService } from '../shared/snakebar.service';
 import { User } from './user';
 import { UserDto } from './userDto';

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
-import { UserService } from '../users/user.service';
+import { UserService } from '../shared/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../users/user';
 import { SnakebarService } from '../shared/snakebar.service';
@@ -28,7 +28,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   private snakeBar = inject(SnakebarService)
   private dialog = inject(MatDialog)
   public title = 'Gestion des utilisateurs'
-  public displayedColumns: string[] = ['username', 'firstName', 'lastName', 'email', 'role', 'rememberMe', 'edit', 'delete'];
+  public displayedColumns: string[] = ['username', 'firstName', 'lastName', 'email', 'role', 'createDate', 'lastConnectionDate', 'rememberMe', 'edit', 'delete'];
   public dataSource: any;
   public isEditMode = false
   public isSpinner: boolean = false
@@ -49,7 +49,6 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   }
 
   deleteAccount(user: any) {
-    // this.deleteDialog(element);
     this.userServiceSubscription = this.userService.deleteUser(user._id).subscribe({
       next: () => { this.refreshData() },
       error: (data) => {
@@ -87,5 +86,6 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userServiceSubscription.unsubscribe()
+    this.logoutSubscription.unsubscribe()
   }
 }

@@ -102,8 +102,12 @@ span {
     padding-top: 20px;
 }
 
-.icon {
+.user-icon-div {
     margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .edit-icon {
@@ -161,6 +165,38 @@ span {
 
 .edit-btn {
     background: rgba(125, 0, 0);
+}
+
+.closebtn-div {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: -50px;
+    margin-right: 50px;
+}
+
+.edit-icon-btn-div {
+    position: fixed;
+    margin-left: 110px;
+    margin-top: 120px;
+}
+
+.edit-fab-btn {
+    display: flex;
+    align-items: center;
+    background: red;
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+    position: relative;
+}
+
+.closebtn {
+    background: red;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    position: relative;
 }
 
 button {

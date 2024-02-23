@@ -6,7 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from './shared/http-interceptor';
 import { TokenService } from './shared/token.service';
 import { UserRouteAccessService } from './shared/user-route-access.service';
-import { UserService } from './users/user.service';
+import { UserService } from './shared/user.service';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { JwtModule } from '@auth0/angular-jwt';
 

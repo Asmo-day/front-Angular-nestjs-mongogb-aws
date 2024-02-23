@@ -29,6 +29,14 @@
             <th mat-header-cell *matHeaderCellDef>Role</th>
             <td mat-cell *matCellDef="let element">{{ element.role }}</td>
           </ng-container>
+          <ng-container matColumnDef="createDate">
+            <th mat-header-cell *matHeaderCellDef>Date de création</th>
+            <td mat-cell *matCellDef="let element">{{ element.createDate }}</td>
+          </ng-container>
+          <ng-container matColumnDef="lastConnectionDate">
+            <th mat-header-cell *matHeaderCellDef>Dernière connection</th>
+            <td mat-cell *matCellDef="let element">{{ element.lastConnectionDate }}</td>
+          </ng-container>
           <ng-container matColumnDef="rememberMe">
             <th mat-header-cell *matHeaderCellDef>Remember me</th>
             <td mat-cell *matCellDef="let element">{{ element.rememberMe }}</td>

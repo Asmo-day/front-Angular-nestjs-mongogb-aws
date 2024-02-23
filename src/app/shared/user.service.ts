@@ -1,13 +1,13 @@
-import { AuthService } from './../shared/auth.service';
-import { UserRouteAccessService } from '../shared/user-route-access.service';
+import { AuthService } from './auth.service';
+import { UserRouteAccessService } from './user-route-access.service';
 import { HttpClient } from "@angular/common/http";
 import { Injectable, signal } from "@angular/core";
 import { Observable, map, tap } from "rxjs";
-import { SignInDto } from "./signInDto";
-import { User } from "./user";
-import { UserDto } from "./userDto";
+import { SignInDto } from "../users/signInDto";
+import { User } from "../users/user";
+import { UserDto } from "../users/userDto";
 import { environment } from "../../environment";
-import { LoggerService } from '../shared/logger.service';
+import { LoggerService } from './logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -42,7 +42,9 @@ export class UserService {
         return this.httpClient.patch<User>(this.baseUrl + 'users/' + userId, updateUser).pipe(
             map(data => {
                 const user = this.mapUser(data)
-                this.authService.userSignal.set(user)
+                if (!this.authService.isAdmin()){
+                    this.authService.userSignal.set(user)
+                }
                 this.logger.info('in UserService.updateUser', user);
                 return user
             })
@@ -68,7 +70,9 @@ export class UserService {
             data.email,
             data.role,
             data.userToken,
-            data.rememberMe
+            data.rememberMe,
+            data.createDate,
+            data.lastConnectionDate
         )
     }
 }

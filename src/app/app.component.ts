@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserRouteAccessService } from './shared/user-route-access.service';
 import { LogoutDeleteComponent } from './shared/dialog-box/logout-delete-dialog/logout-delete.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { UserService } from './users/user.service';
+import { UserService } from './shared/user.service';
 import { Subscription } from 'rxjs';
 import { CookiesService } from './shared/cookies.service';
 import { User } from './users/user';
