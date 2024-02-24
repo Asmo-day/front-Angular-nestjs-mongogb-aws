@@ -2,21 +2,21 @@ import { Roles } from "./roles"
 
 export class User {
 
-    id: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
+    id?: string;
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
     password?: string;
-    role: Roles;
-    userToken: string;
-    rememberMe: boolean;
+    role?: Roles;
+    userToken?: string;
+    rememberMe?: boolean;
     createDate?: Date;
     lastConnectionDate?: Date;
     userIcon?: string;
 
-    constructor(id: string, username: string, firstName: string, lastName: string,
-        email: string, role: Roles, userToken: string, rememberMe: boolean,
+    constructor(id?: string, username?: string, firstName?: string, lastName?: string,
+        email?: string, role?: Roles, userToken?: string, rememberMe?: boolean,
         createDate?: Date, lastConnectionDate?: Date, userIcon?: string) {
         this.id = id
         this.username = username

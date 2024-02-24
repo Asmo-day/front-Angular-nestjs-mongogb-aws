@@ -19,7 +19,9 @@ export class UserService {
         private authService: AuthService,
         private userRouteAccessService: UserRouteAccessService,
         private logger: LoggerService
-    ) { }
+    ) { 
+
+    }
 
     signIn(signInDto: SignInDto): Observable<User> {
         return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(signInDto)).pipe(
@@ -44,13 +46,14 @@ export class UserService {
         return this.httpClient.post(this.baseUrl + 'users/' + id, formdata)
     }
 
-    updateUser(userId: string, updateUser: UserDto): Observable<User> {
+    updateUser(userId: string, updateUser: any): Observable<User> {
         return this.httpClient.patch<User>(this.baseUrl + 'users/' + userId, updateUser).pipe(
             map(data => {
                 const user = this.mapUser(data)
-                if (!this.authService.isAdmin()) {
+                // compare IDs before updating the user allows ADMIN to update its own profile
+                if (this.authService.userSignal().id === userId) {
                     this.authService.userSignal.set(user)
-                }
+                } 
                 this.logger.info('in UserService.updateUser', user);
                 return user
             })

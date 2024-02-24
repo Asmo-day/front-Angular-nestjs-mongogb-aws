@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { UserService } from '../shared/user.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -85,6 +85,8 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log('in on destroy');
+
     this.userServiceSubscription.unsubscribe()
     this.logoutSubscription.unsubscribe()
   }

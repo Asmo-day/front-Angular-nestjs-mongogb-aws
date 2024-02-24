@@ -60,7 +60,7 @@ export class UserComponent implements OnDestroy {
       this.isSpinner = true
       const signInDto = new SignInDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(signInDto).subscribe({
-        next: (user: User) => {
+        next: (user: any) => {
           let userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
           this.cookiesService.set('user', userForCookie)
           this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
@@ -84,7 +84,7 @@ export class UserComponent implements OnDestroy {
       const userToCreate = new UserDto(this.createUserForm.value);
       this.createSubscription = this.userService.createUser(userToCreate).subscribe({
         next: (data) => {
-          this.snakeBar.generateSnakebar('Votre compte a été créé', 'Bienvenue ' + data.username.toUpperCase())
+          this.snakeBar.generateSnakebar('Votre compte a été créé', 'Bienvenue ' + data.username?.toUpperCase())
           this.logger.info('in UserComponent.createAccount', data)
         },
         error: (data) => {

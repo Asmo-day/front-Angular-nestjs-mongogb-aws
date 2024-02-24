@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ImageCropperModule, ImageTransform } from 'ngx-image-cropper';
 
 @Component({
@@ -15,9 +16,7 @@ export class EditUserIconDialogComponent {
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
-  canvasRotation = 0;
-  translateH = 0;
-  translateV = 0;
+  // base64Image: any = '';
   scale = 1;
   imageSelected = false
   showCropper = false;
@@ -27,6 +26,7 @@ export class EditUserIconDialogComponent {
   };
 
   constructor(
+    private sanitizer: DomSanitizer,
     private dialogRef: MatDialogRef<EditUserIconDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
@@ -45,7 +45,7 @@ export class EditUserIconDialogComponent {
   }
 
   imageCropped(event: any) {
-
+    // this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl || event.base64 || '');
     var reader = new FileReader();
     reader.onload = () => {
       const dataUrl: any = reader.result;
@@ -66,7 +66,6 @@ export class EditUserIconDialogComponent {
 
   resetImage() {
     this.scale = 1;
-    this.canvasRotation = 0;
     this.transform = {
       translateUnit: 'px'
     };

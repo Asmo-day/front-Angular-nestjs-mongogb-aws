@@ -52,7 +52,8 @@ export class ProfilComponent implements OnInit, OnDestroy {
   public isSpinner: boolean = false
   public editMode: boolean = false
   public isAdminEdit: boolean = false
-  private userToUpdate: any;
+  private isIconChanged: boolean = false;
+  public userToUpdate: any;
   public roles: { value: Roles, label: string }[] = [
     { value: Roles.USER, label: 'Utilisateur' },
     { value: Roles.ADMIN, label: 'Administrateur' },
@@ -74,8 +75,10 @@ export class ProfilComponent implements OnInit, OnDestroy {
 
   init() {
     if (this.authService.isAdmin() && (this.selectedUser ?? '')) {
+      console.log('in ProfilComponent init admin');
+      
       this.title = `Gestion du compte : ${this.selectedUser.username.toUpperCase()}`
-      this.isAdminEdit = !this.isAdminEdit
+      this.isAdminEdit = true
       this.userToUpdate = this.selectedUser
       this.toggleMode()
     } else {
@@ -103,12 +106,12 @@ export class ProfilComponent implements OnInit, OnDestroy {
       const userDto: UserDto = new UserDto(this.updateUserForm.value)
       this.updateUserSubscription = this.userService.updateUser(this.userToUpdate.id, userDto).subscribe({
         next: () => {
-          this.toggleMode()
-          this.isSpinner = false
-          this.snakeBar.generateSnakebar('Le profil a été mis à jour avec', 'SUCCÉS')
           if (this.isAdminEdit) {
             this.close()
           }
+          this.isSpinner = false
+          this.snakeBar.generateSnakebar('Le profil a été mis à jour avec', 'SUCCÉS')
+          this.init()
         },
         error: (data) => {
           this.isSpinner = false
@@ -185,7 +188,10 @@ export class ProfilComponent implements OnInit, OnDestroy {
     })
     this.editUserIconSubscription = dialog.afterClosed().subscribe(icon => {
       if (icon) {
-        this.updateUserForm.value.userIcon = icon
+        // this.updateUserForm.value.userIcon = icon
+        this.isIconChanged = true
+        this.userToUpdate.userIcon = icon
+        this.resetForm()
       } else {
         this.toggleMode()
       }
@@ -209,7 +215,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
       this.updateUserForm.value.lastName === this.userToUpdate.lastName &&
       this.updateUserForm.value.email === this.userToUpdate.email &&
       this.updateUserForm.value.role === this.userToUpdate.role &&
-      this.updateUserForm.value.userIcon === this.userToUpdate.userIcon
+      this.isIconChanged
   }
 
   ngOnDestroy(): void {
