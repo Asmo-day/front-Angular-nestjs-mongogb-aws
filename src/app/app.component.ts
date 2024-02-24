@@ -1,4 +1,3 @@
-import { SignInDto } from './users/signInDto';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterModule, RouterOutlet, RouterLinkActive, Router } from '@angular/router';
@@ -15,6 +14,7 @@ import { CookiesService } from './shared/cookies.service';
 import { User } from './users/user';
 import { LoggerService } from './shared/logger.service';
 import { AuthService } from './shared/auth.service';
+import { UserDto } from './users/userDto';
 
 
 @Component({
@@ -35,12 +35,10 @@ export class AppComponent implements OnInit, OnDestroy {
   public authService = inject(AuthService)
   public userService = inject(UserService)
   public userRouteAccessService = inject(UserRouteAccessService)
-  public userSignal: any;
   private logoutSubscription: Subscription = new Subscription();
   private signinSubscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.userSignal = this.authService.userSignal
     this.rememberMe()
   }
 
@@ -48,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const userFromCookie: User = this.cookiesService.get('user')
     this.logger.info('in AppComponent.rememberMe', userFromCookie);
     if ((userFromCookie ?? '') && userFromCookie.rememberMe) {
-      this.signinSubscription = this.userService.signIn(new SignInDto(userFromCookie)).subscribe()
+      this.signinSubscription = this.userService.signIn(new UserDto(userFromCookie)).subscribe()
     } else {
       this.logger.info('No cookie found for user')
     }

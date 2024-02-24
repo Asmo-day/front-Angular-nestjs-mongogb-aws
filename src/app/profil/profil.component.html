@@ -13,8 +13,8 @@
     }
     <div class="profile-container">
         <div class="user-icon-div">
-            @if (userSignal().userIcon) {
-            <img class="user-icon" [src]="userSignal().userIcon" />
+            @if (authService.userSignal().userIcon) {
+            <img class="user-icon" [src]="authService.userSignal().userIcon" />
             } @else {
             <mat-icon class="user-icon">account_circle</mat-icon>
             }

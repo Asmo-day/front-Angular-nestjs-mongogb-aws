@@ -97,7 +97,7 @@ span {
 
 .delete-container {
     cursor: pointer;
-    background: rgba(125, 0, 0);
+    background: $myRed;
     padding-bottom: 20px;
     padding-top: 20px;
 }
@@ -165,7 +165,7 @@ span {
 }
 
 .edit-btn {
-    background: rgba(125, 0, 0);
+    background: $myRed;
 }
 
 .closebtn-div {

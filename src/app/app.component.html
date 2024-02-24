@@ -12,7 +12,7 @@
       </button>
       }
 
-      @if (userRouteAccessService.isActivated() && userSignal().role === 'ADMIN') {
+      @if (userRouteAccessService.isActivated() && authService.userSignal().role === 'ADMIN') {
       <button mat-tab-link [routerLink]="'usersManagement'" routerLinkActive #usersManagement="routerLinkActive"
         [active]="usersManagement.isActive">
         Gestion des utilisateurs
@@ -20,17 +20,17 @@
       }
 
       <div class="signin">
-        @if (userSignal().userIcon) {
-        <img class="signin-ico" [matMenuTriggerFor]="menu" [src]="userSignal().userIcon" />
+        @if (authService.userSignal().userIcon) {
+        <img class="signin-ico" [matMenuTriggerFor]="menu" [src]="authService.userSignal().userIcon" />
         } @else {
         <mat-icon class="signin-ico" [matMenuTriggerFor]="menu">account_circle</mat-icon>
         }
-        {{ userRouteAccessService.isActivated() ? (userSignal().username| uppercase) : "Se connecter" }}
+        {{ userRouteAccessService.isActivated() ? (authService.userSignal().username | uppercase) : "Se connecter" }}
         <mat-menu #menu="matMenu" xPosition="before">
 
           @if (userRouteAccessService.isActivated()) {
           <button mat-menu-item (click)="manageProfil()">
-            {{ userSignal().firstName }} {{ userSignal().lastName | uppercase}}
+            {{ authService.userSignal().firstName }} {{ authService.userSignal().lastName | uppercase}}
             <mat-icon>account_circle</mat-icon>
           </button>
           <div class="line"></div>

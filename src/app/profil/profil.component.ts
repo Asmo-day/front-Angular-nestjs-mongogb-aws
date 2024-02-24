@@ -17,6 +17,8 @@ import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { Roles } from '../users/roles';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { EditUserIconDialogComponent } from '../shared/dialog-box/edit-user-icon-dialog/edit-user-icon-dialog.component';
+import { CookiesService } from '../shared/cookies.service';
+import { User } from '../users/user';
 
 @Component({
   selector: 'app-profil',
@@ -35,13 +37,13 @@ export class ProfilComponent implements OnInit, OnDestroy {
   backToUserManagement = new EventEmitter();
 
   public title: string = 'Profil'
+  private cookiesService = inject(CookiesService);
   private userService = inject(UserService)
   public dialog = inject(MatDialog)
   public snakeBar = inject(SnakebarService)
   public authService = inject(AuthService)
   private router = inject(Router)
   public userRouteAccessService = inject(UserRouteAccessService)
-  public userSignal: any;
   private deleteUserSubscription: Subscription = new Subscription();
   private logoutSubscription: Subscription = new Subscription();
   private editUserIconSubscription: Subscription = new Subscription();
@@ -52,7 +54,8 @@ export class ProfilComponent implements OnInit, OnDestroy {
   public isSpinner: boolean = false
   public editMode: boolean = false
   public isAdminEdit: boolean = false
-  private isIconChanged: boolean = false;
+  private isUpdateUserFormChanged: boolean = false
+  private UpdateUserFormChangedSubscription = new Subscription()
   public userToUpdate: any;
   public roles: { value: Roles, label: string }[] = [
     { value: Roles.USER, label: 'Utilisateur' },
@@ -69,20 +72,24 @@ export class ProfilComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.userSignal = this.authService.userSignal
     this.init()
+    this.updateUserForm.valueChanges.subscribe(() => {
+      console.log('in  this.updateUserForm.valueChanges');
+
+      this.isUpdateUserFormChanged = true
+    });
   }
 
   init() {
     if (this.authService.isAdmin() && (this.selectedUser ?? '')) {
       console.log('in ProfilComponent init admin');
-      
+
       this.title = `Gestion du compte : ${this.selectedUser.username.toUpperCase()}`
       this.isAdminEdit = true
       this.userToUpdate = this.selectedUser
       this.toggleMode()
     } else {
-      this.userToUpdate = this.userSignal()
+      this.userToUpdate = this.authService.userSignal()
     }
     this.resetForm()
   }
@@ -99,15 +106,21 @@ export class ProfilComponent implements OnInit, OnDestroy {
   }
 
   updateUser() {
-    if (this.isPropertiesChanged()) {
+    if (!this.isUpdateUserFormChanged) {
       this.snakeBar.generateSnakebar('Les informations n\'ont pas changé', 'Aucun changement détécté')
     } else if (this.updateUserForm.valid) {
       this.isSpinner = true
-      const userDto: UserDto = new UserDto(this.updateUserForm.value)
+      const userDto: any = new UserDto(this.updateUserForm.value)
       this.updateUserSubscription = this.userService.updateUser(this.userToUpdate.id, userDto).subscribe({
         next: () => {
           if (this.isAdminEdit) {
             this.close()
+          } else {
+            if (this.editMode) {
+              this.toggleMode()
+            }
+            let userForCookie = new User(this.userToUpdate.id, userDto.username, '', '', userDto.email, userDto.role, this.userToUpdate.userToken, this.userToUpdate.rememberMe)
+            this.cookiesService.set('user', userForCookie)
           }
           this.isSpinner = false
           this.snakeBar.generateSnakebar('Le profil a été mis à jour avec', 'SUCCÉS')
@@ -146,7 +159,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
           this.close()
         } else {
           this.userRouteAccessService.isActivated.set(false)
-          this.userSignal.set({})
+          this.authService.userSignal.set({})
           this.router.navigate(['/home'])
           this.snakeBar.generateSnakebar('Votre compte a été', 'SUPPRIMÉ')
         }
@@ -179,20 +192,30 @@ export class ProfilComponent implements OnInit, OnDestroy {
   }
 
   editUserIcon() {
-    if (!this.editMode) {
-      this.toggleMode()
-    }
     const dialog = this.dialog.open(EditUserIconDialogComponent, {
       panelClass: 'custom-dialog-container',
       data: { title: 'Photo de profil' }
     })
     this.editUserIconSubscription = dialog.afterClosed().subscribe(icon => {
-      if (icon) {
-        // this.updateUserForm.value.userIcon = icon
-        this.isIconChanged = true
+      console.log(icon ?? '');
+
+      if (icon ?? '') {
+        console.log("1");
+
+        return
+      }
+      if ((icon ?? '') && icon !== "deleteIcon") {
+        console.log("2");
         this.userToUpdate.userIcon = icon
         this.resetForm()
+        this.updateUser()
+      } else if (icon === "deleteIcon") {
+        console.log("3");
+        this.userToUpdate.userIcon = ''
+        this.resetForm()
+        this.updateUser()
       } else {
+        console.log("4");
         this.toggleMode()
       }
 
@@ -209,17 +232,9 @@ export class ProfilComponent implements OnInit, OnDestroy {
       document.documentElement.style.setProperty('--field-background-color', '#411d7f')
   }
 
-  isPropertiesChanged() {
-    return this.updateUserForm.value.username === this.userToUpdate.username.toUpperCase() &&
-      this.updateUserForm.value.firstName === this.userToUpdate.firstName &&
-      this.updateUserForm.value.lastName === this.userToUpdate.lastName &&
-      this.updateUserForm.value.email === this.userToUpdate.email &&
-      this.updateUserForm.value.role === this.userToUpdate.role &&
-      this.isIconChanged
-  }
-
   ngOnDestroy(): void {
     this.deleteUserSubscription.unsubscribe()
+    this.UpdateUserFormChangedSubscription.unsubscribe()
     this.logoutSubscription.unsubscribe()
     this.updateUserSubscription.unsubscribe()
     this.editUserIconSubscription.unsubscribe()

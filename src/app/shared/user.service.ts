@@ -3,7 +3,6 @@ import { UserRouteAccessService } from './user-route-access.service';
 import { HttpClient } from "@angular/common/http";
 import { Injectable, signal } from "@angular/core";
 import { Observable, map, tap } from "rxjs";
-import { SignInDto } from "../users/signInDto";
 import { User } from "../users/user";
 import { UserDto } from "../users/userDto";
 import { environment } from "../../environment";
@@ -19,12 +18,10 @@ export class UserService {
         private authService: AuthService,
         private userRouteAccessService: UserRouteAccessService,
         private logger: LoggerService
-    ) { 
+    ) { }
 
-    }
-
-    signIn(signInDto: SignInDto): Observable<User> {
-        return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(signInDto)).pipe(
+    signIn(userDto: UserDto): Observable<User> {
+        return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(userDto)).pipe(
             map(data => {
                 const user = this.mapUser(data)
                 this.authService.userSignal.set(user)
@@ -53,7 +50,7 @@ export class UserService {
                 // compare IDs before updating the user allows ADMIN to update its own profile
                 if (this.authService.userSignal().id === userId) {
                     this.authService.userSignal.set(user)
-                } 
+                }
                 this.logger.info('in UserService.updateUser', user);
                 return user
             })

@@ -1,10 +1,19 @@
+@if (isSpinner) {
+<div class="spinner">
+    <mat-spinner [diameter]="70"></mat-spinner>
+</div>
+}
+
 <div class="container">
     <div class="sub-container">
         <span class="title">
             Photo de profil
         </span>
-        <button class="open-btn" (click)="fileInput.click()">Ouvrir</button>
-        <input style="display: none;" type="file" (change)="fileChangeEvent($event)" accept="image/*" #fileInput />
+        <div class="open-delete-btn">
+            <button class="open-btn" (click)="fileInput.click(); isSpinner = true">Selectionner une photo</button>
+            <input style="display: none;" type="file" (change)="fileChangeEvent($event)" accept="image/*" #fileInput />
+            <button class="delete-btn" (click)="deleteUserIcon()">Supprimer la photo de profil</button>
+        </div>
     </div>
     @if (imageSelected) {
     <div class="control-btn">
@@ -15,11 +24,11 @@
 
     <div class="selected-img">
         <div class="cropper-wrapper">
+
             <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [cropperMinWidth]="128"
                 [onlyScaleDown]="true" [roundCropper]="true" [(transform)]="transform" [alignImage]="'center'"
-                [style.display]="showCropper ? null : 'none'" format="png" [allowMoveImage]="true" backgroundColor="red"
-                (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-                (loadImageFailed)="loadImageFailed()">
+                [allowMoveImage]="true" backgroundColor="red" (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()">
             </image-cropper>
         </div>
         @if (displayImageCropper) {

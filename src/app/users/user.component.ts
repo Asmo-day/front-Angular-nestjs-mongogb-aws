@@ -1,5 +1,3 @@
-import { Roles } from './roles';
-import { SignInDto } from './signInDto';
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -58,8 +56,8 @@ export class UserComponent implements OnDestroy {
   signIn() {
     if (this.signInForm.valid) {
       this.isSpinner = true
-      const signInDto = new SignInDto(this.signInForm.value)
-      this.signinSubscription = this.userService.signIn(signInDto).subscribe({
+      const userDto = new UserDto(this.signInForm.value)
+      this.signinSubscription = this.userService.signIn(userDto).subscribe({
         next: (user: any) => {
           let userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
           this.cookiesService.set('user', userForCookie)

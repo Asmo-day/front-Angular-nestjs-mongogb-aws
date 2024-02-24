@@ -79,8 +79,13 @@ input {
     background: #411d7f;
 }
 
-.open-btn {
-    width: 80%;
+.open-btn,
+.delete-btn {
+    width: 40%;
+}
+
+.delete-btn {
+    background: $myRed;
 }
 
 .reset-btn {
@@ -88,9 +93,26 @@ input {
     background: chartreuse;
 }
 
+.open-delete-btn {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+
+}
+
 .edit-btn {
     color: antiquewhite;
-    background: rgba(125, 0, 0);
+    background: $myRed;
+}
+
+::ng-deep .mat-spinner {
+    width: 50px !important;
+}
+
+.spinner {
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 button {

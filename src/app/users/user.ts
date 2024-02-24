@@ -31,3 +31,18 @@ export class User {
         this.userIcon = userIcon
     }
 }
+
+export class UserBuilder {
+    id?: string;
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    role?: Roles;
+    userToken?: string;
+    rememberMe?: boolean;
+    createDate?: Date;
+    lastConnectionDate?: Date;
+    userIcon?: string;
+}
