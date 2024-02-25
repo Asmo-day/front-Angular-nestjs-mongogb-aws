@@ -25,6 +25,7 @@ import { SpinnerComponent } from '../shared/spinner/spinner.component';
 })
 export class UserComponent implements OnDestroy {
 
+  public title: string = "Connexion";
   private cookiesService = inject(CookiesService);
   private snakeBar = inject(SnakebarService);
   private userService = inject(UserService);
@@ -35,7 +36,6 @@ export class UserComponent implements OnDestroy {
   public isAccountCreation: boolean = false;
   public creationOrCancelButton: string = "Créer un compte";
   public signInOrCreateButton: string = "Se connecter";
-  public title: string = "Connection";
   public showPass: boolean = false;
   public isSpinner: boolean = false;
   private signinSubscription: Subscription = new Subscription();

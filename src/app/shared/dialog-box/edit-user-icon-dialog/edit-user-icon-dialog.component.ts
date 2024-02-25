@@ -35,19 +35,16 @@ export class EditUserIconDialogComponent {
   cancel() {
     this.dialogRef.close();
   }
-
+  
   updateUserImage() {
     this.dialogRef.close(this.croppedImage);
   }
-
+  
   deleteUserIcon() {
-    this.croppedImage = 'deleteIcon'
-    this.dialogRef.close(this.croppedImage);
+    this.dialogRef.close('');
   }
 
   fileChangeEvent(event: any): void {
-    console.log('in fileChangeEvent');
-
     this.isSpinner = true
     this.imageSelected = true
     this.imageChangedEvent = event;

@@ -74,16 +74,12 @@ export class ProfilComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.init()
     this.updateUserForm.valueChanges.subscribe(() => {
-      console.log('in  this.updateUserForm.valueChanges');
-
       this.isUpdateUserFormChanged = true
     });
   }
 
   init() {
     if (this.authService.isAdmin() && (this.selectedUser ?? '')) {
-      console.log('in ProfilComponent init admin');
-
       this.title = `Gestion du compte : ${this.selectedUser.username.toUpperCase()}`
       this.isAdminEdit = true
       this.userToUpdate = this.selectedUser
@@ -196,29 +192,13 @@ export class ProfilComponent implements OnInit, OnDestroy {
       panelClass: 'custom-dialog-container',
       data: { title: 'Photo de profil' }
     })
-    this.editUserIconSubscription = dialog.afterClosed().subscribe(icon => {
-      console.log(icon ?? '');
-
-      if (icon ?? '') {
-        console.log("1");
-
+    this.editUserIconSubscription = dialog.afterClosed().subscribe(response => {
+      if ( response === undefined) {
         return
       }
-      if ((icon ?? '') && icon !== "deleteIcon") {
-        console.log("2");
-        this.userToUpdate.userIcon = icon
+      this.userToUpdate.userIcon = response === '' ? '' : response
         this.resetForm()
         this.updateUser()
-      } else if (icon === "deleteIcon") {
-        console.log("3");
-        this.userToUpdate.userIcon = ''
-        this.resetForm()
-        this.updateUser()
-      } else {
-        console.log("4");
-        this.toggleMode()
-      }
-
     })
   }
 

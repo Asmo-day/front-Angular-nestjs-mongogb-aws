@@ -85,8 +85,6 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('in on destroy');
-
     this.userServiceSubscription.unsubscribe()
     this.logoutSubscription.unsubscribe()
   }

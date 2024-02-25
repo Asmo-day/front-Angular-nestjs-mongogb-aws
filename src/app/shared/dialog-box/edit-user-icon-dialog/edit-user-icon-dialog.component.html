@@ -38,10 +38,12 @@
         </div>
         }
     </div>
+}
     <div class="update-buttons">
         <button class="reset-btn" (click)="cancel()">Annuler</button>
-        <button class="edit-btn" (click)="updateUserImage()">
-            Valider</button>
+        @if (imageSelected) {
+            <button class="edit-btn" (click)="updateUserImage()">
+                Valider</button>
+        }
     </div>
-    }
 </div>

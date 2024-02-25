@@ -23,7 +23,11 @@
         @if (authService.userSignal().userIcon) {
         <img class="signin-ico" [matMenuTriggerFor]="menu" [src]="authService.userSignal().userIcon" />
         } @else {
-        <mat-icon class="signin-ico" [matMenuTriggerFor]="menu">account_circle</mat-icon>
+          @if (userRouteAccessService.isActivated()) {
+            <mat-icon class="signin-ico" [matMenuTriggerFor]="menu">account_circle</mat-icon>
+          } @else {
+            <mat-icon class="signin-ico" (click)=signInOut()>account_circle</mat-icon>
+          }
         }
         {{ userRouteAccessService.isActivated() ? (authService.userSignal().username | uppercase) : "Se connecter" }}
         <mat-menu #menu="matMenu" xPosition="before">
@@ -37,9 +41,10 @@
           <button mat-menu-item (click)="signInOut()">Déconnexion
             <mat-icon>power_settings_new</mat-icon>
           </button>
-          } @else {
+          } 
+          <!-- @else {
           <button mat-menu-item (click)="signInOut()">Connexion</button>
-          }
+          } -->
 
         </mat-menu>
       </div>
