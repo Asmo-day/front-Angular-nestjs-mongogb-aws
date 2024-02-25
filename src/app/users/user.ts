@@ -14,10 +14,11 @@ export class User {
     createDate?: Date;
     lastConnectionDate?: Date;
     userIcon?: string;
+    isValidatedAccount?: boolean;
 
     constructor(id?: string, username?: string, firstName?: string, lastName?: string,
         email?: string, role?: Roles, userToken?: string, rememberMe?: boolean,
-        createDate?: Date, lastConnectionDate?: Date, userIcon?: string) {
+        createDate?: Date, lastConnectionDate?: Date, userIcon?: string, isValidatedAccount?: boolean) {
         this.id = id
         this.username = username
         this.firstName = firstName
@@ -29,6 +30,7 @@ export class User {
         this.createDate = createDate
         this.lastConnectionDate = lastConnectionDate
         this.userIcon = userIcon
+        this.isValidatedAccount = isValidatedAccount
     }
 }
 

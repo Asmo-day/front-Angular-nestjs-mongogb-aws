@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { MailerService } from '../email/mailer.service';
+import { MailerService } from '../shared/mailer.service';
 import { MailerServiceResponseData } from './mailer-service-response-data-mock';
 import { EmailDto } from '../email/emailDto';
 

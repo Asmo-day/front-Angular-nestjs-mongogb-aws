@@ -15,6 +15,7 @@ import { CookiesService } from '../shared/cookies.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoggerService } from '../shared/logger.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
+import { MailerService } from '../shared/mailer.service';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ export class UserComponent implements OnDestroy {
   private cookiesService = inject(CookiesService);
   private snakeBar = inject(SnakebarService);
   private userService = inject(UserService);
+  private mailerService = inject(MailerService);
   private formBuilder = inject(FormBuilder);
   private logger = inject(LoggerService);
   private router = inject(Router);
@@ -38,6 +40,7 @@ export class UserComponent implements OnDestroy {
   public signInOrCreateButton: string = "Se connecter";
   public showPass: boolean = false;
   public isSpinner: boolean = false;
+  public isUserAccountValidated: boolean = true;
   private signinSubscription: Subscription = new Subscription();
   private createSubscription: Subscription = new Subscription();
   public createUserForm = this.formBuilder.group({
@@ -59,18 +62,22 @@ export class UserComponent implements OnDestroy {
       const userDto = new UserDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(userDto).subscribe({
         next: (user: any) => {
-          let userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
-          this.cookiesService.set('user', userForCookie)
-          this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
+          if (user.isValidatedAccount) {
+            let userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
+            this.cookiesService.set('user', userForCookie)
+            this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
+            this.router.navigate(['/home']);
+          } else {
+            this.isUserAccountValidated = false
+          }
         },
         error: (data) => {
           this.isSpinner = false
-          this.logger.error('in UserComponent.signIn error: ', data.error.message)
+          this.logger.error('in UserComponent.signIn error: ', data)
           this.snakeBar.generateSnakebar('Une erreur est survenue', 'Utilisateur non trouvé')
         },
         complete: () => {
           this.isSpinner = false
-          this.router.navigate(['/home']);
         }
       })
     }
@@ -82,8 +89,9 @@ export class UserComponent implements OnDestroy {
       const userToCreate = new UserDto(this.createUserForm.value);
       this.createSubscription = this.userService.createUser(userToCreate).subscribe({
         next: (data) => {
-          this.snakeBar.generateSnakebar('Votre compte a été créé', 'Bienvenue ' + data.username?.toUpperCase())
+          this.snakeBar.generateSnakebar('Veuillez consulter votre boite e-mail', 'Bienvenue ' + data.username?.toUpperCase())
           this.logger.info('in UserComponent.createAccount', data)
+          this.sendValidationEmail(userToCreate)
         },
         error: (data) => {
           let error: string;
@@ -104,6 +112,11 @@ export class UserComponent implements OnDestroy {
         }
       })
     }
+  }
+
+  sendValidationEmail(userToValidate: UserDto) {
+    console.log('in send validation email');
+    this.mailerService.postValidationEmail(userToValidate).subscribe()
   }
 
   async toggleIsAccountCreation() {

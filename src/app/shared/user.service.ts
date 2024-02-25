@@ -24,11 +24,16 @@ export class UserService {
         return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(userDto)).pipe(
             map(data => {
                 const user = this.mapUser(data)
-                this.authService.userSignal.set(user)
-                this.authService.isAdmin.set(user.role === 'ADMIN' ? true : false)
-                this.logger.info('in UserService.signIn', user);
-                this.userRouteAccessService.isActivated.set(true)
-                return user
+                if (user.isValidatedAccount) {
+                    this.authService.userSignal.set(user)
+                    this.authService.isAdmin.set(user.role === 'ADMIN' ? true : false)
+                    this.logger.info('in UserService.signIn', user);
+                    this.userRouteAccessService.isActivated.set(true)
+                    return user
+                } else {
+                    this.logger.warn('in UserService.signIn', 'User account not validated', user);
+                    return user
+                }
             })
         )
     }
@@ -79,7 +84,8 @@ export class UserService {
             data.rememberMe,
             data.createDate,
             data.lastConnectionDate,
-            data.userIcon
+            data.userIcon,
+            data.isValidatedAccount
         )
     }
 }
