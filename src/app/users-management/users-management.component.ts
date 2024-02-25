@@ -8,11 +8,13 @@ import { LoggerService } from '../shared/logger.service';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { Subscription, map } from 'rxjs';
 import { LogoutDeleteComponent } from '../shared/dialog-box/logout-delete-dialog/logout-delete.component';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { ProfilComponent } from '../profil/profil.component';
 import { MatButtonModule } from '@angular/material/button';
+import { HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-management',
@@ -22,7 +24,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './users-management.component.scss'
 })
 export class UsersManagementComponent implements OnInit, OnDestroy {
-  
+
   private logger = inject(LoggerService)
   private userService = inject(UserService)
   private snakeBar = inject(SnakebarService)
@@ -39,7 +41,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.refreshData()
   }
-  
+
   refreshData() {
     this.userService.getUsers().subscribe({
       next: (data) => {
@@ -56,7 +58,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
         this.snakeBar.generateSnakebar('Un problèmé est survenue lors de la suppression', 'ERREUR')
       },
       complete: () => {
-        this.snakeBar.generateSnakebar(`L\'utilisateur ${ user.username.toUpperCase() } a été` , 'SUPPRIMÉ')
+        this.snakeBar.generateSnakebar(`L\'utilisateur ${user.username.toUpperCase()} a été`, 'SUPPRIMÉ')
       }
     })
   }
@@ -81,7 +83,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
       if (response) {
         this.deleteAccount(user)
       }
-  })
+    })
   }
 
   ngOnDestroy(): void {

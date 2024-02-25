@@ -1,5 +1,5 @@
 @if (isSpinner) {
-    <app-spinner ></app-spinner>
+<app-spinner></app-spinner>
 }
 
 <div class="container">
@@ -61,14 +61,14 @@
                 </li>
             </ul>
         </div>
-        @if (!isUserAccountValidated) {
-            <div class="warn-user-account-not-validated">
-                <mat-icon>warning</mat-icon>
-                <p>Votre compte n'a pas encore était validé !</p>
-                <p>Veuillez vérifier votre boite e-mail et valider votre inscription</p>
-                <p>Cliquez sur le bouton pour envoyer un nouvel e-mail de confirmation</p>
-                <button (click)="sendValidationEmail('')">Renvoyer</button>
-            </div>
+        @if (!isUserAccountValidated && !isAccountCreation) {
+        <div class="warn-user-account-not-validated">
+            <mat-icon>warning</mat-icon>
+            <p>Votre compte n'a pas encore était validé !</p>
+            <p>Veuillez vérifier votre boite e-mail et valider votre inscription</p>
+            <p>Cliquez sur le bouton pour envoyer un nouvel e-mail de confirmation</p>
+            <button (click)="sendValidationEmail('')">Renvoyer</button>
+        </div>
         }
         <div class="sign-in-buttons">
             <button (click)="toggleIsAccountCreation()">{{creationOrCancelButton}}</button>

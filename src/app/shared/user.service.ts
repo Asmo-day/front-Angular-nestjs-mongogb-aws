@@ -38,7 +38,11 @@ export class UserService {
         )
     }
 
-    createUser(userToCreate: UserDto): Observable<User> {
+    validateUser(id: string, token: string): Observable<any> {
+        return this.httpClient.get(this.baseUrl + 'users/validation?id=' + id + '&token=' + token)
+    }
+
+    createUser(userToCreate: UserDto): Observable<any> {
         return this.httpClient.post<User>(this.baseUrl + 'users', JSON.stringify(userToCreate))
     }
 
