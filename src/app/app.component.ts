@@ -44,11 +44,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   rememberMe() {
     const userFromCookie: User = this.cookiesService.get('user')
-    this.logger.info('in AppComponent.rememberMe', userFromCookie);
-    if ((userFromCookie ?? '') && userFromCookie.rememberMe) {
+    this.logger.info('in AppComponent.rememberMe', 'cookie content => ', userFromCookie);
+    if ((userFromCookie) && userFromCookie.rememberMe) {
       this.signinSubscription = this.userService.signIn(new UserDto(userFromCookie)).subscribe()
     } else {
-      this.logger.info('No cookie found for user')
+      this.logger.info('No cookie found for user or NO rememberMe')
     }
   }
 
@@ -73,6 +73,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (isLogout) {
         this.authService.userSignal.set({})
         this.cookiesService.deleteCookie('user')
+        // localStorage.removeItem
         this.userRouteAccessService.isActivated.set(false);
         this.dialog.closeAll()
         this.router.navigate(['/home'])

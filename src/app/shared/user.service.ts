@@ -7,6 +7,7 @@ import { User } from "../users/user";
 import { UserDto } from "../users/userDto";
 import { environment } from "../../environment";
 import { LoggerService } from './logger.service';
+import { CookiesService } from './cookies.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -24,7 +25,7 @@ export class UserService {
         return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(userDto)).pipe(
             map(data => {
                 const user = this.mapUser(data)
-                if (user.isValidatedAccount) {
+            if (user.isValidatedAccount) {
                     this.authService.userSignal.set(user)
                     this.authService.isAdmin.set(user.role === 'ADMIN' ? true : false)
                     this.logger.info('in UserService.signIn', user);

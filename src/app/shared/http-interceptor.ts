@@ -22,7 +22,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
     }))
   } else {
     return tokenService.getToken().pipe(
-      tap(() => logger.info('Get token from back-end')
+      tap(() => logger.info('in httpInterceptor Get token from back-end')
       ),
       switchMap(token => next(req.clone({
         headers: req.headers.set('Authorization', `Bearer ${token}`)

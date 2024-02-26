@@ -2,6 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import * as CryptoJS from 'crypto-js';
 import { environment } from "../../environment";
 import { CookieService } from "ngx-cookie-service";
+import { CryptoService } from "./crypto.service";
 
 @Injectable({
     providedIn: 'root'
@@ -9,32 +10,18 @@ import { CookieService } from "ngx-cookie-service";
 export class CookiesService {
 
     private cookieService = inject(CookieService)
+    private cryptoService = inject(CryptoService)
 
-    set(key: string, value: any) {
-        this.cookieService.set(key, this.encryptCookie(JSON.stringify(value)))
+    set(key: string, value: any): void {
+        this.cookieService.set(key, this.cryptoService.encrypt(JSON.stringify(value)))
     }
 
     get(key: string) {
         const cookie = this.cookieService.get(key)
-        return JSON.parse(this.decryptCookie(cookie) || 'null')
+        return JSON.parse(this.cryptoService.decrypt(cookie) || 'null')
     }
 
     deleteCookie(key: string) {
         this.cookieService.delete(key)
-    }
-
-    private encryptCookie(value: string): string {
-        const ciphertext = CryptoJS.AES.encrypt(value, environment.CRYPTO_KEY).toString();
-        return ciphertext;
-    }
-
-    private decryptCookie(ciphertext: string): string | null {
-        try {
-            const bytes = CryptoJS.AES.decrypt(ciphertext, environment.CRYPTO_KEY).toString(CryptoJS.enc.Utf8);
-            return bytes;
-        } catch (error) {
-            console.error('Decryption error:', error);
-            return null;
-        }
     }
 }

@@ -11,10 +11,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subscription, map } from 'rxjs';
 import { LogoutDeleteComponent } from '../shared/dialog-box/logout-delete-dialog/logout-delete.component';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
-import { ProfilComponent } from '../profil/profil.component';
 import { MatButtonModule } from '@angular/material/button';
-import { HttpHeaders } from '@angular/common/http';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ProfilComponent } from '../users/profil/profil.component';
 
 @Component({
   selector: 'app-users-management',

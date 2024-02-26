@@ -7,10 +7,10 @@ import { UserService } from '../shared/user.service';
 import { SnakebarService } from '../shared/snakebar.service';
 import { User } from './user';
 import { UserDto } from './userDto';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatIconModule } from '@angular/material/icon';
-import { Subscription, map } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CookiesService } from '../shared/cookies.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoggerService } from '../shared/logger.service';
@@ -66,11 +66,13 @@ export class UserComponent implements OnDestroy {
       this.isSpinner = true
       const userDto = new UserDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(userDto).subscribe({
-        next: (user: any) => {
+        next: (user: User) => {
           if (user.isValidatedAccount) {
-            const userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
+            const userForCookie = new UserDto(user) as User
+            // remove userIcon to not store it in cookie
+            userForCookie.userIcon = ''
             this.cookiesService.set('user', userForCookie)
-            this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
+            // this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
             this.router.navigate(['/home']);
           } else {
             this.isUserAccountValidated = false
@@ -122,12 +124,10 @@ export class UserComponent implements OnDestroy {
 
   sendValidationEmail(userToValidate?: UserDto) {
     if (userToValidate == null) {
-      console.log('in send validation email if', userToValidate);
       userToValidate = this.userToValidate
     }
     this.mailerService.postValidationEmail(userToValidate).subscribe({
       next: (data) => {
-        console.log(data);
         this.isEmailSentAgain = true
         this.isValidationEmailError = false
       },

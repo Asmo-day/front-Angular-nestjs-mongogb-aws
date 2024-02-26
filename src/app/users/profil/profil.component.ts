@@ -1,24 +1,24 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { UserService } from '../shared/user.service';
+import { UserService } from '../../shared/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { SnakebarService } from '../shared/snakebar.service';
+import { SnakebarService } from '../../shared/snakebar.service';
 import { Router } from '@angular/router';
-import { UserRouteAccessService } from '../shared/user-route-access.service';
+import { UserRouteAccessService } from '../../shared/user-route-access.service';
 import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { LogoutDeleteComponent } from '../shared/dialog-box/logout-delete-dialog/logout-delete.component';
+import { LogoutDeleteComponent } from '../../shared/dialog-box/logout-delete-dialog/logout-delete.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { UserDto } from '../users/userDto';
-import { AuthService } from '../shared/auth.service';
-import { SpinnerComponent } from '../shared/spinner/spinner.component';
-import { Roles } from '../users/roles';
+import { UserDto } from '../../users/userDto';
+import { AuthService } from '../../shared/auth.service';
+import { SpinnerComponent } from '../../shared/spinner/spinner.component';
+import { Roles } from '../../users/roles';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { EditUserIconDialogComponent } from '../shared/dialog-box/edit-user-icon-dialog/edit-user-icon-dialog.component';
-import { CookiesService } from '../shared/cookies.service';
-import { User } from '../users/user';
+import { EditUserIconDialogComponent } from '../../shared/dialog-box/edit-user-icon-dialog/edit-user-icon-dialog.component';
+import { CookiesService } from '../../shared/cookies.service';
+import { User } from '../../users/user';
 
 @Component({
   selector: 'app-profil',
@@ -115,6 +115,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
             if (this.editMode) {
               this.toggleMode()
             }
+            // refresh cookie while keeping the essential information of the user (id, token, rememberMe)
             let userForCookie = new User(this.userToUpdate.id, userDto.username, '', '', userDto.email, userDto.role, this.userToUpdate.userToken, this.userToUpdate.rememberMe)
             this.cookiesService.set('user', userForCookie)
           }

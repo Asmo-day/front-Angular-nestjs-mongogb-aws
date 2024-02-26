@@ -1,4 +1,4 @@
-import { Routes, UrlMatcher, UrlSegment, UrlTree } from '@angular/router';
+import { Routes, UrlSegment } from '@angular/router';
 import { UserRouteAccessService } from './shared/user-route-access.service';
 
 export const routes: Routes = [
@@ -22,7 +22,7 @@ export const routes: Routes = [
     {
         path: 'profil',
         canActivate: [UserRouteAccessService],
-        loadComponent: () => import("./profil/profil.component").then(module => module.ProfilComponent),
+        loadComponent: () => import("./users/profil/profil.component").then(module => module.ProfilComponent),
         title: 'Profile',
     },
     {
