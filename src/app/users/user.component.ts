@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +24,7 @@ import { MailerService } from '../shared/mailer.service';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class UserComponent implements OnDestroy {
 
   public title: string = "Connexion";
   private cookiesService = inject(CookiesService);
@@ -36,15 +36,18 @@ export class UserComponent implements OnInit, OnDestroy {
   private logger = inject(LoggerService);
   private router = inject(Router);
   private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
-  public isAccountCreation: boolean = false;
   public creationOrCancelButton: string = "Créer un compte";
   public signInOrCreateButton: string = "Se connecter";
   public showPass: boolean = false;
   public isSpinner: boolean = false;
+  public isAccountCreation: boolean = false;
+  public isValidationEmailError: boolean = false;
   public isUserAccountValidated: boolean = true;
+  public isEmailSentAgain: boolean = false;
   private signinSubscription: Subscription = new Subscription();
   private createSubscription: Subscription = new Subscription();
   private userValidationDataSubscription = new Subscription();
+  public userToValidate: any;
   public createUserForm = this.formBuilder.group({
     username: ['', Validators.required],
     firstName: [''],
@@ -57,15 +60,6 @@ export class UserComponent implements OnInit, OnDestroy {
     password: ['', Validators.required],
     rememberMe: [false]
   });
-  private userValidationData = this.route.paramMap.pipe(
-    map((params: ParamMap) => params.get('data'))
-  );
-
-  ngOnInit(): void {
-    if (this.userValidationData) {
-      this.validateUser()
-    }
-  }
 
   signIn() {
     if (this.signInForm.valid) {
@@ -74,12 +68,13 @@ export class UserComponent implements OnInit, OnDestroy {
       this.signinSubscription = this.userService.signIn(userDto).subscribe({
         next: (user: any) => {
           if (user.isValidatedAccount) {
-            let userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
+            const userForCookie = new User(user.id, user.username, '', '', user.email, user.role, user.userToken, user.rememberMe)
             this.cookiesService.set('user', userForCookie)
             this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
             this.router.navigate(['/home']);
           } else {
             this.isUserAccountValidated = false
+            this.userToValidate = user as UserDto
           }
         },
         error: (data) => {
@@ -125,9 +120,22 @@ export class UserComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendValidationEmail(userToValidate: UserDto) {
-    console.log('in send validation email', userToValidate);
-    this.mailerService.postValidationEmail(userToValidate).subscribe()
+  sendValidationEmail(userToValidate?: UserDto) {
+    if (userToValidate == null) {
+      console.log('in send validation email if', userToValidate);
+      userToValidate = this.userToValidate
+    }
+    this.mailerService.postValidationEmail(userToValidate).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.isEmailSentAgain = true
+        this.isValidationEmailError = false
+      },
+      error: (data) => {
+        this.isValidationEmailError = true
+        this.logger.error('Something went wrong during e-mail sending', data)
+      }
+    })
   }
 
   async toggleIsAccountCreation() {
@@ -135,38 +143,6 @@ export class UserComponent implements OnInit, OnDestroy {
     this.title = this.isAccountCreation ? "Création de compte" : "Connexion"
     this.creationOrCancelButton = this.isAccountCreation ? "Annuler" : "Créer un compte"
     this.signInOrCreateButton = this.isAccountCreation ? "Créer" : "Se Connecter"
-  }
-
-  validateUser() {
-    this.isSpinner = true
-    let id: string = '';
-    let token: string = '';
-    this.userValidationData.subscribe({
-      next: (data) => {
-        console.log(data);
-        if (data) {
-          let dataSplit: string[] = data.split('@')
-          id = dataSplit[0]
-          token = dataSplit[1]
-        } else {
-          this.logger.error('Unable to retrieve data for Validation')
-          this.snakeBar.generateSnakebar('Une erreur est survenue', 'Validation impossible')
-        }
-      }
-    })
-    this.userService.validateUser(id, token).subscribe({
-      next: (data) => { console.log(data) },
-      error: (data) => {
-        this.isSpinner = false
-        this.logger.error('in UserComponent.validateUser error: ', data)
-        this.snakeBar.generateSnakebar('Une erreur est survenue', 'L\'inscription n\'a pas été validé')
-      },
-      complete: () => {
-        this.isSpinner = false
-        this.snakeBar.generateSnakebar('Votre inscription a été validée', 'Connectez vous !!', '', 5000)
-      }
-
-    })
   }
 
   ngOnDestroy(): void {

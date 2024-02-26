@@ -1,0 +1,17 @@
+<div class="container">
+@if (isLoading) {
+    <div class="spinner2">Validation en cours
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+} @else if (isValidated){
+    <div class="validated">
+        <p>Votre compte est validé</p>
+        <p>Vous pouvez vous connecter !</p>
+        <button (click)="continue()">Continuer</button>
+    </div>
+} @else {
+    <div class="oups"><H2>OUPS !</H2> <p class="error">La validation a échouée</p> </div>
+}
+</div>

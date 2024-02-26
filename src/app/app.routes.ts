@@ -34,7 +34,6 @@ export const routes: Routes = [
     },
     {
         matcher: (url) => {
-            console.log('*****');
             if (url.length === 1 && url[0].path.match(/^@[\w]+@[\w]+.+[\w]+$/gm)) {
                 return {
                     consumed: url,
@@ -45,6 +44,6 @@ export const routes: Routes = [
             }
             return null;
         },
-        loadComponent: () => import("./users/user.component").then(module => module.UserComponent),
+        loadComponent: () => import("./users/user-validation/user-validation.component").then(module => module.UserValidationComponent),
     },
 ];

@@ -37,7 +37,7 @@ button {
     cursor: pointer;
     width: 150px;
     height: 30px;
-    background: $mypurple;
+    background: $myPurple;
     color: white;
     border: none;
     border-radius: 25px;
@@ -54,12 +54,20 @@ button {
 }
 
 .warn-user-account-not-validated {
-    color: rgb(125, 0, 0);
+    color: $myRed;
     font-size: larger;
     text-align: center;
     margin: 20px;
     padding: 10px;
     border: 2px solid;
+}
+
+.error {
+    color: $myRed;
+    font-size: large;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
 }
 
 mat-spinner {

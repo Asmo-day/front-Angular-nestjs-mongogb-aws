@@ -18,7 +18,7 @@ export class MailerService {
         return this.httpClient.post<EmailDto>(this.baseUrl + 'email', JSON.stringify(emailDto))
     }
     
-    postValidationEmail(userToValidate: UserDto): Observable<any> {
+    postValidationEmail(userToValidate?: UserDto): Observable<any> {
         return this.httpClient.post<EmailDto>(this.baseUrl + 'email/validation', JSON.stringify(userToValidate))
     }
 }

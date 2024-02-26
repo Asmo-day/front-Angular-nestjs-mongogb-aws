@@ -1,7 +1,7 @@
 @import '../../var.scss';
 
 ::root {
-    --field-background-color: $mypurple;
+    --field-background-color: $myPurple;
 }
 
 .box {
@@ -81,7 +81,7 @@
 }
 
 .profile-container {
-    background: $mypurple;
+    background: $myPurple;
 
 }
 
@@ -131,7 +131,7 @@ span {
     justify-content: space-around;
     height: 60px;
     align-items: center;
-    background: $mypurpleDim;
+    background: $myPurpleDim;
     border-radius: 20px;
 }
 
@@ -161,7 +161,7 @@ span {
 }
 
 .reset-btn {
-    color: $mypurple;
+    color: $myPurple;
 }
 
 .edit-btn {
@@ -183,7 +183,7 @@ span {
 }
 
 .edit-fab-btn {
-    border: 3px solid $mypurple;
+    border: 3px solid $myPurple;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -208,6 +208,7 @@ span {
 
 button {
     cursor: pointer;
+    margin-top: 20px;
     font-size: large;
     width: 150px;
     height: 30px;

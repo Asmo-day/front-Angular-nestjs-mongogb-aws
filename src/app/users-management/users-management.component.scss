@@ -16,7 +16,7 @@
 }
 
 .mat-mdc-table {
-    background: $mypurple;
+    background: $myPurple;
     box-shadow: $myShadow;
 }
 
@@ -27,7 +27,7 @@
 
 ::ng-deep .mat-mdc-cell {
     background: antiquewhite !important;
-    color: $mypurple !important;
+    color: $myPurple !important;
     text-align: center !important;
 }
 
