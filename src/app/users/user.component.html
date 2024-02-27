@@ -61,22 +61,24 @@
                 </li>
             </ul>
         </div>
-        @if (!isUserAccountValidated && !isAccountCreation || isEmailSentAgain) {
+        @if (!isUserAccountValidated && !isAccountCreation) {
         <div class="warn-user-account-not-validated">
             <mat-icon>warning</mat-icon>
             <p>Votre compte n'a pas encore été validé !</p>
             <p>Veuillez vérifier votre boite e-mail et valider votre inscription</p>
-            <p>Cliquez sur le bouton pour envoyer un nouvel e-mail de validation</p>
+            <p>Cliquez sur ce bouton pour envoyer un nouvel e-mail de validation</p>
             <button (click)="sendValidationEmail()">Renvoyer</button>
         </div>
         }
-        @if (isEmailSentAgain) {
-            <span>Un nouvel e-mail de validation vient d'être envoyé à l'adresse: {{ userToValidate.email }}</span>
-            <span>Veuillez consulter votre boite e-mail</span>
-        }
-        @if (isValidationEmailError) {
+        <div class="warn-user-sent-email">
+            @if (isEmailSentAgain && !isAccountCreation) {
+            <p>Un nouvel e-mail de validation vient d'être envoyé à l'adresse: {{ userToValidate.email }}</p>
+            <p>Veuillez consulter votre boite e-mail</p>
+            }
+            @if (isValidationEmailError) {
             <p class="error">Une erreur est survenue lors de l'envoie du message !</p>
-        }
+            }
+        </div>
         <div class="sign-in-buttons">
             <button (click)="toggleIsAccountCreation()">{{creationOrCancelButton}}</button>
 

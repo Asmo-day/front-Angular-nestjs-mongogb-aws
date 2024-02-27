@@ -48,12 +48,14 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private logoutSubscription: Subscription = new Subscription();
   private editUserIconSubscription: Subscription = new Subscription();
   private updateUserSubscription: Subscription = new Subscription();
-  // private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
+  private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   private formBuilder = inject(FormBuilder)
   // public showPass: boolean = false
   public isSpinner: boolean = false
   public editMode: boolean = false
   public isAdminEdit: boolean = false
+  public isChangePass: boolean = false
+  public showPass: boolean = false
   private isUpdateUserFormChanged: boolean = false
   private UpdateUserFormChangedSubscription = new Subscription()
   public userToUpdate: any;
@@ -67,8 +69,8 @@ export class ProfilComponent implements OnInit, OnDestroy {
     lastName: ['', Validators.required],
     email: ['', Validators.email],
     role: [''],
-    userIcon: ['']
-    // password: ['', [Validators.required, Validators.pattern(this.passRegx)]],
+    userIcon: [''],
+    password: ['', [Validators.required, Validators.pattern(this.passRegx)]],
   });
 
   ngOnInit(): void {
@@ -97,7 +99,8 @@ export class ProfilComponent implements OnInit, OnDestroy {
       lastName: this.userToUpdate.lastName,
       email: this.userToUpdate.email,
       role: this.userToUpdate.role,
-      userIcon: this.userToUpdate.userIcon
+      userIcon: this.userToUpdate.userIcon,
+      password: ''
     });
   }
 
@@ -194,12 +197,12 @@ export class ProfilComponent implements OnInit, OnDestroy {
       data: { title: 'Photo de profil' }
     })
     this.editUserIconSubscription = dialog.afterClosed().subscribe(response => {
-      if ( response === undefined) {
+      if (response === undefined) {
         return
       }
       this.userToUpdate.userIcon = response === '' ? '' : response
-        this.resetForm()
-        this.updateUser()
+      this.resetForm()
+      this.updateUser()
     })
   }
 

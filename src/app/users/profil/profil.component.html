@@ -68,18 +68,34 @@
                 }
             </mat-radio-group>
             }
-        </form>
 
-        <div class="update-buttons">
-            @if (editMode) {
-            <button class="reset-btn" (click)="cancel()">{{ isAdminEdit ? 'Reset' : 'Annuler'}}</button>
+            <div class="update-buttons">
+                @if (editMode) {
+                <button class="reset-btn" (click)="cancel()">{{ isAdminEdit ? 'Reset' : 'Annuler'}}</button>
+                }
+
+                <button class="edit-btn" (click)="editMode ? updateUser()  : toggleMode()"
+                    (click)="editMode ? usernameField.focus() : ''">
+                    {{ editMode ? 'Enregister' : "Modifier"}}</button>
+            </div>
+            <div class="delete-container" (click)="isChangePass = true">
+                <div class="delete">Changer de mot de passe</div>
+            </div>
+            @if (isChangePass) {
+            <div class="pass">
+                <mat-form-field>
+                    <mat-label>Mot de passe</mat-label>
+                    <div class="password">
+                        <input matInput [type]="showPass ? 'text': 'password'" formControlName="password"
+                            autocomplete="on" required>
+                        <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
+                    </div>
+                </mat-form-field>
+            </div>
             }
-
-            <button class="edit-btn" (click)="editMode ? updateUser()  : toggleMode()"
-                (click)="editMode ? usernameField.focus() : ''">
-                {{ editMode ? 'Enregister' : "Modifier"}}</button>
-        </div>
+        </form>
     </div>
+
     <div class="delete-container" (click)="deleteDialog()" (keydown.enter)="deleteDialog()">
         <div class="delete">Supprimer votre compte</div>
     </div>

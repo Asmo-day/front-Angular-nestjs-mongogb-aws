@@ -97,7 +97,6 @@ export class UserComponent implements OnDestroy {
       const userToCreate = new UserDto(this.createUserForm.value);
       this.createSubscription = this.userService.createUser(userToCreate).subscribe({
         next: (data) => {
-          this.snakeBar.generateSnakebar('Veuillez consulter votre boite e-mail', 'Bienvenue ' + data.username?.toUpperCase(), '', 5000)
           this.logger.info('in UserComponent.createAccount', data)
           Object.assign(userToCreate, { id: data._id })
           this.sendValidationEmail(userToCreate)
