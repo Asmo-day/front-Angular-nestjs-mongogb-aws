@@ -4,11 +4,11 @@
 </div>
 }
 
-<div class="container">
+<div class="box">
     <div class="sub-container">
-        <span class="title">
+        <h2 class="title">
             Photo de profil
-        </span>
+        </h2>
         <div class="open-delete-btn">
             <button class="open-btn" (click)="fileInput.click(); isSpinner = true">Selectionner une photo</button>
             <input style="display: none;" type="file" (change)="fileChangeEvent($event)" accept="image/*" #fileInput />

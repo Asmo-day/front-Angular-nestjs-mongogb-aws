@@ -1,13 +1,13 @@
 @if (isSpinner) {
   <app-spinner ></app-spinner>
 }
-<div class="box">
+<!-- <div class="box"> -->
   @if (isEditMode) {
     <app-profil [selectedUser]="selectedUser" (backToUserManagement)="eventFromProfil()"></app-profil>
   }
   @if (!isEditMode) {
-    <h2>{{ title }}</h2>
     <div class="container">
+      <h2>{{ title }}</h2>
     <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef>Nom d'utilisateur</th>
@@ -62,4 +62,4 @@
       </table>
     </div>
   }
-</div>
+<!-- </div> -->

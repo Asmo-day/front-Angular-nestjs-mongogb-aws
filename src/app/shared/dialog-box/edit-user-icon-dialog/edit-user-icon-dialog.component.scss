@@ -1,9 +1,7 @@
 @import '../../../../var.scss';
 
-.container {
-    // padding: 20px;
-    font-family: Roboto;
-    font-size: 30px;
+.box {
+    padding: 20px;
     color: #411d7f;
     background: antiquewhite;
     width: 800px;
@@ -15,9 +13,7 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    // overflow: hidden;
-    font-family: Roboto;
-    font-size: 30px;
+    overflow: hidden;
 }
 
 .title {
@@ -50,7 +46,6 @@ image-cropper {
 
 .preview-txt {
     margin-bottom: 20PX;
-    font-family: Roboto;
     font-size: 30px;
 }
 
@@ -79,31 +74,7 @@ input {
     background: #411d7f;
 }
 
-.open-btn,
-.delete-btn {
-    width: 40%;
-}
 
-.delete-btn {
-    background: $myRed;
-}
-
-.reset-btn {
-    color: $myPurple;
-    background: chartreuse;
-}
-
-.open-delete-btn {
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-
-}
-
-.edit-btn {
-    color: antiquewhite;
-    background: $myRed;
-}
 
 ::ng-deep .mat-spinner {
     width: 50px !important;
@@ -115,19 +86,33 @@ input {
     left: 10px;
 }
 
-button {
-    width: 250;
-    cursor: pointer;
-    height: 30px;
-    width: 150px;
-    background: $myPurple;
-    color: white;
-    border: none;
-    border-radius: 25px;
-}
-
 .sign-in-buttons {
     display: flex;
     justify-content: space-evenly;
+}
 
+.edit-btn {
+    color: antiquewhite;
+    background: $myRed;
+}    
+
+.open-btn,
+.delete-btn {
+    width: 40%;
+}
+
+.open-delete-btn {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+
+}
+
+.delete-btn {
+    background: $myRed;
+}
+
+.reset-btn {
+    color: $myPurple;
+    background: chartreuse;
 }

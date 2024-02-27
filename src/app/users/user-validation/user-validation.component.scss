@@ -1,29 +1,7 @@
 @import '../../../var.scss';
 
-.container {
-  display: flex;
-  width: 500px;
-  height: 300px;
-  margin: auto;
-  text-align: center;
-  justify-content: center;
-  color: $myPurple;
-  font-size: large;
-  margin-top: 10%;
-}
-
 p {
   font-size: x-large;
-}
-
-button {
-  font-size: large;
-  width: 150px;
-  height: 30px;
-  background: $myPurple;
-  color: antiquewhite;
-  border: none;
-  border-radius: 25px;
 }
 
 .spinner2 {

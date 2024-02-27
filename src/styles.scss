@@ -1,8 +1,15 @@
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "../src/var.scss";
+
+@font-face {
+  font-family: 'Regi';
+  src: url('./assets/fonts/Regi.otf');
+}
 
 body {
   margin: 0 !important;
   padding: 0 !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 html,
@@ -11,22 +18,40 @@ body {
   background: antiquewhite;
 }
 
-body {
-  margin: 0;
+  .container {
+    max-width: 1080px;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+  color: $myPurple;
+  font-size: 30px;
+}
+
+button {
+  cursor: pointer;
+  width: 150px;
+  height: 30px;
+  background: $myPurple;
+  color: antiquewhite;
+  font-size: 15px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  border: none;
+  border-radius: 25px;
 }
 
-::ng-deep snack-bar-container {
-  padding: 20px;
-  background-color: red;
-  color: white;
-}
+// ::ng-deep snack-bar-container {
+//   padding: 20px;
+//   background-color: red;
+//   color: white;
+// }
 
-@font-face {
-  font-family: 'Regi';
-  src: url('./assets/fonts/Regi.otf');
-}
 
-.simple-snack-bar .mat-simple-snackbar {
-  justify-content: center;
-}
+// .simple-snack-bar .mat-simple-snackbar {
+//   justify-content: center;
+// }

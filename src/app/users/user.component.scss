@@ -1,15 +1,5 @@
 @import '../../var.scss';
 
-.container {
-    margin-top: 80px;
-    width: 100%;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
 .box {
     width: 40%;
     max-width: 500px;
@@ -31,16 +21,6 @@ input {
 .sign-in-buttons {
     display: flex;
     justify-content: space-evenly;
-}
-
-button {
-    cursor: pointer;
-    width: 150px;
-    height: 30px;
-    background: $myPurple;
-    color: white;
-    border: none;
-    border-radius: 25px;
 }
 
 // TODO put this CSS class in global CSS (shared with profil CSS)

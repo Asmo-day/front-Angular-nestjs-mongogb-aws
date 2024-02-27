@@ -19,11 +19,12 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { EditUserIconDialogComponent } from '../../shared/dialog-box/edit-user-icon-dialog/edit-user-icon-dialog.component';
 import { CookiesService } from '../../shared/cookies.service';
 import { User } from '../../users/user';
+import { PasswordManagementComponent } from '../password/password-management/password-management.component';
 
 @Component({
   selector: 'app-profil',
   standalone: true,
-  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatFormFieldModule, SpinnerComponent, MatRadioButton, MatRadioGroup],
+  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatFormFieldModule, SpinnerComponent, MatRadioButton, MatRadioGroup, PasswordManagementComponent],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss'
 })
@@ -50,7 +51,6 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private updateUserSubscription: Subscription = new Subscription();
   private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   private formBuilder = inject(FormBuilder)
-  // public showPass: boolean = false
   public isSpinner: boolean = false
   public editMode: boolean = false
   public isAdminEdit: boolean = false
@@ -214,6 +214,11 @@ export class ProfilComponent implements OnInit, OnDestroy {
     this.editMode = !this.editMode
     this.editMode ? document.documentElement.style.setProperty('--field-background-color', '#5c2eab') :
       document.documentElement.style.setProperty('--field-background-color', '#411d7f')
+  }
+
+  changePass() {
+    this.showPass = true
+    // this.router.navigate(['/password'])
   }
 
   ngOnDestroy(): void {
