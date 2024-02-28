@@ -47,6 +47,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.logger.info('in AppComponent.rememberMe', 'cookie content => ', userFromCookie);
     if ((userFromCookie) && userFromCookie.rememberMe) {
       this.signinSubscription = this.userService.signIn(new UserDto(userFromCookie)).subscribe()
+      this.router.navigate(['home'])
     } else {
       this.logger.info('No cookie found for user or NO rememberMe')
     }

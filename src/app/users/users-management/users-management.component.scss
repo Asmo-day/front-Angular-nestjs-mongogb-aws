@@ -1,4 +1,4 @@
-@import '../../var.scss';
+@import '../../../var.scss';
 
 .mat-mdc-table {
     background: $myPurple;
@@ -16,18 +16,23 @@
     text-align: center !important;
 }
 
-.deleteButton, .editButton {
+.mat-mdc-header-cell {
+    min-width: 110px;
+}
+
+.deleteButton,
+.editButton {
     background-color: #c6c6c9;
     color: white;
 }
 
 .deleteButton:hover {
-background-color: red;
+    background-color: red;
 }
 
 .editButton:hover {
     background-color: chartreuse;
-    }
+}
 
 input {
     width: 100%;

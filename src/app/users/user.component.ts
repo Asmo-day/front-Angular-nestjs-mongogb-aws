@@ -42,6 +42,7 @@ export class UserComponent implements OnDestroy {
   public isSpinner: boolean = false;
   public isAccountCreation: boolean = false;
   public isValidationEmailError: boolean = false;
+  public isUserError: boolean = false;
   public isUserAccountValidated: boolean = true;
   public isEmailSentAgain: boolean = false;
   private signinSubscription: Subscription = new Subscription();
@@ -63,7 +64,6 @@ export class UserComponent implements OnDestroy {
 
   signIn() {
     if (this.signInForm.valid) {
-      this.isSpinner = true
       const userDto = new UserDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(userDto).subscribe({
         next: (user: User) => {
@@ -72,20 +72,15 @@ export class UserComponent implements OnDestroy {
             // remove userIcon to not store it in cookie
             userForCookie.userIcon = ''
             this.cookiesService.set('user', userForCookie)
-            // this.snakeBar.generateSnakebar('Hello !!', user.username.toUpperCase())
-            this.router.navigate(['/home']);
+            this.router.navigate(['home']);
           } else {
             this.isUserAccountValidated = false
             this.userToValidate = user as UserDto
           }
         },
         error: (data) => {
-          this.isSpinner = false
           this.logger.error('in UserComponent.signIn error: ', data)
-          this.snakeBar.generateSnakebar('Une erreur est survenue', 'Utilisateur non trouvé')
-        },
-        complete: () => {
-          this.isSpinner = false
+          this.isUserError = true
         }
       })
     }

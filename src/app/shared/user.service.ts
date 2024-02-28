@@ -25,7 +25,7 @@ export class UserService {
         return this.httpClient.post<User>(this.baseUrl + 'users/signin', JSON.stringify(userDto)).pipe(
             map(data => {
                 const user = this.mapUser(data)
-            if (user.isValidatedAccount) {
+                if (user.isValidatedAccount) {
                     this.authService.userSignal.set(user)
                     this.authService.isAdmin.set(user.role === 'ADMIN' ? true : false)
                     this.logger.info('in UserService.signIn', user);
@@ -51,6 +51,10 @@ export class UserService {
         let formdata = new FormData()
         formdata.append('image', icon)
         return this.httpClient.post(this.baseUrl + 'users/' + id, formdata)
+    }
+
+    updateUserPassword(id: string, updateUserPass: UserDto) {
+        return this.httpClient.post(this.baseUrl + 'users/password/' + id, updateUserPass)
     }
 
     updateUser(userId: string, updateUser: any): Observable<User> {

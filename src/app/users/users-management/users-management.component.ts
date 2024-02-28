@@ -1,23 +1,25 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
-import { UserService } from '../shared/user.service';
+import { UserService } from '../../shared/user.service';
 import { MatIconModule } from '@angular/material/icon';
-import { User } from '../users/user';
-import { SnakebarService } from '../shared/snakebar.service';
-import { LoggerService } from '../shared/logger.service';
+import { User } from '../user';
+import { SnakebarService } from '../../shared/snakebar.service';
+import { LoggerService } from '../../shared/logger.service';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subscription, map } from 'rxjs';
-import { LogoutDeleteComponent } from '../shared/dialog-box/logout-delete-dialog/logout-delete.component';
-import { SpinnerComponent } from '../shared/spinner/spinner.component';
+import { LogoutDeleteComponent } from '../../shared/dialog-box/logout-delete-dialog/logout-delete.component';
+import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 import { MatButtonModule } from '@angular/material/button';
-import { ProfilComponent } from '../users/profil/profil.component';
+import { ProfilComponent } from '../profil/profil.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-users-management',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatDialogModule, SpinnerComponent, ProfilComponent, MatButtonModule],
+  imports: [CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatDialogModule, SpinnerComponent, ProfilComponent, MatButtonModule, MatCheckboxModule],
   templateUrl: './users-management.component.html',
   styleUrl: './users-management.component.scss'
 })
@@ -28,7 +30,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   private snakeBar = inject(SnakebarService)
   private dialog = inject(MatDialog)
   public title = 'Gestion des utilisateurs'
-  public displayedColumns: string[] = ['username', 'firstName', 'lastName', 'email', 'role', 'createDate', 'lastConnectionDate', 'rememberMe', 'edit', 'delete'];
+  public displayedColumns: string[] = ['username', 'firstName', 'lastName', 'email', 'role', 'createDate', 'lastConnectionDate', 'rememberMe', 'validated', 'edit', 'delete'];
   public dataSource: any;
   public isEditMode = false
   public isSpinner: boolean = false

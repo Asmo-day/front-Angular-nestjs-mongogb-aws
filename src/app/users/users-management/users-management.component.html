@@ -1,0 +1,71 @@
+@if (isSpinner) {
+<app-spinner></app-spinner>
+}
+<!-- <div class="box"> -->
+@if (isEditMode) {
+<app-profil [selectedUser]="selectedUser" (backToUserManagement)="eventFromProfil()"></app-profil>
+}
+@if (!isEditMode) {
+<div class="container">
+  <h2>{{ title }}</h2>
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef>Nom d'utilisateur</th>
+      <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+    </ng-container>
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef>Prénom</th>
+      <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Adresse e-mail</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Role</th>
+      <td mat-cell *matCellDef="let element">{{ element.role }}</td>
+    </ng-container>
+    <ng-container matColumnDef="createDate">
+      <th mat-header-cell *matHeaderCellDef>Date de création</th>
+      <td mat-cell *matCellDef="let element">{{ element.createDate | date : "dd-MM-YYYY hh:mm" }}</td>
+    </ng-container>
+    <ng-container matColumnDef="lastConnectionDate">
+      <th mat-header-cell *matHeaderCellDef>Dernière connection</th>
+      <td mat-cell *matCellDef="let element">{{ element.lastConnectionDate | date : "dd-MM-YYYY hh:mm" }}</td>
+    </ng-container>
+    <ng-container matColumnDef="rememberMe">
+      <th mat-header-cell *matHeaderCellDef>Remember me</th>
+      <td mat-cell *matCellDef="let element"><mat-checkbox [checked]="element.rememberMe" [disableRipple]="true"
+          (click)="$event.preventDefault()"></mat-checkbox></td>
+    </ng-container>
+    <ng-container matColumnDef="validated">
+      <th mat-header-cell *matHeaderCellDef>Compte validé</th>
+      <td mat-cell *matCellDef="let element"><mat-checkbox [checked]="element.isValidatedAccount" [disableRipple]="true"
+          (click)="$event.preventDefault()"></mat-checkbox></td>
+    </ng-container>
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Modifier</th>
+      <td mat-cell *matCellDef="let element" class="buttonCell">
+        <button mat-mini-fab matTooltip="Éditer l'utilisateur" (click)="edit(element)" class="editButton">
+          <mat-icon mat-button>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Supprimer</th>
+      <td mat-cell *matCellDef="let element" class="buttonCell">
+        <button mat-mini-fab matTooltip="Supprimer l'utilisateur" (click)="deleteDialog(element)" class="deleteButton">
+          <mat-icon mat-button>delete_outline</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+}
+<!-- </div> -->

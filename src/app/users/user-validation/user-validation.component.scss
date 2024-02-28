@@ -1,7 +1,17 @@
 @import '../../../var.scss';
 
+.container {
+  text-align: center;
+  color: $myPurple;
+  font-size: large;
+}
+
 p {
   font-size: x-large;
+}
+
+.continue {
+  margin-top: 50px;
 }
 
 .spinner2 {

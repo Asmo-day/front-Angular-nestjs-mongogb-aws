@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -11,16 +11,16 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+
     UserService,
     UserRouteAccessService,
     TokenService,
+    provideAnimations(),
     provideRouter(routes),
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    provideAnimations(),
     provideHttpClient(withInterceptors([
       httpInterceptor
     ])),
-    provideAnimations(),
   ]
 };
 

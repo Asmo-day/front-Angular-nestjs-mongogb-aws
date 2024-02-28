@@ -19,7 +19,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { EditUserIconDialogComponent } from '../../shared/dialog-box/edit-user-icon-dialog/edit-user-icon-dialog.component';
 import { CookiesService } from '../../shared/cookies.service';
 import { User } from '../../users/user';
-import { PasswordManagementComponent } from '../password/password-management/password-management.component';
+import { PasswordManagementComponent } from '../password-management/password-management.component';
 
 @Component({
   selector: 'app-profil',
@@ -45,16 +45,16 @@ export class ProfilComponent implements OnInit, OnDestroy {
   public authService = inject(AuthService)
   private router = inject(Router)
   public userRouteAccessService = inject(UserRouteAccessService)
+  private formBuilder = inject(FormBuilder)
   private deleteUserSubscription: Subscription = new Subscription();
   private logoutSubscription: Subscription = new Subscription();
   private editUserIconSubscription: Subscription = new Subscription();
   private updateUserSubscription: Subscription = new Subscription();
   private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
-  private formBuilder = inject(FormBuilder)
   public isSpinner: boolean = false
   public editMode: boolean = false
   public isAdminEdit: boolean = false
-  public isChangePass: boolean = false
+  // public isChangePass: boolean = false
   public showPass: boolean = false
   private isUpdateUserFormChanged: boolean = false
   private UpdateUserFormChangedSubscription = new Subscription()
@@ -70,10 +70,13 @@ export class ProfilComponent implements OnInit, OnDestroy {
     email: ['', Validators.email],
     role: [''],
     userIcon: [''],
-    password: ['', [Validators.required, Validators.pattern(this.passRegx)]],
   });
 
   ngOnInit(): void {
+    if (this.editMode) {
+      this.toggleMode()
+
+    }
     this.init()
     this.updateUserForm.valueChanges.subscribe(() => {
       this.isUpdateUserFormChanged = true
@@ -100,7 +103,6 @@ export class ProfilComponent implements OnInit, OnDestroy {
       email: this.userToUpdate.email,
       role: this.userToUpdate.role,
       userIcon: this.userToUpdate.userIcon,
-      password: ''
     });
   }
 
@@ -216,9 +218,16 @@ export class ProfilComponent implements OnInit, OnDestroy {
       document.documentElement.style.setProperty('--field-background-color', '#411d7f')
   }
 
+  eventFromPasswordManagement() {
+    this.toggleMode()
+    this.showPass = false
+  }
+
   changePass() {
+    if (!this.editMode) {
+      this.toggleMode()
+    }
     this.showPass = true
-    // this.router.navigate(['/password'])
   }
 
   ngOnDestroy(): void {

@@ -34,6 +34,11 @@
                     <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
                 </div>
             </mat-form-field>
+            @if (isUserError && !isAccountCreation) {
+            <div class="warn-user">
+                <p>Nom d'utilisateur ou mot de passe incorrect !</p>
+            </div>
+            }
             @if (!isAccountCreation) {
             <mat-checkbox formControlName="rememberMe" matTooltip="Cochez cette case pour rester connecté"
                 matTooltipPosition="before">Se souvenir

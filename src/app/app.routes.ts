@@ -28,7 +28,7 @@ export const routes: Routes = [
     {
         path: 'usersManagement',
         canActivate: [UserRouteAccessService],
-        loadComponent: () => import("./users-management/users-management.component").then(module => module.UsersManagementComponent),
+        loadComponent: () => import("./users/users-management/users-management.component").then(module => module.UsersManagementComponent),
         title: 'Gestion des Utilisateurs',
         data: { authorities: ['ADMIN'] }
     },

@@ -33,17 +33,22 @@ input {
     backdrop-filter: blur(2px);
 }
 
-.warn-user-account-not-validated {
+.warn-user {
     color: $myRed;
-    font-size: larger;
     text-align: center;
+
+}
+
+.warn-user-account-not-validated {
+    text-align: center;
+    font-size: larger;
     margin: 20px;
     padding: 10px;
+    color: $myPurple;
     border: 2px solid;
 }
 
 .warn-user-sent-email {
-    color: $myPurple;
     text-align: center;
 }
 
