@@ -16,19 +16,22 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoggerService } from '../shared/logger.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { MailerService } from '../shared/mailer.service';
+import { InfoBarService } from '../shared/info-bar/info-bar.service';
+import { InfoBarComponent } from '../shared/info-bar/info-bar.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, SpinnerComponent, MatIconModule, MatCheckboxModule, MatTooltipModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, InfoBarComponent, CommonModule, MatCheckboxModule, SpinnerComponent, MatIconModule, MatCheckboxModule, MatTooltipModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
 export class UserComponent implements OnDestroy {
 
   public title: string = "Connexion";
+  private infoBarService = inject(InfoBarService)
   private cookiesService = inject(CookiesService);
-  private snakeBar = inject(SnakebarService);
+  // private snakeBar = inject(SnakebarService);
   private userService = inject(UserService);
   private mailerService = inject(MailerService);
   private route = inject(ActivatedRoute);
@@ -72,7 +75,8 @@ export class UserComponent implements OnDestroy {
             // remove userIcon to not store it in cookie
             userForCookie.userIcon = ''
             this.cookiesService.set('user', userForCookie)
-            this.router.navigate(['home']);
+            this.infoBarService.generateInfoBar(`Bienvenue ${user.username?.toUpperCase()}`)
+            // this.router.navigate(['home']);
           } else {
             this.isUserAccountValidated = false
             this.userToValidate = user as UserDto
@@ -106,7 +110,7 @@ export class UserComponent implements OnDestroy {
             this.logger.error('in UserComponent.createAccount error ', data.status, data.error.message);
             error = 'Une erreur est survenue'
           }
-          this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non créé', undefined, 5000)
+          // this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non créé', undefined, 5000)
         },
         complete: () => {
           this.isSpinner = false

@@ -50,7 +50,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private logoutSubscription: Subscription = new Subscription();
   private editUserIconSubscription: Subscription = new Subscription();
   private updateUserSubscription: Subscription = new Subscription();
-  private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
+  // private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   public isSpinner: boolean = false
   public editMode: boolean = false
   public isAdminEdit: boolean = false

@@ -1,6 +1,22 @@
 @import '../../var.scss';
 
 
+.overlay {
+    /* Set the dimensions and position */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+
+  
+    /* Set the background color and opacity (optional) */
+    background: rgba(0, 0, 0, 0.5); // Adjust opacity as needed
+  
+    /* Hide the overlay initially */
+    // display: none;
+  }
+
 .box-container {
     display: grid;
     grid-template-columns: repeat(10, 3vw);
