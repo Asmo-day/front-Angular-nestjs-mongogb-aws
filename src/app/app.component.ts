@@ -15,6 +15,8 @@ import { User } from './users/user';
 import { LoggerService } from './shared/logger.service';
 import { AuthService } from './shared/auth.service';
 import { UserDto } from './users/userDto';
+import { InfoBarComponent } from './shared/info-bar/info-bar.component';
+import { InfoBarBuilder, InfoBarService } from './shared/info-bar/info-bar.service';
 
 
 @Component({
@@ -23,7 +25,7 @@ import { UserDto } from './users/userDto';
   styleUrl: './app.component.scss',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterModule, MatMenuModule, MatMenuModule, MatButtonModule, RouterLinkActive, MatTabsModule, MatIconModule, MatDialogModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, InfoBarComponent, RouterModule, MatMenuModule, MatMenuModule, MatButtonModule, RouterLinkActive, MatTabsModule, MatIconModule, MatDialogModule],
 })
 
 export class AppComponent implements OnInit, OnDestroy {
@@ -31,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog)
   public router = inject(Router)
   private cookiesService = inject(CookiesService)
+  private infoBarService = inject(InfoBarService)
   private logger = inject(LoggerService)
   public authService = inject(AuthService)
   public userService = inject(UserService)
@@ -47,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.logger.info('in AppComponent.rememberMe', 'cookie content => ', userFromCookie);
     if ((userFromCookie) && userFromCookie.rememberMe) {
       this.signinSubscription = this.userService.signIn(new UserDto(userFromCookie)).subscribe()
+      this.infoBarService.buildInfoBar(new InfoBarBuilder(`Bienvenue ${userFromCookie.username?.toUpperCase()} !`).withIcon('mood'))
       this.router.navigate(['home'])
     } else {
       this.logger.info('No cookie found for user or NO rememberMe')

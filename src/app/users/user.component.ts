@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../shared/user.service';
-import { SnakebarService } from '../shared/snakebar.service';
+// import { SnakebarService } from '../shared/snakebar.service';
 import { User } from './user';
 import { UserDto } from './userDto';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,13 +16,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoggerService } from '../shared/logger.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { MailerService } from '../shared/mailer.service';
-import { InfoBarService } from '../shared/info-bar/info-bar.service';
+import { InfoBarBuilder, InfoBarService, Type } from '../shared/info-bar/info-bar.service';
 import { InfoBarComponent } from '../shared/info-bar/info-bar.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, InfoBarComponent, CommonModule, MatCheckboxModule, SpinnerComponent, MatIconModule, MatCheckboxModule, MatTooltipModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, CommonModule, MatCheckboxModule, SpinnerComponent, MatIconModule, MatCheckboxModule, MatTooltipModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
@@ -75,8 +75,8 @@ export class UserComponent implements OnDestroy {
             // remove userIcon to not store it in cookie
             userForCookie.userIcon = ''
             this.cookiesService.set('user', userForCookie)
-            this.infoBarService.generateInfoBar(`Bienvenue ${user.username?.toUpperCase()}`)
-            // this.router.navigate(['home']);
+            this.infoBarService.buildInfoBar(new InfoBarBuilder(`Bienvenue ${user.username?.toUpperCase()} !`).withIcon('mood'))
+            this.router.navigate(['home']);
           } else {
             this.isUserAccountValidated = false
             this.userToValidate = user as UserDto
@@ -95,10 +95,12 @@ export class UserComponent implements OnDestroy {
       this.isSpinner = true
       const userToCreate = new UserDto(this.createUserForm.value);
       this.createSubscription = this.userService.createUser(userToCreate).subscribe({
-        next: (data) => {
-          this.logger.info('in UserComponent.createAccount', data)
-          Object.assign(userToCreate, { id: data._id })
+        next: (user) => {
+          this.logger.info('in UserComponent.createAccount', user)
+          Object.assign(userToCreate, { id: user._id })
           this.sendValidationEmail(userToCreate)
+          this.userToValidate = user as UserDto
+          this.infoBarService.generateSimpleInfoBar(`Le compte ${user.username} a été créé`)
         },
         error: (data) => {
           let error: string;
@@ -110,7 +112,7 @@ export class UserComponent implements OnDestroy {
             this.logger.error('in UserComponent.createAccount error ', data.status, data.error.message);
             error = 'Une erreur est survenue'
           }
-          // this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non créé', undefined, 5000)
+          this.infoBarService.generateSimpleInfoBar(`${error} Utilisateur non créé`)
         },
         complete: () => {
           this.isSpinner = false

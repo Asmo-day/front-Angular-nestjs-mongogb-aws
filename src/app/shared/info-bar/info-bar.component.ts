@@ -1,13 +1,28 @@
-import { Component, OnInit, effect, inject } from '@angular/core';
-import { IInfoBar, InfoBarService } from './info-bar.service';
+import { Component, effect, inject } from '@angular/core';
+import { InfoBarService } from './info-bar.service';
 import { CommonModule } from '@angular/common';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { MatIconModule } from '@angular/material/icon';
+
+export const InfoBarAnimation = trigger('slideBar', [
+  transition(':enter', [
+    style({ transform: 'translateX(100%)' }),
+    animate('500ms ease-out', style({ transform: 'translateX(0)' })),
+  ]),
+  transition(":leave", [
+    animate('500ms ease-out', style({ transform: 'translateX(100%)' })),
+  ])
+]);
 
 @Component({
   selector: 'app-info-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './info-bar.component.html',
-  styleUrl: './info-bar.component.scss'
+  styleUrl: './info-bar.component.scss',
+  animations: [
+    InfoBarAnimation
+  ]
 })
 export class InfoBarComponent {
 
@@ -15,28 +30,11 @@ export class InfoBarComponent {
 
   constructor() {
     console.log(this.infoBarService.triggerInfoBar());
-    effect(() =>{
-      // setTimeout(() => {
-        
-        this.infoBarService.triggerInfoBar
-      // }, 3000);
+    effect(() => {
+      this.infoBarService.triggerInfoBar
     })
-
   }
-
-  dipslay(): string {
-    return ` .overlay1 {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 300px;
-      color: white;
-      font-size: xx-large;
-      background-color: rgba(0, 0, 0, 0.5);
-    }`
-  }
-
-
 
 }
+
+

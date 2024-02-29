@@ -4,7 +4,7 @@ import { MatTableModule } from '@angular/material/table';
 import { UserService } from '../../shared/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../user';
-import { SnakebarService } from '../../shared/snakebar.service';
+// import { SnakebarService } from '../../shared/snakebar.service';
 import { LoggerService } from '../../shared/logger.service';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,7 @@ import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ProfilComponent } from '../profil/profil.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { InfoBarService } from '../../shared/info-bar/info-bar.service';
 
 @Component({
   selector: 'app-users-management',
@@ -27,7 +28,8 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
 
   private logger = inject(LoggerService)
   private userService = inject(UserService)
-  private snakeBar = inject(SnakebarService)
+  // private snakeBar = inject(SnakebarService)
+  private infoBarService = inject(InfoBarService)
   private dialog = inject(MatDialog)
   public title = 'Gestion des utilisateurs'
   public displayedColumns: string[] = ['username', 'firstName', 'lastName', 'email', 'role', 'createDate', 'lastConnectionDate', 'rememberMe', 'validated', 'edit', 'delete'];
@@ -55,10 +57,12 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
       next: () => { this.refreshData() },
       error: (data) => {
         this.logger.error('in UsersManagementComponent.deleteDialog error', data.status, data.error.message)
-        this.snakeBar.generateSnakebar('Un problèmé est survenue lors de la suppression', 'ERREUR')
+        // this.snakeBar.generateSnakebar('Un problèmé est survenue lors de la suppression', 'ERREUR')
+        this.infoBarService.generateSimpleInfoBar('Un problèmé est survenue lors de la suppression')
       },
       complete: () => {
-        this.snakeBar.generateSnakebar(`L\'utilisateur ${user.username.toUpperCase()} a été`, 'SUPPRIMÉ')
+        // this.snakeBar.generateSnakebar()
+        this.infoBarService.generateSimpleInfoBar(`L\'utilisateur ${user.username.toUpperCase()} a été SUPPRIMÉ`)
       }
     })
   }

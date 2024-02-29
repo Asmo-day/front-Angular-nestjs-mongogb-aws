@@ -8,9 +8,12 @@ export class InfoBarService {
 
     public triggerInfoBar = signal<IInfoBar>(new InfoBar());
 
-    generateInfoBar(message: string, duration?: number, width?: string, height?: string) {
+    generateSimpleInfoBar(message: string) {
+        this.buildInfoBar(new InfoBarBuilder(message))
+    }
 
-        this.triggerInfoBar.set(new InfoBarBuilder( message).withDuration(duration).withWidth(width).withHeight(height));
+    buildInfoBar(infoBar: InfoBarBuilder) {
+        this.triggerInfoBar.set(infoBar.build());
         console.log(this.triggerInfoBar());
         setTimeout(() => {
             this.triggerInfoBar.set(new InfoBar({ hide: true }));
@@ -21,10 +24,12 @@ export class InfoBarService {
 
 export interface IInfoBar {
     message: string;
-    duration?: number;
+    duration: number;
     hide: boolean;
-    width?: string;
-    height?: string
+    width: string;
+    height: string;
+    type: Type;
+    icon: string;
 }
 
 export class InfoBar implements IInfoBar {
@@ -33,29 +38,55 @@ export class InfoBar implements IInfoBar {
         Object.assign(this, init);
     }
 
-    message: string = '';
-    duration?: number;
+    message!: string;
+    duration!: number;
     hide: boolean = false;
-    width?: string;
-    height?: string;
+    width!: string;
+    height!: string;
+    type!: Type;
+    icon!: string
 }
 
-export class InfoBarBuilder extends InfoBar {
+export class InfoBarBuilder {
+
+    private message!: string;
+    private duration: number = 3000
+    private width: string = '400px'
+    private height: string = '60px'
+    private type: Type = Type.MESSAGE
+    private icon!: string
 
     public constructor(message: string) {
-        super({ message });
+        this.message = message;
     }
 
-    withDuration(duration?: number) {
-        this.duration = duration ? duration : 3000
+    withDuration(duration: number) {
+        this.duration = duration
         return this;
     }
-    withWidth(width?: string) {
-        this.width = width ? width : '500px'
+    withWidth(width: string) {
+        this.width = width
         return this;
     }
-    withHeight(height?: string) {
-        this.height = height ? height : '100px'
+    withHeight(height: string) {
+        this.height = height
         return this;
     }
+    withType(type: Type) {
+        this.type = type
+        return this;
+    }
+    withIcon(icon: string) {
+        this.icon = icon
+        return this;
+    }
+    build(): IInfoBar {
+        return new InfoBar({ message: this.message, duration: this.duration, width: this.width, height: this.height, type: this.type, icon: this.icon })
+    }
+
+}
+
+export enum Type {
+    MESSAGE = 'MESSAGE',
+    WARNING = 'WARNING'
 }

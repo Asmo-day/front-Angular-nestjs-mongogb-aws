@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } fro
 import { UserService } from '../../shared/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { SnakebarService } from '../../shared/snakebar.service';
+// import { SnakebarService } from '../../shared/snakebar.service';
 import { Router } from '@angular/router';
 import { UserRouteAccessService } from '../../shared/user-route-access.service';
 import { Subscription } from 'rxjs';
@@ -20,6 +20,7 @@ import { EditUserIconDialogComponent } from '../../shared/dialog-box/edit-user-i
 import { CookiesService } from '../../shared/cookies.service';
 import { User } from '../../users/user';
 import { PasswordManagementComponent } from '../password-management/password-management.component';
+import { InfoBarBuilder, InfoBarService, Type } from '../../shared/info-bar/info-bar.service';
 
 @Component({
   selector: 'app-profil',
@@ -41,7 +42,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private cookiesService = inject(CookiesService);
   private userService = inject(UserService)
   public dialog = inject(MatDialog)
-  public snakeBar = inject(SnakebarService)
+  private infoBarService = inject(InfoBarService)
   public authService = inject(AuthService)
   private router = inject(Router)
   public userRouteAccessService = inject(UserRouteAccessService)
@@ -50,11 +51,9 @@ export class ProfilComponent implements OnInit, OnDestroy {
   private logoutSubscription: Subscription = new Subscription();
   private editUserIconSubscription: Subscription = new Subscription();
   private updateUserSubscription: Subscription = new Subscription();
-  // private passRegx: RegExp = /^(?=.*\W)(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/;
   public isSpinner: boolean = false
   public editMode: boolean = false
   public isAdminEdit: boolean = false
-  // public isChangePass: boolean = false
   public showPass: boolean = false
   private isUpdateUserFormChanged: boolean = false
   private UpdateUserFormChangedSubscription = new Subscription()
@@ -108,7 +107,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
 
   updateUser() {
     if (!this.isUpdateUserFormChanged) {
-      this.snakeBar.generateSnakebar('Les informations n\'ont pas changé', 'Aucun changement détécté')
+      this.infoBarService.generateSimpleInfoBar('Les informations n\'ont pas changé, Aucun changement détécté')
     } else if (this.updateUserForm.valid) {
       this.isSpinner = true
       const userDto: any = new UserDto(this.updateUserForm.value)
@@ -125,7 +124,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
             this.cookiesService.set('user', userForCookie)
           }
           this.isSpinner = false
-          this.snakeBar.generateSnakebar('Le profil a été mis à jour avec', 'SUCCÉS')
+          this.infoBarService.generateSimpleInfoBar('Le profil a été mis à jour avec SUCCÉS')
           this.init()
         },
         error: (data) => {
@@ -139,7 +138,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
             console.warn('error during user creation ' + data);
             error = 'Une erreur est survenue'
           }
-          this.snakeBar.generateSnakebar(`${error}`, 'Utilisateur non modifié', undefined, 5000)
+          this.infoBarService.buildInfoBar(new InfoBarBuilder(`${error} Utilisateur non modifié`).withDuration(5000).withType(Type.WARNING))
         }
       })
     } else {
@@ -148,7 +147,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
       this.updateUserForm.controls.firstName.errors ? errors.push('prénom') : '';
       this.updateUserForm.controls.lastName.errors ? errors.push('Nom') : '';
       this.updateUserForm.controls.email.errors ? errors.push('Adresse e-mail') : '';
-      this.snakeBar.generateSnakebar('Erreur ! Veuillez vérifier les données suivantes : ', errors.join(', '))
+      this.infoBarService.buildInfoBar(new InfoBarBuilder((errors.length > 1 ? 'Erreur sur les champs : ' : 'Erreur sur le champ : ') + `${errors.join(', ')}`).withHeight('100px').withWidth('500px').withType(Type.WARNING).withIcon('warning'))
     }
   }
 
@@ -157,13 +156,13 @@ export class ProfilComponent implements OnInit, OnDestroy {
     this.deleteUserSubscription = this.userService.deleteUser(this.userToUpdate.id).subscribe({
       next: () => {
         if (this.isAdminEdit) {
-          this.snakeBar.generateSnakebar(`le compte ${this.userToUpdate.username.toUpperCase()}`, 'SUPPRIMÉ')
+          this.infoBarService.generateSimpleInfoBar(`le compte ${this.userToUpdate.username.toUpperCase()} SUPPRIMÉ`)
           this.close()
         } else {
           this.userRouteAccessService.isActivated.set(false)
           this.authService.userSignal.set({})
           this.router.navigate(['/home'])
-          this.snakeBar.generateSnakebar('Votre compte a été', 'SUPPRIMÉ')
+          this.infoBarService.generateSimpleInfoBar('Votre compte a été SUPPRIMÉ')
         }
         this.isSpinner = false
         this.dialog.closeAll()
@@ -171,7 +170,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
       error: (data) => {
         this.isSpinner = false
         console.warn(data)
-        this.snakeBar.generateSnakebar('Une erreur est survenue ', data)
+        this.infoBarService.generateSimpleInfoBar('Une erreur est survenue')
       }
     });
   }

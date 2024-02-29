@@ -9,9 +9,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { EmailDto } from './emailDto';
 import { MailerService } from '../shared/mailer.service';
-import { SnakebarService } from '../shared/snakebar.service';
 import { WaitDialogComponent } from '../shared/dialog-box/wait-dialog/wait-dialog.component';
 import { Subscription } from 'rxjs';
+import { InfoBarService } from '../shared/info-bar/info-bar.service';
 
 @Component({
   selector: 'app-email',
@@ -26,7 +26,7 @@ import { Subscription } from 'rxjs';
 export class EmailComponent implements OnDestroy {
 
   private formBuilder = inject(FormBuilder)
-  private snakeBar = inject(SnakebarService)
+  private infoBarService = inject(InfoBarService)
   private dialog = inject(MatDialog)
   private mailerService = inject(MailerService)
   private router = inject(Router)
@@ -34,7 +34,7 @@ export class EmailComponent implements OnDestroy {
   emailForm = this.formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    from: ['', [Validators.required, Validators.email]],
     message: ['', Validators.required],
   });
   private mailerSubscription: Subscription = new Subscription();
@@ -45,11 +45,12 @@ export class EmailComponent implements OnDestroy {
     this.mailerSubscription = this.mailerService.postEmail(sendEmailDto).subscribe({
       next: () => { },
       error: () => {
+        this.infoBarService.generateSimpleInfoBar('Une erreur est survenue lors de l\'envoie de l\'e-mail')
         this.dialog.closeAll()
-        this.snakeBar.generateSnakebar('Une erreur est survenue lors de l\'envoie de l\'e-mail', '')
       },
       complete: () => {
-        this.dialog.closeAll(); this.snakeBar.generateSnakebar('Votre Message a bien été ', 'envoyé !');
+        this.dialog.closeAll()
+        this.infoBarService.generateSimpleInfoBar('Votre Message a bien été envoyé !')
         this.emailForm.reset();
         Object.keys(this.emailForm.controls).forEach((key) => {
           this.emailForm.get(key)?.setErrors(null)

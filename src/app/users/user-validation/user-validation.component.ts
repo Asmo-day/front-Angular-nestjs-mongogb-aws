@@ -3,12 +3,13 @@ import { ActivatedRoute, ParamMap, Router, RouterLink, RouterLinkActive } from '
 import { map } from 'rxjs';
 import { UserService } from '../../shared/user.service';
 import { LoggerService } from '../../shared/logger.service';
-import { SnakebarService } from '../../shared/snakebar.service';
+// import { SnakebarService } from '../../shared/snakebar.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from '../user';
 import { CookiesService } from '../../shared/cookies.service';
+import { InfoBarService } from '../../shared/info-bar/info-bar.service';
 
 @Component({
   selector: 'app-user-validation',
@@ -24,10 +25,11 @@ export class UserValidationComponent implements OnInit {
   private cookiesService = inject(CookiesService);
   private userService = inject(UserService);
   public isValidated: boolean = false;
+  private infoBarService = inject(InfoBarService)
   public isLoading: boolean = true;
   public isUserAlredyValidate: boolean = false;
   private logger = inject(LoggerService);
-  private snakeBar = inject(SnakebarService);
+  // private snakeBar = inject(SnakebarService);
   private userValidationData = this.route.paramMap.pipe(
     map((params: ParamMap) => params.get('data'))
   );
@@ -49,14 +51,14 @@ export class UserValidationComponent implements OnInit {
           token = dataSplit[1]
         } else {
           this.logger.error('Unable to retrieve data for Validation')
-          this.snakeBar.generateSnakebar('Une erreur est survenue', 'Validation impossible')
+          this.infoBarService.generateSimpleInfoBar('Une erreur est survenue, validation impossible')
         }
       }
     })
     // check is user is already validated
     const user: User = this.cookiesService.get('user')
     console.log(user);
-    
+
     if (user && user.id === id && user.isValidatedAccount) {
       this.isUserAlredyValidate = true
       this.isLoading = false
@@ -70,7 +72,7 @@ export class UserValidationComponent implements OnInit {
         error: (data) => {
           this.isLoading = false
           this.logger.error('in UserComponent.validateUser error: ', data)
-          this.snakeBar.generateSnakebar('Une erreur est survenue', 'L\'inscription n\'a pas été validé')
+          this.infoBarService.generateSimpleInfoBar('Une erreur est survenue, L\'inscription n\'a pas été validé')
         },
       })
     }

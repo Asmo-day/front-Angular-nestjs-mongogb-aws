@@ -23,7 +23,3 @@ export const appConfig: ApplicationConfig = {
     ])),
   ]
 };
-
-// export function tokenGetter() {
-//   return localStorage.getItem("token");
-// }
