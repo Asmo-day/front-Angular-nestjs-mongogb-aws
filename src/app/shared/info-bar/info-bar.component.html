@@ -1,0 +1,7 @@
+@if (!infoBarService.triggerInfoBar().hide) {
+<div class="overlay" [ngStyle]="{
+    'to': this.infoBarService.triggerInfoBar().width,
+    width: this.infoBarService.triggerInfoBar().width,
+    height: this.infoBarService.triggerInfoBar().height
+    }">{{ infoBarService.triggerInfoBar().message }}</div>
+}
