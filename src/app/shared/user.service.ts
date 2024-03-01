@@ -12,7 +12,8 @@ import { CookiesService } from './cookies.service';
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-    private baseUrl = environment.BASE_URL
+    private baseUrl = environment.BASE_URL;
+    public isCookiesAllowed = signal(true);
 
     constructor(
         private httpClient: HttpClient,

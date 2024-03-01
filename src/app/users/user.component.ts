@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../shared/user.service';
-// import { SnakebarService } from '../shared/snakebar.service';
 import { User } from './user';
 import { UserDto } from './userDto';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +16,6 @@ import { LoggerService } from '../shared/logger.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { MailerService } from '../shared/mailer.service';
 import { InfoBarBuilder, InfoBarService, Type } from '../shared/info-bar/info-bar.service';
-import { InfoBarComponent } from '../shared/info-bar/info-bar.component';
 
 @Component({
   selector: 'app-login',
@@ -26,12 +24,11 @@ import { InfoBarComponent } from '../shared/info-bar/info-bar.component';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnDestroy {
-
+export class UserComponent implements OnInit, OnDestroy {
+  
   public title: string = "Connexion";
   private infoBarService = inject(InfoBarService)
   private cookiesService = inject(CookiesService);
-  // private snakeBar = inject(SnakebarService);
   private userService = inject(UserService);
   private mailerService = inject(MailerService);
   private route = inject(ActivatedRoute);
@@ -64,6 +61,10 @@ export class UserComponent implements OnDestroy {
     password: ['', Validators.required],
     rememberMe: [false]
   });
+
+  ngOnInit(): void {
+    this.infoBarService.buildInfoBar(new InfoBarBuilder('Tu veux des cookies ?').withButtons(true))
+  }
 
   signIn() {
     if (this.signInForm.valid) {

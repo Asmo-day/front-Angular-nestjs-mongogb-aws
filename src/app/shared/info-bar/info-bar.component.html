@@ -10,5 +10,9 @@
     </mat-icon>
     }
     {{ infoBarService.triggerInfoBar().message }}
+    @if (this.infoBarService.triggerInfoBar().isButtons) {
+        <button (click)="cookiesAllowed(true)">J'accepte</button>
+        <button (click)="cookiesAllowed(false)">Je refuse</button>
+    }
 </div>
 }

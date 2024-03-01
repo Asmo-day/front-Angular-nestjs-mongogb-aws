@@ -30,6 +30,7 @@ export interface IInfoBar {
     height: string;
     type: Type;
     icon: string;
+    isButtons?: boolean
 }
 
 export class InfoBar implements IInfoBar {
@@ -45,6 +46,7 @@ export class InfoBar implements IInfoBar {
     height!: string;
     type!: Type;
     icon!: string
+    isButtons?: boolean = false
 }
 
 export class InfoBarBuilder {
@@ -55,6 +57,7 @@ export class InfoBarBuilder {
     private height: string = '60px'
     private type: Type = Type.MESSAGE
     private icon!: string
+    isButtons?: boolean
 
     public constructor(message: string) {
         this.message = message;
@@ -80,8 +83,12 @@ export class InfoBarBuilder {
         this.icon = icon
         return this;
     }
+    withButtons(isButtons: boolean) {
+        this.isButtons = isButtons
+        return this;
+    }
     build(): IInfoBar {
-        return new InfoBar({ message: this.message, duration: this.duration, width: this.width, height: this.height, type: this.type, icon: this.icon })
+        return new InfoBar({ message: this.message, duration: this.duration, width: this.width, height: this.height, type: this.type, icon: this.icon, isButtons: this.isButtons })
     }
 
 }
