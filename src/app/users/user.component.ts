@@ -115,6 +115,7 @@ export class UserComponent implements OnDestroy {
           this.infoBarService.generateSimpleInfoBar(`${error} Utilisateur non créé`)
         },
         complete: () => {
+          this.isUserError = false
           this.isSpinner = false
           this.toggleIsAccountCreation()
         }

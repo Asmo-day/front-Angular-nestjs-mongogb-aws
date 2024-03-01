@@ -28,7 +28,6 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
 
   private logger = inject(LoggerService)
   private userService = inject(UserService)
-  // private snakeBar = inject(SnakebarService)
   private infoBarService = inject(InfoBarService)
   private dialog = inject(MatDialog)
   public title = 'Gestion des utilisateurs'
