@@ -4,13 +4,20 @@ on:
   push:
     branches:
       - master
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+      
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     
-    - name: 🖌 Log in to Docke hub
+    - name: 🔑 Log in to Docke hub
       uses: docker/login-action@v3
       with:
         username: asm0day
@@ -19,13 +26,13 @@ jobs:
     - name: 📦 Build the Docker image
       run: docker build -t asm0day/user-test-angular:latest .
 
-    - name: asm0day/user-test-angular:latest
+    - name: 🥜 Extract Docker metadata
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: asm0day/user-test-angular:latest
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-    - name: Build and push Docker image
+    - name: 🚀 Build and push Docker image
       uses: docker/build-push-action@v2
       with:
         context: .
