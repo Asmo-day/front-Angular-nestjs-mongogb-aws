@@ -6,18 +6,9 @@ on:
       - master
       
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    
+  run-on-EC2:
+    runs-on: self-hosted
+    steps:    
     - name: 🎉 Deploy to EC2
-      uses: easingthemes/ssh-deploy@v5.0.0
-      with:
-        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-        REMOTE_HOST: 35.163.180.116
-        REMOTE_USER: asmoday
-        SCRIPT_AFTER: |
-            cd home/ubuntu
-            ./remove_relaunch_app.sh
+      run: ./remove_relaunch_app.sh
 
