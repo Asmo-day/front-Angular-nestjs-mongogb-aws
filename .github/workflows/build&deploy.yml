@@ -14,7 +14,21 @@ jobs:
       uses: docker/login-action@v3
       with:
         username: asm0day
-        password: dckr_pat_c8Bouwt-UzLZy4cDcLNAL60MS4k
+        password: ${{secrets.DOCKER_TOKEN}}
           
     - name: 📦 Build the Docker image
-      run: docker build -t asm0day/user-test-nestjs-mongodb:latest .
+      run: docker build -t asm0day/user-test-angular:latest .
+
+    - name: asm0day/user-test-angular:latest
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: asm0day/user-test-angular:latest
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
