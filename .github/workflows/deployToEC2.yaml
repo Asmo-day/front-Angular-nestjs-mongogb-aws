@@ -10,5 +10,7 @@ jobs:
     runs-on: self-hosted
     steps:    
     - name: 🎉 Deploy to EC2
+      run: cd ~
+    - name: 🎉 Deploy to EC2
       run: ./remove_relaunch_app.sh
 
