@@ -6,20 +6,18 @@ import { Injectable, signal } from "@angular/core";
 
 export class InfoBarService {
 
-    public triggerInfoBar = signal<IInfoBar>(new InfoBar());
+    public infoBarSignal = signal<IInfoBar>(new InfoBar());
 
     generateSimpleInfoBar(message: string) {
         this.buildInfoBar(new InfoBarBuilder(message))
     }
 
     buildInfoBar(infoBar: InfoBarBuilder) {
-        this.triggerInfoBar.set(infoBar.build());
-        console.log(this.triggerInfoBar());
+        this.infoBarSignal.set(infoBar.build());
         setTimeout(() => {
-            this.triggerInfoBar.set(new InfoBar({ hide: true }));
-        }, this.triggerInfoBar().duration);
+            this.infoBarSignal.set(new InfoBar({ hide: true }));
+        }, this.infoBarSignal().duration);
     }
-
 }
 
 export interface IInfoBar {
@@ -30,7 +28,8 @@ export interface IInfoBar {
     height: string;
     type: Type;
     icon: string;
-    isButtons?: boolean
+    iconSize: string;
+    isButtons: boolean
 }
 
 export class InfoBar implements IInfoBar {
@@ -46,49 +45,55 @@ export class InfoBar implements IInfoBar {
     height!: string;
     type!: Type;
     icon!: string
-    isButtons?: boolean = false
+    iconSize!: string;
+    isButtons!: boolean;
 }
 
 export class InfoBarBuilder {
 
     private message!: string;
-    private duration: number = 3000
-    private width: string = '400px'
-    private height: string = '60px'
-    private type: Type = Type.MESSAGE
-    private icon!: string
-    isButtons?: boolean
+    private duration: number = 3000;
+    private width: string = '400px';
+    private height: string = '60px';
+    private type: Type = Type.MESSAGE;
+    private icon!: string;
+    iconSize: string = 'xx-large';
+    isButtons: boolean = false;
 
     public constructor(message: string) {
         this.message = message;
     }
 
     withDuration(duration: number) {
-        this.duration = duration
+        this.duration = duration;
         return this;
     }
     withWidth(width: string) {
-        this.width = width
+        this.width = width;
         return this;
     }
     withHeight(height: string) {
-        this.height = height
+        this.height = height;
         return this;
     }
     withType(type: Type) {
-        this.type = type
+        this.type = type;
         return this;
     }
     withIcon(icon: string) {
-        this.icon = icon
+        this.icon = icon;
+        return this;
+    }
+    withIconSize(iconSize: string) {
+        this.iconSize = iconSize;
         return this;
     }
     withButtons(isButtons: boolean) {
-        this.isButtons = isButtons
+        this.isButtons = isButtons;
         return this;
     }
     build(): IInfoBar {
-        return new InfoBar({ message: this.message, duration: this.duration, width: this.width, height: this.height, type: this.type, icon: this.icon, isButtons: this.isButtons })
+        return new InfoBar({ message: this.message, duration: this.duration, width: this.width, height: this.height, type: this.type, icon: this.icon, iconSize: this.iconSize, isButtons: this.isButtons })
     }
 
 }

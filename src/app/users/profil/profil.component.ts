@@ -18,7 +18,6 @@ import { Roles } from '../../users/roles';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { EditUserIconDialogComponent } from '../../shared/dialog-box/edit-user-icon-dialog/edit-user-icon-dialog.component';
 import { CookiesService } from '../../shared/cookies.service';
-import { User } from '../../users/user';
 import { PasswordManagementComponent } from '../password-management/password-management.component';
 import { InfoBarBuilder, InfoBarService, Type } from '../../shared/info-bar/info-bar.service';
 
@@ -119,8 +118,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
             if (this.editMode) {
               this.toggleMode()
             }
-            // refresh cookie while keeping the essential information of the user (id, token, rememberMe)
-            let userForCookie = new User(this.userToUpdate.id, userDto.username, '', '', userDto.email, userDto.role, this.userToUpdate.userToken, this.userToUpdate.rememberMe)
+            let userForCookie = new UserDto({ username: userDto.username, userToken: this.userToUpdate.userToken, rememberMe: this.userToUpdate.rememberMe })
             this.cookiesService.set('user', userForCookie)
           }
           this.isSpinner = false
@@ -144,7 +142,7 @@ export class ProfilComponent implements OnInit, OnDestroy {
     } else {
       const errors: string[] = [];
       this.updateUserForm.controls.username.errors ? errors.push('Nom d\'utilisateur') : '';
-      this.updateUserForm.controls.firstName.errors ? errors.push('prénom') : '';
+      this.updateUserForm.controls.firstName.errors ? errors.push('Prénom') : '';
       this.updateUserForm.controls.lastName.errors ? errors.push('Nom') : '';
       this.updateUserForm.controls.email.errors ? errors.push('Adresse e-mail') : '';
       this.infoBarService.buildInfoBar(new InfoBarBuilder((errors.length > 1 ? 'Erreur sur les champs : ' : 'Erreur sur le champ : ') + `${errors.join(', ')}`).withHeight('100px').withWidth('500px').withType(Type.WARNING).withIcon('warning'))

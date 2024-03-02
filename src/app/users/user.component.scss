@@ -39,6 +39,14 @@ input {
 
 }
 
+.cover-checkbox {
+    cursor: pointer;
+    position: fixed;
+    margin-top: 10px;
+    width: 180px;
+    height: 20px;
+}
+
 .warn-user-account-not-validated {
     text-align: center;
     font-size: larger;

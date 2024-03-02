@@ -1,18 +1,20 @@
-@if (!infoBarService.triggerInfoBar().hide) {
+@if (!infoBarService.infoBarSignal().hide) {
 <div class="overlay" [@slideBar] [ngStyle]="{
-    color: this.infoBarService.triggerInfoBar().type === 'MESSAGE' ? '#411d7f' : 'red',
-    width: this.infoBarService.triggerInfoBar().width,
-    height: this.infoBarService.triggerInfoBar().height
+    color: this.infoBarService.infoBarSignal().type === 'MESSAGE' ? '#411d7f' : 'red',
+    width: this.infoBarService.infoBarSignal().width,
+    height: this.infoBarService.infoBarSignal().height
 }">
-    @if (this.infoBarService.triggerInfoBar().icon) {
-    <mat-icon>
-        {{ this.infoBarService.triggerInfoBar().icon }}
+    @if (this.infoBarService.infoBarSignal().icon) {
+    <mat-icon [ngStyle]="{
+        'font-size': this.infoBarService.infoBarSignal().iconSize
+    }">
+        {{ this.infoBarService.infoBarSignal().icon }}
     </mat-icon>
     }
-    {{ infoBarService.triggerInfoBar().message }}
-    @if (this.infoBarService.triggerInfoBar().isButtons) {
-        <button (click)="cookiesAllowed(true)">J'accepte</button>
-        <button (click)="cookiesAllowed(false)">Je refuse</button>
+    {{ infoBarService.infoBarSignal().message }}
+    @if (this.infoBarService.infoBarSignal().isButtons) {
+    <button (click)="allowCookies(true)">J'accepte</button>
+    <button (click)="allowCookies(false)">Je refuse</button>
     }
 </div>
 }
