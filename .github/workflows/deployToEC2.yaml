@@ -1,0 +1,22 @@
+name: Build & Push to Docker hub and deploy on EC2
+
+on:
+  push:
+    branches:
+      - master
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: 🎉 Deploy to Remote Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: 35.163.180.116
+        username: asmoday
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          EC2_SSH_KEY
+          ./remove_relaunch_app.sh
