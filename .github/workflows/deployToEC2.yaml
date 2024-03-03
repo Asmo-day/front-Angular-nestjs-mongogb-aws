@@ -20,4 +20,4 @@ jobs:
         run: | 
           cd ~
           ls
-          ./remove_relaunch_app.sh
+          cat Dockefile
