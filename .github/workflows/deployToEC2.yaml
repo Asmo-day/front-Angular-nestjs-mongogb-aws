@@ -19,4 +19,9 @@ jobs:
             USER_NAME: asmoday
         run: | 
           ls
-          cat Dockerfile
+          cd ..
+          ls
+          cd ..
+          ls
+          cd .. 
+          ls
