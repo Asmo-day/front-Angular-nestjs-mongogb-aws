@@ -6,11 +6,14 @@ on:
       - master
       
 jobs:
-  run-on-EC2:
-    runs-on: self-hosted
-    steps:    
-    - name: 🎉 Deploy to EC2
-      run: cd ~
-    - name: 🎉 Deploy to EC2
-      run: ./remove_relaunch_app.sh
-
+  Deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: 35.163.180.116
+            USER_NAME: asmoday
