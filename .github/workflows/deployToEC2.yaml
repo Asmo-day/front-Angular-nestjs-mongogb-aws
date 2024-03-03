@@ -17,3 +17,5 @@ jobs:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
             HOSTNAME: 35.163.180.116
             USER_NAME: asmoday
+            run: | 
+              ls
