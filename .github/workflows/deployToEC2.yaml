@@ -19,4 +19,4 @@ jobs:
             USER_NAME: asmoday
         run: | 
           ls
-          cat Dockefile
+          cat Dockerfile
