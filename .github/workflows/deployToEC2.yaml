@@ -8,19 +8,10 @@ on:
 jobs:
   Deploy:
     name: Deploy to EC2
-    runs-on: ubuntu-latest
-    
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2 
-      - name: Build & Deploy
-        env:
-            PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-            HOSTNAME: 35.163.180.116
-            USER_NAME: ubuntu
+      - name: test
         run: | 
-          echo "$PRIVATE_KEY"
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -tt -i private_key ${USER_NAME}@${HOSTNAME}
           ls
           echo -n "--------------------------"
           cd ..
