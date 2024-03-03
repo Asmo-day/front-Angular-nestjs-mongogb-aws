@@ -15,10 +15,11 @@ export class User {
     lastConnectionDate?: Date;
     userIcon?: string;
     isValidatedAccount?: boolean;
+    isAllowCookies?: boolean
 
     constructor(id?: string, username?: string, firstName?: string, lastName?: string,
         email?: string, role?: Roles, userToken?: string, rememberMe?: boolean,
-        createDate?: Date, lastConnectionDate?: Date, userIcon?: string, isValidatedAccount?: boolean) {
+        createDate?: Date, lastConnectionDate?: Date, userIcon?: string, isValidatedAccount?: boolean, isAllowCookies?: boolean) {
         this.id = id
         this.username = username
         this.firstName = firstName
@@ -31,6 +32,7 @@ export class User {
         this.lastConnectionDate = lastConnectionDate
         this.userIcon = userIcon
         this.isValidatedAccount = isValidatedAccount
+        this.isAllowCookies = isAllowCookies
     }
 }
 

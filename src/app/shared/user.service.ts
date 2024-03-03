@@ -1,19 +1,18 @@
+import { StorageService } from './storage.service';
 import { AuthService } from './auth.service';
 import { UserRouteAccessService } from './user-route-access.service';
 import { HttpClient } from "@angular/common/http";
-import { Injectable, signal } from "@angular/core";
+import { Injectable, effect, signal } from "@angular/core";
 import { Observable, map, tap } from "rxjs";
 import { User } from "../users/user";
 import { UserDto } from "../users/userDto";
 import { environment } from "../../environment";
 import { LoggerService } from './logger.service';
-import { CookiesService } from './cookies.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
     private baseUrl = environment.BASE_URL;
-    public isCookiesAllowed = signal(true);
 
     constructor(
         private httpClient: HttpClient,
@@ -95,7 +94,8 @@ export class UserService {
             data.createDate,
             data.lastConnectionDate,
             data.userIcon,
-            data.isValidatedAccount
+            data.isValidatedAccount,
+            data.isAllowCookies
         )
     }
 }

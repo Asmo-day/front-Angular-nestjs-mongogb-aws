@@ -1,0 +1,18 @@
+name: Deploy on EC2
+
+on:
+  push:
+    branches:
+      - master
+      
+jobs:
+  Deploy:
+    name: Deploy to EC2
+    runs-on: self-hosted
+    steps:
+      - name: test
+        run: | 
+          cd ~
+          ls
+          ./remove_relaunch_app.sh
+          

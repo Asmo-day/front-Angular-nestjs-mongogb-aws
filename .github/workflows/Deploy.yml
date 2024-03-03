@@ -1,0 +1,36 @@
+name: Build & Push to Docker hub and deploy on EC2
+
+on:
+  push:
+    branches:
+      - master
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: 🔑 Log in to Docke hub
+      uses: docker/login-action@v3
+      with:
+        username: asm0day
+        password: ${{secrets.DOCKER_TOKEN}}
+          
+    - name: 📦 Build the Docker image
+      run: docker build -t asm0day/user-test-angular:latest .
+
+    - name: 🚀 Build and push
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: asm0day/user-test-angular:latest
+        
+  deploy:
+    runs-on: self-hosted
+    steps: 
+    - name: 🚀 Deploy to EC2
+      run: | 
+        cd ~
+        ls
+        ./remove_relaunch_app.sh

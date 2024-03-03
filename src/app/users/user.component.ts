@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, inject, effect } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../shared/user.service';
 import { User } from './user';
 import { UserDto } from './userDto';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoggerService } from '../shared/logger.service';
 import { SpinnerComponent } from '../shared/spinner/spinner.component';
 import { MailerService } from '../shared/mailer.service';
-import { InfoBarBuilder, InfoBarService, Type } from '../shared/info-bar/info-bar.service';
+import { InfoBarBuilder, InfoBarService } from '../shared/info-bar/info-bar.service';
 
 @Component({
   selector: 'app-login',
@@ -24,14 +24,13 @@ import { InfoBarBuilder, InfoBarService, Type } from '../shared/info-bar/info-ba
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnInit, OnDestroy {
-  
+export class UserComponent implements OnDestroy {
+
   public title: string = "Connexion";
   private infoBarService = inject(InfoBarService)
-  private cookiesService = inject(CookiesService);
-  private userService = inject(UserService);
+  public cookiesService = inject(CookiesService);
+  public userService = inject(UserService);
   private mailerService = inject(MailerService);
-  private route = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private logger = inject(LoggerService);
   private router = inject(Router);
@@ -45,6 +44,7 @@ export class UserComponent implements OnInit, OnDestroy {
   public isUserError: boolean = false;
   public isUserAccountValidated: boolean = true;
   public isEmailSentAgain: boolean = false;
+  public isCookiesAllowed: boolean = false
   private signinSubscription: Subscription = new Subscription();
   private createSubscription: Subscription = new Subscription();
   private userValidationDataSubscription = new Subscription();
@@ -59,11 +59,15 @@ export class UserComponent implements OnInit, OnDestroy {
   public signInForm = this.formBuilder.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
-    rememberMe: [false]
+    rememberMe: [{ value: false, disabled: true }]
   });
 
-  ngOnInit(): void {
-    this.infoBarService.buildInfoBar(new InfoBarBuilder('Tu veux des cookies ?').withButtons(true))
+  constructor() {
+    effect(() => {
+      if (this.cookiesService.cookiesAllowed() === 'yes') {
+        this.signInForm.controls.rememberMe.enable()
+      }
+    })
   }
 
   signIn() {
@@ -72,9 +76,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.signinSubscription = this.userService.signIn(userDto).subscribe({
         next: (user: User) => {
           if (user.isValidatedAccount) {
-            const userForCookie = new UserDto(user) as User
-            // remove userIcon to not store it in cookie
-            userForCookie.userIcon = ''
+            const userForCookie = new UserDto({ userToken: user.userToken, username: user.username, rememberMe: user.rememberMe })
             this.cookiesService.set('user', userForCookie)
             this.infoBarService.buildInfoBar(new InfoBarBuilder(`Bienvenue ${user.username?.toUpperCase()} !`).withIcon('mood'))
             this.router.navigate(['home']);
@@ -138,6 +140,11 @@ export class UserComponent implements OnInit, OnDestroy {
         this.logger.error('Something went wrong during e-mail sending', data)
       }
     })
+  }
+
+  callCookiesInfoBar() {
+    this.cookiesService.cookiesAllowed.set('')
+    this.infoBarService.buildInfoBar(new InfoBarBuilder('Tu veux des cookies ?').withButtons(true).withIcon('cookie').withDuration(3600000).withHeight('200px').withIconSize('xxx-large'))
   }
 
   async toggleIsAccountCreation() {

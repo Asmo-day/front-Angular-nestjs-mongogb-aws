@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../user.service';
+import { CookiesService } from '../cookies.service';
 
 export const InfoBarAnimation = trigger('slideBar', [
   transition(':enter', [
@@ -28,19 +29,25 @@ export const InfoBarAnimation = trigger('slideBar', [
 export class InfoBarComponent {
 
   public infoBarService = inject(InfoBarService)
-  public userService = inject(UserService)
+  public cookiesService = inject(CookiesService)
 
   constructor() {
-    console.log(this.infoBarService.triggerInfoBar());
     effect(() => {
-      this.infoBarService.triggerInfoBar
+      this.infoBarService.infoBarSignal
     })
   }
 
-  cookiesAllowed(isCookiesAllowed: boolean) {
-    this.userService.isCookiesAllowed.set(isCookiesAllowed)
+  allowCookies(allowCookies: boolean) {
+    this.cookiesService.cookiesAllowed.set(allowCookies ? 'yes' : 'no')
+    this.closeCookiesBar()
   }
 
+  closeCookiesBar() {
+    this.infoBarService.infoBarSignal.update(infobar => {
+      infobar.hide = true
+      return infobar
+    })
+  }
 }
 
 

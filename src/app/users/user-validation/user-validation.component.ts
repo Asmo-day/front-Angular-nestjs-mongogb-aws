@@ -3,10 +3,7 @@ import { ActivatedRoute, ParamMap, Router, RouterLink, RouterLinkActive } from '
 import { map } from 'rxjs';
 import { UserService } from '../../shared/user.service';
 import { LoggerService } from '../../shared/logger.service';
-// import { SnakebarService } from '../../shared/snakebar.service';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
-import { CookieService } from 'ngx-cookie-service';
 import { User } from '../user';
 import { CookiesService } from '../../shared/cookies.service';
 import { InfoBarService } from '../../shared/info-bar/info-bar.service';
@@ -65,7 +62,7 @@ export class UserValidationComponent implements OnInit {
     } else {
       // call back end to validate user
       this.userService.validateUser(id, token).subscribe({
-        next: (data) => {
+        next: () => {
           this.isLoading = false
           this.isValidated = true
         },

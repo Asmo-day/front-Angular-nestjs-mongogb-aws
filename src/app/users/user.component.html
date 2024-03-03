@@ -31,7 +31,7 @@
                 <div class="password">
                     <input matInput [type]="showPass ? 'text': 'password'" formControlName="password" autocomplete="on"
                         required>
-                    <mat-icon (click)="showPass = !showPass">{{showPass ? 'close' : 'remove_red_eye' }}</mat-icon>
+                    <mat-icon (click)="showPass = !showPass">{{showPass ? 'visibility_off' : 'visibility' }}</mat-icon>
                 </div>
             </mat-form-field>
             @if (isUserError && !isAccountCreation) {
@@ -40,13 +40,18 @@
             </div>
             }
             @if (!isAccountCreation) {
-            <mat-checkbox formControlName="rememberMe" matTooltip="Cochez cette case pour rester connecté"
-                matTooltipPosition="before">Se souvenir
-                de moi ?</mat-checkbox>
+            <div>
+                <div class="cover-checkbox" (click)="callCookiesInfoBar()"
+                    [matTooltip]="this.cookiesService.cookiesAllowed() === 'yes' ? '' : 'Acceptez les cookies pour activer cette option !'">
+                </div>
+                <mat-checkbox formControlName="rememberMe" matTooltip="Cochez cette case pour rester connecté">Se
+                    souvenirde moi ?</mat-checkbox>
+            </div>
             }
         </form>
-        <div [ngStyle]="{'color': createUserForm.controls.password.touched ? 'red' : 'black'}"
-            *ngIf="isAccountCreation">
+        @if (isAccountCreation) {
+        <div [ngStyle]="{'color': createUserForm.controls.password.touched ? 'red' : 'black'}">
+
             <span *ngIf="!createUserForm.controls.password.dirty">Le mot de passe doit contenir :</span>
             <ul>
                 <li *ngIf="!createUserForm.getRawValue().password?.match('(?=.*[A-Z])')">
@@ -66,6 +71,7 @@
                 </li>
             </ul>
         </div>
+        }
         @if (!isUserAccountValidated && !isAccountCreation) {
         <div class="warn-user-account-not-validated">
             <mat-icon>warning</mat-icon>
