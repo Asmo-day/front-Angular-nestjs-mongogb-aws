@@ -18,6 +18,5 @@ jobs:
             HOSTNAME: 35.163.180.116
             USER_NAME: asmoday
         run: | 
-          cd ~
           ls
           cat Dockefile
