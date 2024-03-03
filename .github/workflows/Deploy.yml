@@ -6,7 +6,7 @@ on:
       - master
       
 jobs:
-  build:
+  Build_Push_Docker:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -26,11 +26,12 @@ jobs:
         push: true
         tags: asm0day/user-test-angular:latest
         
-  deploy:
+  Deploy_EC2:
+    name: 🚀 Deploy to EC2
     runs-on: self-hosted
-    steps: 
-    - name: 🚀 Deploy to EC2
-      run: | 
-        cd ~
-        ls
-        ./remove_relaunch_app.sh
+    steps:
+      - name: test
+        run: | 
+          cd ~
+          ls
+          ./remove_relaunch_app.sh
