@@ -25,3 +25,12 @@ jobs:
       with:
         push: true
         tags: asm0day/user-test-angular:latest
+        
+  deploy:
+    runs-on: self-hosted
+    steps: 
+    - name: Deploy to EC2
+      run: | 
+        cd ~
+        ls
+        ./remove_relaunch_app.sh
