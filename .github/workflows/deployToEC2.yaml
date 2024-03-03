@@ -18,7 +18,7 @@ jobs:
             HOSTNAME: 35.163.180.116
             USER_NAME: ubuntu
         run: | 
-          echo "$PRIVATE_KEY" > private_key
+          echo "$PRIVATE_KEY" 
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
           ls
           echo -n "--------------------------"
