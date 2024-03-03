@@ -5,7 +5,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterOutlet, RouterModule, RouterLink, RouterLinkActive } from '@angular/router';
 import { InfoBarComponent } from '../shared/info-bar/info-bar.component';
-import { InfoBarService } from '../shared/info-bar/info-bar.service';
 
 @Component({
   selector: 'app-home',
