@@ -27,6 +27,7 @@ jobs:
         tags: asm0day/user-test-angular:latest
         
   Deploy_EC2:
+    needs: Build_Push_Docker
     runs-on: self-hosted
     steps:
       - name: 🚀 Deploy to EC2
