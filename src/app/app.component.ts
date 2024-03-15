@@ -44,6 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private signinSubscription: Subscription = new Subscription();
 
   ngOnInit() {
+    console.log(this.cookiesService.cookiesAllowed());
+
     if (this.storageService.get('cookiesAllowed') === '' || this.storageService.get('cookiesAllowed') === null) {
       this.infoBarService.buildInfoBar(new InfoBarBuilder('Tu veux des cookies ?').withButtons(true).withIcon('cookie').withDuration(3600000).withHeight('200px').withIconSize('xxx-large'))
     } else {
@@ -93,6 +95,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (isLogout) {
         this.authService.userSignal.set({})
         this.cookiesService.deleteCookie('user')
+        this.cookiesService.cookiesAllowed
         this.userRouteAccessService.isActivated.set(false);
         this.dialog.closeAll()
         this.router.navigate(['/home'])

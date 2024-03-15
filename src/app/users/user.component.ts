@@ -71,6 +71,7 @@ export class UserComponent implements OnDestroy {
   }
 
   signIn() {
+    this.isUserError = false
     if (this.signInForm.valid) {
       const userDto = new UserDto(this.signInForm.value)
       this.signinSubscription = this.userService.signIn(userDto).subscribe({
