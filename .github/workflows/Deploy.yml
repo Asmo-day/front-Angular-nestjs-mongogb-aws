@@ -34,4 +34,4 @@ jobs:
         run: | 
           cd ~
           ls
-          ./remove_relaunch_app.sh
+          ./remove_relaunch_front.sh
